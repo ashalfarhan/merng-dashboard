@@ -24,3 +24,14 @@ export class CreateInput {
   @Field(() => Int)
   public price: number;
 }
+@InputType()
+export class EditInput {
+  @Field(() => String, { nullable: true })
+  public reporterId: string;
+
+  @Field(() => String, { nullable: true })
+  public stuff: string;
+
+  @Field(() => Number, { nullable: true })
+  public price: number;
+}
