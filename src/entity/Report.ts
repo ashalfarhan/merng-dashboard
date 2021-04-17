@@ -2,8 +2,9 @@ import { Field, ID, Int, ObjectType } from "type-graphql";
 import { User } from "./User";
 import { getModelForClass, prop } from "@typegoose/typegoose";
 import { Ref } from "../utils/@types";
+import { ObjectId } from "mongodb";
 
-@ObjectType()
+@ObjectType({ simpleResolvers: true })
 class ReportData {
   @Field(() => String)
   @prop()
@@ -16,19 +17,18 @@ class ReportData {
 
 @ObjectType()
 export class Report {
-  @Field(() => String)
-  @prop()
-  readonly id: string;
+  @Field(() => ID)
+  readonly _id: ObjectId;
 
-  @Field(() => Date, { defaultValue: new Date() })
-  @prop()
+  @Field(() => Date)
+  @prop({ type: () => Date, default: new Date() })
   public createdAt?: Date;
 
-  @Field(() => Date, { defaultValue: new Date() })
-  @prop()
+  @Field(() => Date)
+  @prop({ type: () => Date, default: new Date() })
   public updatedAt?: Date;
 
-  @Field(() => ReportData)
+  @Field(() => ReportData, { simple: true })
   @prop({ type: () => ReportData })
   public detail: ReportData;
 
