@@ -1,6 +1,6 @@
 import { Resolver, Query } from "type-graphql";
 import UserResolver from "./UserResolver";
-import RegisterResolver from "./ReportResolver";
+import ReportResolver from "./ReportResolver";
 
 @Resolver()
 export class Main {
@@ -9,4 +9,4 @@ export class Main {
     return "Hello from graphql!";
   }
 }
-export const resolvers = [Main, UserResolver, RegisterResolver] as const;
+export const resolvers = [Main, UserResolver, ReportResolver] as const;
