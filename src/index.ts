@@ -1,16 +1,20 @@
+import "reflect-metadata";
+import "dotenv/config";
 import { ApolloServer } from "apollo-server-express";
 import chalk from "chalk";
 import express from "express";
 import { connect } from "mongoose";
-import "dotenv/config";
-import "reflect-metadata";
 import { buildSchema } from "type-graphql";
-import UserResolver from "./graphql/resolvers/UserResolver";
+import { resolvers } from "./resolvers";
+import { TypegooseMiddleware } from "./utils/typegoose-middleware";
+import { TypegooseEntityMiddleware } from "./utils/typegoose-entity-middleware";
 
 (async () => {
   const schema = await buildSchema({
-    resolvers: [UserResolver],
+    resolvers,
+    globalMiddlewares: [TypegooseEntityMiddleware, TypegooseMiddleware],
   });
+
   const app = express();
   const PORT = process.env.PORT || 4040;
   const server = new ApolloServer({ schema });
@@ -23,10 +27,10 @@ import UserResolver from "./graphql/resolvers/UserResolver";
     useCreateIndex: true,
   })
     .then(() => {
-      console.log(chalk.blue("[database] Mongo is connected"));
+      console.log(chalk.yellow("[database] Mongo is connected"));
     })
     .catch((e) => {
-      console.log(chalk.bgRed("[database] Error: ", e));
+      console.log(chalk.bgYellow("[database] Error: ", e.message));
     });
 
   app.get("/", (_, res) => {
@@ -43,5 +47,5 @@ import UserResolver from "./graphql/resolvers/UserResolver";
     );
   });
 })().catch((e) => {
-  console.log(chalk.bgGreenBright("[server] Error: ", e.message));
+  console.log(chalk.bgMagenta("[server] Error: ", e.message));
 });

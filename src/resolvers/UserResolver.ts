@@ -1,14 +1,13 @@
-import { Resolver, Query, Mutation, Arg } from "type-graphql";
+import { Resolver, Mutation, Arg, FieldResolver, Root } from "type-graphql";
 import * as bcrypt from "bcryptjs";
-import { User } from "../../entity/User";
-import { UserModel } from "../../models/user";
-import { LoginPayload } from "../";
+import { User, UserModel } from "../entity/User";
+import { LoginPayload } from "../utils/@types";
 
 @Resolver(() => User)
 export default class UserResolver {
-  @Query(() => String)
-  hello() {
-    return "Hello World!";
+  @FieldResolver()
+  async name(@Root() { lastName, firstName }: User) {
+    return `${firstName} ${lastName}`;
   }
 
   @Mutation(() => User)
@@ -17,7 +16,8 @@ export default class UserResolver {
     @Arg("lastName") lastName: string,
     @Arg("email") email: string,
     @Arg("username") username: string,
-    @Arg("password") password: string
+    @Arg("password") password: string,
+    @Arg("isAdmin", { nullable: true }) isAdmin?: boolean
   ) {
     try {
       const emailExist = await UserModel.findOne({ email });
@@ -32,6 +32,7 @@ export default class UserResolver {
       const user = await UserModel.create({
         email,
         username,
+        isAdmin,
         password: hashedPassword,
         firstName,
         lastName,
@@ -79,7 +80,7 @@ export default class UserResolver {
       }
       const valid = await bcrypt.compare(password, user.password);
       if (!valid) {
-        return Error(`Oops, password is incorrect`);
+        return Error(`Password is incorrect`);
       }
       return {
         user,
