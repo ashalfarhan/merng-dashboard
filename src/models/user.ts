@@ -1,9 +1,8 @@
 import { model, Schema } from "mongoose";
-import { User } from "../entity/User";
 
-export const UserModel = model<User>(
+export const UserModel = model(
   "user",
-  new Schema<User>({
+  new Schema({
     email: {
       type: String,
       required: true,
