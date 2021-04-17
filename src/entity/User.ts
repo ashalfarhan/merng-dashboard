@@ -1,12 +1,12 @@
-import { ObjectType, Field } from "type-graphql";
+import { ObjectType, Field, ID } from "type-graphql";
 import { getModelForClass, prop } from "@typegoose/typegoose";
 import { Ref } from "../utils/@types";
+import { ObjectId } from "mongodb";
 
 @ObjectType()
 export class User {
-  @Field(() => String)
-  @prop()
-  readonly id: string;
+  @Field(() => ID)
+  readonly _id: ObjectId;
 
   @Field()
   @prop()
@@ -22,7 +22,7 @@ export class User {
 
   @Field()
   @prop()
-  email: string;
+  public email: string;
 
   @Field(() => String)
   @prop({ ref: () => User })
