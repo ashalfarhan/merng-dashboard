@@ -6,7 +6,7 @@ import { LoginPayload } from "../utils/@types";
 @Resolver(() => User)
 export default class UserResolver {
   @FieldResolver()
-  async name(@Root() { lastName, firstName }: User) {
+  name(@Root() { lastName, firstName }: User) {
     return `${firstName} ${lastName}`;
   }
 
@@ -21,13 +21,9 @@ export default class UserResolver {
   ) {
     try {
       const emailExist = await UserModel.findOne({ email });
-      if (emailExist) {
-        return Error(`Oops, email is already exist`);
-      }
+      if (emailExist) return Error(`Oops, email is already exist`);
       const usernameExist = await UserModel.findOne({ username });
-      if (usernameExist) {
-        return Error(`Oops, username is already exist`);
-      }
+      if (usernameExist) return Error(`Oops, username is already exist`);
       const hashedPassword = await bcrypt.hash(password, 12);
       const user = await UserModel.create({
         email,
@@ -51,13 +47,9 @@ export default class UserResolver {
   ) {
     try {
       const user = await UserModel.findOne({ username });
-      if (!user) {
-        return Error(`Oops, there's no user with this username`);
-      }
+      if (!user) return Error(`Oops, there's no user with this username`);
       const valid = await bcrypt.compare(password, user.password);
-      if (!valid) {
-        return Error(`Oops, password is incorrect`);
-      }
+      if (!valid) return Error(`Oops, password is incorrect`);
       return {
         user,
         message: "Successfully login",
@@ -75,13 +67,9 @@ export default class UserResolver {
   ) {
     try {
       const user = await UserModel.findOne({ email });
-      if (!user) {
-        return Error(`Oops, there's no user with this email`);
-      }
+      if (!user) return Error(`Oops, there's no user with this email`);
       const valid = await bcrypt.compare(password, user.password);
-      if (!valid) {
-        return Error(`Password is incorrect`);
-      }
+      if (!valid) return Error(`Password is incorrect`);
       return {
         user,
         message: "Successfully login",
