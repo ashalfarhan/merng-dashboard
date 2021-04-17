@@ -12,7 +12,7 @@ import { TypegooseEntityMiddleware } from "./utils/typegoose-entity-middleware";
 (async () => {
   const schema = await buildSchema({
     resolvers,
-    globalMiddlewares: [TypegooseEntityMiddleware, TypegooseMiddleware],
+    globalMiddlewares: [TypegooseMiddleware, TypegooseEntityMiddleware],
   });
 
   const app = express();
