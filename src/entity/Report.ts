@@ -32,7 +32,7 @@ export class Report {
   @prop({ type: () => ReportData })
   public detail: ReportData;
 
-  @Field()
+  @Field(() => String)
   @prop()
   public name: string;
 

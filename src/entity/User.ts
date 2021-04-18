@@ -28,7 +28,7 @@ export class User {
   @prop({ ref: () => User })
   public name?: Ref<User | string>;
 
-  @Field(() => Boolean, { defaultValue: false })
+  @Field(() => Boolean)
   @prop({ type: () => Boolean, default: false })
   public isAdmin?: boolean;
 
