@@ -1,13 +1,34 @@
-import { Resolver, Mutation, Arg, FieldResolver, Root } from "type-graphql";
+import {
+  Resolver,
+  Mutation,
+  Arg,
+  FieldResolver,
+  Root,
+  Ctx,
+  Query,
+  UseMiddleware,
+} from "type-graphql";
 import * as bcrypt from "bcryptjs";
 import { User, UserModel } from "../entity/User";
-import { LoginPayload } from "../utils/@types";
+import { LoginPayload, MyContext } from "../utils/@types";
+import { createToken } from "../utils/helpers/createToken";
+import { isAuth } from "../utils/middleware/isAuth";
 
 @Resolver(() => User)
 export default class UserResolver {
   @FieldResolver()
   name(@Root() { lastName, firstName }: User) {
     return `${firstName} ${lastName}`;
+  }
+
+  @Query(() => User, { nullable: true })
+  @UseMiddleware(isAuth)
+  async me(@Ctx() { payload }: MyContext) {
+    if (!payload) {
+      return null;
+    }
+    const user = await UserModel.findOne({ _id: payload.userId });
+    return user;
   }
 
   @Mutation(() => User)
@@ -36,47 +57,51 @@ export default class UserResolver {
       await user.save();
       return user;
     } catch (error) {
-      return error;
+      return error.message;
     }
   }
 
-  @Mutation(() => LoginPayload)
+  @Mutation(() => LoginPayload, { nullable: true })
   async loginWithUsername(
     @Arg("username") username: string,
-    @Arg("password") password: string
+    @Arg("password") password: string,
+    @Ctx() { res }: MyContext
   ) {
     try {
       const user = await UserModel.findOne({ username });
-      if (!user) return Error(`Oops, there's no user with this username`);
+      if (!user) return null;
       const valid = await bcrypt.compare(password, user.password);
-      if (!valid) return Error(`Oops, password is incorrect`);
+      if (!valid) return null;
+      const { accessToken, refreshToken } = createToken(user);
+      res.cookie("fwas", refreshToken, { httpOnly: true });
       return {
         user,
-        message: "Successfully login",
-        token: "asdakj12kj3h12j3vh12h3",
+        token: accessToken,
       };
     } catch (error) {
-      return error;
+      return error.message;
     }
   }
 
-  @Mutation(() => LoginPayload)
+  @Mutation(() => LoginPayload, { nullable: true })
   async loginWithEmail(
     @Arg("email") email: string,
-    @Arg("password") password: string
+    @Arg("password") password: string,
+    @Ctx() { res }: MyContext
   ) {
     try {
       const user = await UserModel.findOne({ email });
-      if (!user) return Error(`Oops, there's no user with this email`);
+      if (!user) return null;
       const valid = await bcrypt.compare(password, user.password);
-      if (!valid) return Error(`Password is incorrect`);
+      if (!valid) return null;
+      const { accessToken, refreshToken } = createToken(user);
+      res.cookie("fwas", refreshToken, { httpOnly: true });
       return {
         user,
-        message: "Successfully login",
-        token: "asdakj12kj3h12j3vh12h3",
+        token: accessToken,
       };
     } catch (error) {
-      return error;
+      return error.message;
     }
   }
 }

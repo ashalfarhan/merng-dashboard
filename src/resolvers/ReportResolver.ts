@@ -7,8 +7,11 @@ import {
   Mutation,
   Resolver,
   Root,
+  UseMiddleware,
+  Ctx,
 } from "type-graphql";
-import { CreateInput, EditInput } from "../utils/@types";
+import { CreateInput, EditInput, MyContext } from "../utils/@types";
+import { isAuth } from "../utils/middleware/isAuth";
 
 @Resolver(() => Report)
 export default class ReportResolver {
@@ -36,24 +39,26 @@ export default class ReportResolver {
       await newReport.save();
       return newReport;
     } catch (error) {
-      return error;
+      return error.message;
     }
   }
 
-  @Mutation(() => Report)
+  @Mutation(() => Report, { nullable: true })
   async deleteReport(@Arg("id") id: string) {
     try {
       const deleted = await ReportModel.findByIdAndDelete(id);
       return deleted;
     } catch (error) {
-      return error;
+      return error.message;
     }
   }
 
   @Mutation(() => Report)
   async editReport(@Arg("id") id: string, @Arg("data") data: EditInput) {
-    const after = await ReportModel.findOneAndUpdate(
-      { _id: id },
+    // const before = await ReportModel.findById(id);
+    // console.log("before saved: ", before);
+    const after = await ReportModel.findByIdAndUpdate(
+      id,
       { ...data },
       {
         new: true,
@@ -63,19 +68,24 @@ export default class ReportResolver {
       return Error("Report with this id is not exist, please create one");
     }
     await after.save();
-    console.log("after saved: ", after);
-    const foundSaved = await ReportModel.findById(id);
-    console.log("foundSaved saved: ", foundSaved);
+    // console.log("after saved: ", after);
     return after;
   }
 
-  @Query(() => [Report])
-  async getAllReports() {
+  @Query(() => [Report], { nullable: true })
+  @UseMiddleware(isAuth)
+  async getAllReports(@Ctx() { payload }: MyContext) {
+    if (!payload) {
+      return null;
+    }
+    if (!payload.isAdmin) {
+      return Error("Must be an admin");
+    }
     try {
       const reports = await ReportModel.find();
       return reports;
     } catch (error) {
-      return error;
+      return error.message;
     }
   }
 
@@ -86,7 +96,7 @@ export default class ReportResolver {
       if (!report) return Error(`There's no report with this ${id}`);
       return report;
     } catch (error) {
-      return error;
+      return error.message;
     }
   }
 }
