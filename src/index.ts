@@ -9,11 +9,17 @@ import { resolvers } from "./resolvers";
 import { TypegooseMiddleware } from "./utils/middleware/typegoose-middleware";
 import { TypegooseEntityMiddleware } from "./utils/middleware/typegoose-entity-middleware";
 import { GraphQLError } from "graphql";
+import cookieParser from "cookie-parser";
+import { refreshTokenHandler } from "./utils/refreshToken";
 
 (async () => {
   const PORT = process.env.PORT || 4040;
   const app = express();
   app.use(express.json());
+  app.use(cookieParser());
+  app.get("/", (_, res) => {
+    res.status(200).send("Yeay! Go to /graphql to have some fun!!");
+  });
   await connect(process.env.MONGO_URI!, {
     useUnifiedTopology: true,
     useNewUrlParser: true,
@@ -34,9 +40,6 @@ import { GraphQLError } from "graphql";
 
   const server = new ApolloServer({
     schema,
-    /**
-     * Error Formatter
-     */
     formatError: (e: GraphQLError) => {
       if (e instanceof ApolloError) {
         console.log("you should see me");
@@ -46,11 +49,9 @@ import { GraphQLError } from "graphql";
     context: ({ req, res }) => ({ req, res }),
   });
 
-  app.get("/", (_, res) => {
-    res.status(200).send("Yeay! Go to /graphql to have some fun!!");
-  });
-
   server.applyMiddleware({ app });
+
+  app.post("/refresh_token", refreshTokenHandler);
 
   app.listen(PORT, () => {
     console.log(
