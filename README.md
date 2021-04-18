@@ -6,6 +6,7 @@
 - Graphql / Type-graphql
 - Express
 - Node Js
+- Apollo Server
 
 ## TODO
 
