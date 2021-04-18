@@ -1,6 +1,7 @@
 import { User } from "../../entity/User";
 import { Field, InputType, Int, ObjectType } from "type-graphql";
 import { ObjectId } from "mongodb";
+import { Request, Response } from "express";
 
 export type Ref<T> = T | ObjectId;
 
@@ -11,9 +12,6 @@ export class LoginPayload {
 
   @Field()
   public token: string;
-
-  @Field()
-  public message: string;
 }
 
 @InputType()
@@ -34,4 +32,13 @@ export class EditInput {
 
   @Field(() => Number, { nullable: true })
   public price: number;
+}
+
+export interface MyContext {
+  req: Request;
+  res: Response;
+  payload?: {
+    userId: string;
+    isAdmin: boolean;
+  };
 }
