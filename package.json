@@ -7,9 +7,10 @@
   "license": "MIT",
   "scripts": {
     "dev": "nodemon src/index.ts --trace-warnings",
-    "build:server": "tsc -p ./",
-    "start:server": "node dist/index.js",
-    "heroku-postbuild": "yarn build:server && yarn start:server"
+    "ts-check": "tsc",
+    "build": "tsc -p ./",
+    "start": "node dist/index.js",
+    "heroku-postbuild": "yarn build && yarn start"
   },
   "dependencies": {
     "apollo-server-express": "^2.23.0",
