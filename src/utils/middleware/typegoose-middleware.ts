@@ -4,7 +4,6 @@ import { MiddlewareFn } from "type-graphql";
 
 export const TypegooseMiddleware: MiddlewareFn = async (_, next) => {
   const result = await next();
-
   if (Array.isArray(result)) {
     return result.map((item) =>
       item instanceof Model ? convertDocument(item) : item
