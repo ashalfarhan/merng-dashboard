@@ -15,17 +15,7 @@ export default function Layout({ children }: Props) {
         <GridItem>
           <SideBar />
         </GridItem>
-        <GridItem colSpan={3}>
-          {children}
-          {/* <Switch>
-              {routes.map((route, idx) => {
-                if (isProtected(route.path)) {
-                  return <PrivateRoute key={idx} {...route} />;
-                }
-                return <Route key={idx} {...route} />;
-              })}
-            </Switch> */}
-        </GridItem>
+        <GridItem colSpan={3}>{children}</GridItem>
       </Grid>
     </Box>
   );
