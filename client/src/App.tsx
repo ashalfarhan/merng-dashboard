@@ -4,7 +4,7 @@ import Header from "./components/Header";
 import { routes } from "./routes";
 import PrivateRoute from "./views/Private";
 
-const adminRoutes = ["/admin", "/users"];
+const adminRoutes = ["/dashboard/users", "/dashboard/reports", "/dashboard"];
 
 function App() {
   const isProtected = (e: string) => {
