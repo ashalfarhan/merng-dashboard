@@ -11,11 +11,13 @@ import { IconButton } from "@chakra-ui/button";
 import { BiMenuAltRight } from "react-icons/bi";
 import { ColorModeSwitcher } from "./ColorModeSwitcer";
 import { Link, useHistory } from "react-router-dom";
+import auth from "../helpers/auth";
 
 export default function Header() {
   const history = useHistory();
   const handleLogout = () => {
     setTimeout(() => {
+      auth.logout();
       history.push("/login");
     }, 300);
   };
@@ -34,7 +36,13 @@ export default function Header() {
           <MenuList>
             <MenuItem>Account</MenuItem>
             <MenuDivider />
-            <MenuItem onClick={handleLogout}>Logout</MenuItem>
+            {auth.isLoggedIn ? (
+              <MenuItem onClick={handleLogout}>Logout</MenuItem>
+            ) : (
+              <MenuItem>
+                <Link to="/login">Login</Link>
+              </MenuItem>
+            )}
           </MenuList>
         </Menu>
       </HStack>
