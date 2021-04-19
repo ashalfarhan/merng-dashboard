@@ -16,9 +16,11 @@ export default function SideBar() {
         spacing="24px"
         py="24px"
       >
-        <Button onClick={() => handleNav("/overview")}>Overview</Button>
-        <Button onClick={() => handleNav("/reports")}>All Reports</Button>
-        <Button onClick={() => handleNav("/users")}>All Users</Button>
+        <Button onClick={() => handleNav("/dashboard")}>Overview</Button>
+        <Button onClick={() => handleNav("/dashboard/reports")}>
+          All Reports
+        </Button>
+        <Button onClick={() => handleNav("/dashboard/users")}>All Users</Button>
       </VStack>
     </Box>
   );
