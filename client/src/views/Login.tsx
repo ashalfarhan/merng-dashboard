@@ -4,17 +4,20 @@ import { Input } from "@chakra-ui/input";
 import { Box, Flex, Heading } from "@chakra-ui/layout";
 import { FormEvent, useState } from "react";
 import { useHistory } from "react-router";
-import auth from "../helpers/auth";
+import useAuth from "../helpers/auth";
 
 export default function LoginPage() {
   const [email, setEmail] = useState<string | null>(null);
   const [password, setPassword] = useState<string | null>(null);
   const history = useHistory();
+  const { login } = useAuth();
   const handleLogin = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setTimeout(() => {
-      alert(JSON.stringify({ email, password }, null, 2));
-      auth.login();
+      alert(
+        JSON.stringify({ message: "success login", email, password }, null, 2)
+      );
+      login();
       history.push("/");
     }, 300);
   };
