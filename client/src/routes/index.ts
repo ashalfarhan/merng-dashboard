@@ -1,10 +1,8 @@
-import AllReports from "../components/Menus/AllReports";
+import AllReports from "../views/AllReports";
 import Page404 from "../views/404Page";
 import HomePage from "../views/Home";
 import LoginPage from "../views/Login";
-import AllUsers from "../components/Menus/AllUsers";
-// import MemberPage from "../views/MemberPage";
-// import AdminPage from "../views/AdminPage";
+import AllUsers from "../views/AllUsers";
 
 export const routes = [
   {
@@ -13,25 +11,15 @@ export const routes = [
     exact: true,
   },
   {
-    path: "/reports",
+    path: "/dashboard/reports",
     component: AllReports,
     exact: true,
   },
   {
-    path: "/users",
+    path: "/dashboard/users",
     component: AllUsers,
     exact: true,
   },
-  // {
-  //   path: "/dashboard",
-  //   component: MemberPage,
-  //   exact: true,
-  // },
-  // {
-  //   path: "/dashboard/admin",
-  //   component: AdminPage,
-  //   exact: true,
-  // },
   {
     path: "/login",
     component: LoginPage,
