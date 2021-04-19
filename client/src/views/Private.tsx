@@ -1,22 +1,18 @@
-import React from "react";
-import { Redirect, Route } from "react-router";
+import { Redirect, Route } from "react-router-dom";
 import auth from "../helpers/auth";
-interface Props {
-  rest?: any[];
-  component: (props: any) => JSX.Element;
-}
-export default function PrivateRoute({ component: Component, ...rest }: Props) {
+
+export default function PrivateRoute({ component, ...rest }: any) {
   return (
     <Route
       {...rest}
-      render={(props) =>
+      render={({ location }) =>
         auth.isLoggedIn ? (
-          <Component {...props} />
+          component
         ) : (
           <Redirect
             to={{
               pathname: "/login",
-              state: { from: props.location },
+              state: { from: location },
             }}
           />
         )
