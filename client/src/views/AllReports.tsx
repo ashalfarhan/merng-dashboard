@@ -9,6 +9,8 @@ import {
   Tr,
 } from "@chakra-ui/table";
 import { useEffect, useState } from "react";
+import Layout from "../components/Layout";
+
 interface Report {
   id: number;
   name: string;
@@ -30,24 +32,26 @@ export default function AllReports() {
   }, []);
 
   return (
-    <Box>
-      <Table variant="striped">
-        <TableCaption>Updated at {new Date().toDateString()}</TableCaption>
-        <Thead>
-          <Th>No.</Th>
-          <Th>Name</Th>
-          <Th>Reporter</Th>
-        </Thead>
-        <Tbody>
-          {posts.map((post: Report) => (
-            <Tr key={post.id}>
-              <Td>{post.id}</Td>
-              <Td>{post.name}</Td>
-              <Td>{post.email}</Td>
-            </Tr>
-          ))}
-        </Tbody>
-      </Table>
-    </Box>
+    <Layout>
+      <Box>
+        <Table variant="striped">
+          <TableCaption>Updated at {new Date().toDateString()}</TableCaption>
+          <Thead>
+            <Th>No.</Th>
+            <Th>Name</Th>
+            <Th>Reporter</Th>
+          </Thead>
+          <Tbody>
+            {posts.map((post: Report) => (
+              <Tr key={post.id}>
+                <Td>{post.id}</Td>
+                <Td>{post.name}</Td>
+                <Td>{post.email}</Td>
+              </Tr>
+            ))}
+          </Tbody>
+        </Table>
+      </Box>
+    </Layout>
   );
 }
