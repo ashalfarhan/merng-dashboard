@@ -9,17 +9,17 @@ import useAuth from "../helpers/auth";
 export default function LoginPage() {
   const [email, setEmail] = useState<string | null>(null);
   const [password, setPassword] = useState<string | null>(null);
+  const [submit, setSubmit] = useState(false);
   const history = useHistory();
   const { login } = useAuth();
   const handleLogin = (e: FormEvent<HTMLFormElement>) => {
+    setSubmit(true);
     e.preventDefault();
     setTimeout(() => {
-      alert(
-        JSON.stringify({ message: "success login", email, password }, null, 2)
-      );
+      console.log(email, password);
       login();
       history.push("/");
-    }, 300);
+    }, 400);
   };
   return (
     <Flex w="full" h="70vh" direction="column" align="center" justify="center">
@@ -45,7 +45,7 @@ export default function LoginPage() {
                 placeholder="***********"
               />
             </FormControl>
-            <Button w="full" mt={4} type="submit">
+            <Button isLoading={submit} w="full" mt={4} type="submit">
               Sign In
             </Button>
           </form>
