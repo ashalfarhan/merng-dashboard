@@ -4,11 +4,15 @@ import Header from "./components/Header";
 import { routes } from "./routes";
 import PrivateRoute from "./views/Private";
 
-const adminRoutes = ["/dashboard/users", "/dashboard/reports", "/dashboard"];
+const protectedRoutes = [
+  "/dashboard/users",
+  "/dashboard/reports",
+  "/dashboard",
+];
 
 function App() {
   const isProtected = (e: string) => {
-    return adminRoutes.includes(e);
+    return protectedRoutes.includes(e);
   };
   return (
     <Box
