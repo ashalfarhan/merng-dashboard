@@ -1,5 +1,6 @@
 import { Button } from "@chakra-ui/button";
 import { Box, Heading, Text } from "@chakra-ui/layout";
+import { FormattedMessage } from "react-intl";
 import { Link } from "react-router-dom";
 import useAuth from "../helpers/auth";
 
@@ -13,10 +14,13 @@ export default function HomePage() {
       flexDir="column"
       justifyContent="center"
     >
-      <Heading textAlign="center">Welcome!</Heading>
+      <Heading textAlign="center">
+        <FormattedMessage id="welcome.title" />
+      </Heading>
       {isLoggedIn ? (
         <Text>
-          Now you can go to <Link to="/dashboard"> dashboard</Link>
+          <FormattedMessage id="welcome.subTitle" />
+          <Link to="/dashboard"> dashboard</Link>
         </Text>
       ) : (
         <Text fontSize="24px">
