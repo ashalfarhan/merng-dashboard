@@ -1,5 +1,6 @@
 import { Button } from "@chakra-ui/button";
 import { Box, VStack } from "@chakra-ui/layout";
+import { FormattedMessage } from "react-intl";
 import { useHistory } from "react-router";
 
 export default function SideBar() {
@@ -16,11 +17,17 @@ export default function SideBar() {
         spacing="24px"
         py="24px"
       >
-        <Button onClick={() => handleNav("/dashboard")}>Overview</Button>
-        <Button onClick={() => handleNav("/dashboard/reports")}>
-          All Reports
+        <Button onClick={() => handleNav("/dashboard")}>
+          <FormattedMessage id="menu.overview" />
         </Button>
-        <Button onClick={() => handleNav("/dashboard/users")}>All Users</Button>
+        <Button onClick={() => handleNav("/dashboard/reports")}>
+          <FormattedMessage id="menu.allReports" />
+        </Button>
+        <Button onClick={() => handleNav("/dashboard/users")}>
+          <FormattedMessage id="menu.allUsers" />
+        </Button>
+        <Button>Sale</Button>
+        <Button>Stock</Button>
       </VStack>
     </Box>
   );
