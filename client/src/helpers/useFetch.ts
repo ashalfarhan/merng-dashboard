@@ -13,7 +13,6 @@ export const useFetch = (item: string, length: number) => {
     fetch(API_URL)
       .then((x) => x.json())
       .then((y) => {
-        console.log(y["Time Series (5min)"]);
         setState({
           data: _.values(y["Time Series (5min)"])
             .slice(0, length)
