@@ -10,9 +10,22 @@ const id = {
     account: "Akun",
   },
   menu: {
-    overview: "Gambaran",
+    overview: "Statistik",
     allReports: "Semua Laporan",
     allUsers: "Semua Pengguna",
+    sales: "Penjualan",
+    inventory: "Inventaris",
+    stock: "Stok Barang",
+  },
+  overview: {
+    heading: "Statistik",
+  },
+  login: {
+    heading: "Masuk",
+  },
+  notFound: {
+    heading: "tidak ada halaman untuk",
+    content: { main: "Kembali ke ", sub: "Halaman Utama" },
   },
 };
 export default id;

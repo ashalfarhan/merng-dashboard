@@ -1,7 +1,7 @@
 const en = {
   hello: "Halo",
   welcome: {
-    title: "Welcome",
+    title: "Welcome!",
     subTitle: "Now you can go to",
   },
   settings: {
@@ -13,6 +13,19 @@ const en = {
     overview: "Overview",
     allReports: "All Reports",
     allUsers: "All Users",
+    sales: "Sales",
+    inventory: "Inventory",
+    stock: "Stock",
+  },
+  overview: {
+    heading: "Overview",
+  },
+  login: {
+    heading: "Login",
+  },
+  notFound: {
+    heading: "there's no page for",
+    content: { main: "Back to ", sub: "Home" },
   },
 };
 export default en;
