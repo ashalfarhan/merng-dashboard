@@ -31,7 +31,7 @@ export default function LoginPage() {
                   w="full"
                   onClick={() => setLoginWith(LOGIN.USERNAME)}
                 >
-                  Login with username
+                  <FormattedMessage id="login.withUsername" />
                 </Button>
               </>
             ) : (
@@ -42,7 +42,7 @@ export default function LoginPage() {
                   w="full"
                   onClick={() => setLoginWith(LOGIN.EMAIL)}
                 >
-                  Login with email
+                  <FormattedMessage id="login.withEmail" />
                 </Button>
               </>
             )}

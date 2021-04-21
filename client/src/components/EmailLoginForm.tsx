@@ -17,11 +17,11 @@ export default function EmailLoginForm() {
   const dispatch = useDispatch();
   const [login, { loading, error }] = useLoginWithEmailMutation({
     onCompleted: ({ loginWithEmail }) => {
-      console.log(error);
       if (!loginWithEmail || error) {
         return dispatch(setError("Invalid email or password"));
       }
-      dispatch(setLogin(loginWithEmail.token));
+      const { token, user } = loginWithEmail;
+      dispatch(setLogin({ token, user }));
       setTimeout(() => {
         history.push("/");
       }, 400);

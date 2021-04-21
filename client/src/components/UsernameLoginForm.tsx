@@ -18,9 +18,10 @@ export default function UsernameLoginForm() {
   const [login, { loading, error }] = useLoginWithUsernameMutation({
     onCompleted: ({ loginWithUsername }) => {
       if (!loginWithUsername || error) {
-        return dispatch(setError(error?.message));
+        return dispatch(setError("Invalid username or password"));
       }
-      dispatch(setLogin(loginWithUsername.token));
+      const { token, user } = loginWithUsername;
+      dispatch(setLogin({ token, user }));
       setTimeout(() => {
         history.push("/");
       }, 400);

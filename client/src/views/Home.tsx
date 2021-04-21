@@ -19,17 +19,19 @@ export default function HomePage() {
         <FormattedMessage id="welcome.title" />
       </Heading>
       {isLoggedIn ? (
-        <Text>
-          <FormattedMessage id="welcome.subTitle" />
-          <Link to="/dashboard"> dashboard</Link>
+        <Text fontSize="24px">
+          <FormattedMessage id="welcome.subTitle" />{" "}
+          <Button fontSize="24px" variant="link">
+            <Link to="/dashboard">dashboard</Link>
+          </Button>
         </Text>
       ) : (
         <Text fontSize="24px">
-          Please{" "}
+          <FormattedMessage id="welcome.please" />{" "}
           <Button fontSize="24px" variant="link">
             <Link to="/login">login</Link>
           </Button>{" "}
-          if you want to continue
+          <FormattedMessage id="welcome.ifContinue" />
         </Text>
       )}
     </Box>
