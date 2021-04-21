@@ -1,5 +1,5 @@
 import jwtDecode from "jwt-decode";
-interface Token {
+export interface Token {
   userId: string;
   isAdmin: boolean;
   iat: number;
