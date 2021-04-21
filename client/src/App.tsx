@@ -2,10 +2,13 @@ import { Box } from "@chakra-ui/react";
 import { Switch, Route } from "react-router-dom";
 import Header from "./components/Header";
 import { routes } from "./routes";
-import PrivateRoute from "./views/Private";
+import PrivateRoute from "./components/Private";
 
 const protectedRoutes = [
   "/dashboard/users",
+  "/dashboard/inventory",
+  "/dashboard/sales",
+  "/dashboard/stock",
   "/dashboard/reports",
   "/dashboard",
 ];
