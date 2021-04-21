@@ -25,11 +25,17 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Install yarn
+     - name: Install yarn
         run: npm i -g yarn
 
-      - name: Install all dependencies
+     - name: Install all dependencies
         run: yarn
 
-      - name: Typescript check
+     - name: Install both modules
+        run: yarn modules
+      
+     - name: Typescript check
         run: yarn ts-check
+
+     - name: Build test
+        run: yarn build
