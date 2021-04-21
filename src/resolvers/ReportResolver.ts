@@ -12,6 +12,7 @@ import {
 } from "type-graphql";
 import { CreateInput, EditInput, MyContext } from "../utils/@types";
 import { isAuth } from "../utils/middleware/isAuth";
+import { ReportType } from "../utils/@types/enums";
 
 @Resolver(() => Report)
 export default class ReportResolver {
@@ -22,18 +23,22 @@ export default class ReportResolver {
     return user;
   }
 
-  @Mutation(() => Report)
+  @Mutation(() => Report, { nullable: true })
+  @UseMiddleware(isAuth)
   async createReport(
+    @Ctx() { payload }: MyContext,
     @Arg("name") name: string,
     @Arg("data") data: CreateInput,
-    @Arg("reporterId", { nullable: true }) reporterId?: string,
-    @Arg("createdAt", { nullable: true }) createdAt?: Date
+    @Arg("type") type: ReportType
   ) {
+    if (!payload) {
+      return Error("You should be a user to create a report");
+    }
     try {
       const newReport = await ReportModel.create({
         name,
-        createdAt,
-        reporterId,
+        type,
+        reporterId: payload.userId,
         detail: { ...data },
       });
       await newReport.save();
@@ -54,18 +59,30 @@ export default class ReportResolver {
   }
 
   @Mutation(() => Report)
-  async editReport(@Arg("id") id: string, @Arg("data") data: EditInput) {
-    const saved = await ReportModel.findByIdAndUpdate(
-      id,
-      { updatedAt: new Date(), detail: { ...data } },
-      {
-        new: true,
-      }
-    );
-    if (!saved) {
-      return Error("Report with this id is not exist, please create one");
+  @UseMiddleware(isAuth)
+  async editReport(
+    @Ctx() { payload }: MyContext,
+    @Arg("data") data: EditInput
+  ) {
+    if (!payload) {
+      return Error("Must be a user to edit a report");
     }
-    return saved;
+    try {
+      const saved = await ReportModel.findOneAndUpdate(
+        { "detail._id": data._id },
+        {
+          detail: {
+            ...data,
+          },
+        }
+      );
+      if (!saved) {
+        return Error("Report with this id is not exist, please create one");
+      }
+      return saved;
+    } catch (error) {
+      return error.message;
+    }
   }
 
   @Query(() => [Report], { nullable: true })
@@ -73,9 +90,6 @@ export default class ReportResolver {
   async getAllReports(@Ctx() { payload }: MyContext) {
     if (!payload) {
       return null;
-    }
-    if (!payload.isAdmin) {
-      return Error("Must be an admin");
     }
     try {
       const reports = await ReportModel.find();
@@ -85,7 +99,7 @@ export default class ReportResolver {
     }
   }
 
-  @Query(() => Report)
+  @Query(() => Report, { nullable: true })
   async getReport(@Arg("id") id: string) {
     try {
       const report = await ReportModel.findById(id);
