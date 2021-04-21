@@ -2,12 +2,14 @@
 
 ## Stack
 
-- Mongoose / Typegoose
-- Graphql / Type-graphql
+- Mongoose
+- Graphql
 - Express
-- Node Js
-- Apollo Server
+- Apollo
+- React
 
 ## TODO
 
-- [ ] Fix mongoose error cannot update document
+- [ ] Add more features for admin
+- [ ] Add more data in db document
+- [ ] Add favicon
