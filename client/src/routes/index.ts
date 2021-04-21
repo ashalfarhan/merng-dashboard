@@ -4,6 +4,9 @@ import HomePage from "../views/Home";
 import LoginPage from "../views/Login";
 import AllUsers from "../views/AllUsers";
 import Overview from "../views/Overview";
+import Inventory from "../views/Inventory";
+import Sales from "../views/Sales";
+import Stock from "../views/Stock";
 
 export const routes = [
   {
@@ -29,6 +32,21 @@ export const routes = [
   {
     path: "/dashboard/users",
     component: AllUsers,
+    exact: true,
+  },
+  {
+    path: "/dashboard/inventory",
+    component: Inventory,
+    exact: true,
+  },
+  {
+    path: "/dashboard/sales",
+    component: Sales,
+    exact: true,
+  },
+  {
+    path: "/dashboard/stock",
+    component: Stock,
     exact: true,
   },
   {
