@@ -1,9 +1,8 @@
 import { ApolloClient, createHttpLink, InMemoryCache } from "@apollo/client";
 import { onError } from "@apollo/client/link/error";
 import { setContext } from "@apollo/client/link/context";
-import { getAccessToken } from "../helpers/token";
 const authLink = setContext((_, { headers }) => {
-  const token = getAccessToken();
+  const token = localStorage.getItem("fmas");
   return {
     headers: {
       ...headers,
@@ -27,8 +26,6 @@ const httpLink = createHttpLink({
 
 export const client = new ApolloClient({
   link: authLink.concat(httpLink).concat(errorLink),
-  cache: new InMemoryCache({
-    addTypename: false,
-  }),
+  cache: new InMemoryCache(),
   credentials: "include",
 });
