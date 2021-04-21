@@ -6,19 +6,23 @@ import { BrowserRouter } from "react-router-dom";
 import { ApolloProvider } from "@apollo/client";
 import { client } from "./libs/apollo";
 import LocaleProvider from "./libs/i18n";
+import { Provider } from "react-redux";
+import { store } from "./store";
 
 ReactDOM.render(
   <React.StrictMode>
-    <BrowserRouter forceRefresh>
-      <LocaleProvider>
+    <Provider store={store}>
+      <BrowserRouter forceRefresh>
         <ApolloProvider client={client}>
-          <ChakraProvider theme={theme}>
-            <ColorModeScript />
-            <App />
-          </ChakraProvider>
+          <LocaleProvider>
+            <ChakraProvider theme={theme}>
+              <ColorModeScript />
+              <App />
+            </ChakraProvider>
+          </LocaleProvider>
         </ApolloProvider>
-      </LocaleProvider>
-    </BrowserRouter>
+      </BrowserRouter>
+    </Provider>
   </React.StrictMode>,
   document.getElementById("root")
 );
