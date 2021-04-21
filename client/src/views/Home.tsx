@@ -2,10 +2,11 @@ import { Button } from "@chakra-ui/button";
 import { Box, Heading, Text } from "@chakra-ui/layout";
 import { FormattedMessage } from "react-intl";
 import { Link } from "react-router-dom";
-import useAuth from "../helpers/auth";
+import { useSelector } from "../store";
+import { isAuth } from "../store/slices/auth";
 
 export default function HomePage() {
-  const { isLoggedIn } = useAuth();
+  const isLoggedIn = useSelector(isAuth);
   return (
     <Box
       minH="60vh"
