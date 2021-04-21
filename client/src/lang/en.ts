@@ -3,6 +3,8 @@ const en = {
   welcome: {
     title: "Welcome!",
     subTitle: "Now you can go to",
+    please: "Please",
+    ifContinue: "if you want to continue",
   },
   settings: {
     login: "Login",
@@ -22,6 +24,8 @@ const en = {
   },
   login: {
     heading: "Login",
+    withUsername: "Login with username",
+    withEmail: "Login with email",
   },
   notFound: {
     heading: "there's no page for",

@@ -3,6 +3,8 @@ const id = {
   welcome: {
     title: "Selamat datang!",
     subTitle: "Sekarang anda bisa ke",
+    please: "Silahkan",
+    ifContinue: "jika anda ingin melanjutkan",
   },
   settings: {
     login: "Masuk",
@@ -22,6 +24,8 @@ const id = {
   },
   login: {
     heading: "Masuk",
+    withUsername: "Masuk dengan username",
+    withEmail: "Masuk dengan email",
   },
   notFound: {
     heading: "tidak ada halaman untuk",
