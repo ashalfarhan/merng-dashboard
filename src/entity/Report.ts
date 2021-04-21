@@ -3,9 +3,13 @@ import { User } from "./User";
 import { getModelForClass, prop } from "@typegoose/typegoose";
 import { Ref } from "../utils/@types";
 import { ObjectId } from "mongodb";
+import { ReportType, StuffType } from "../utils/@types/enums";
 
 @ObjectType({ simpleResolvers: true })
-class ReportData {
+export class ReportData {
+  @Field(() => ID)
+  readonly _id?: ObjectId | string;
+
   @Field(() => String)
   @prop()
   public stuff: string;
@@ -13,6 +17,14 @@ class ReportData {
   @Field(() => Int)
   @prop()
   public price: number;
+
+  @Field(() => Int)
+  @prop()
+  public amount: number;
+
+  @Field(() => StuffType)
+  @prop()
+  public type: StuffType;
 }
 
 @ObjectType()
@@ -21,11 +33,9 @@ export class Report {
   readonly _id: ObjectId;
 
   @Field(() => Date)
-  @prop({ type: () => Date, default: new Date() })
   public createdAt?: Date;
 
   @Field(() => Date)
-  @prop({ type: () => Date, default: new Date() })
   public updatedAt?: Date;
 
   @Field(() => ReportData, { simple: true })
@@ -36,13 +46,19 @@ export class Report {
   @prop()
   public name: string;
 
+  @Field(() => ReportType)
+  @prop()
+  public type: ReportType;
+
   @Field(() => ID, { nullable: true })
   @prop({ type: () => String })
-  public reporterId?: string;
+  public reporterId: string;
 
   @Field(() => User, { nullable: true })
   @prop({ ref: () => User, type: () => User })
   public reporter?: Ref<User> | null;
 }
 
-export const ReportModel = getModelForClass(Report);
+export const ReportModel = getModelForClass(Report, {
+  schemaOptions: { timestamps: true },
+});
