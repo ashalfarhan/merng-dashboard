@@ -1,12 +1,3 @@
-import {
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-} from "@chakra-ui/modal";
 import { Box, Text } from "@chakra-ui/layout";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
@@ -18,19 +9,19 @@ import { Input } from "@chakra-ui/input";
 import { useLoginWithEmailMutation } from "../generated/graphql";
 import { useHistory } from "react-router";
 import { useDispatch } from "../store";
-import { setToken } from "../store/slices/auth";
-import { useDisclosure } from "@chakra-ui/hooks";
+import { setLogin } from "../store/thunk/login";
+import { setError } from "../store/slices/error";
 
 export default function EmailLoginForm() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const history = useHistory();
   const dispatch = useDispatch();
   const [login, { loading, error }] = useLoginWithEmailMutation({
     onCompleted: ({ loginWithEmail }) => {
+      console.log(error);
       if (!loginWithEmail || error) {
-        return onOpen();
+        return dispatch(setError("Invalid email or password"));
       }
-      dispatch(setToken(loginWithEmail.token));
+      dispatch(setLogin(loginWithEmail.token));
       setTimeout(() => {
         history.push("/");
       }, 400);
@@ -46,9 +37,14 @@ export default function EmailLoginForm() {
   });
   const handleLogin = async (value: EmailLogin) => {
     if (isDirty && isValid) {
-      await login({
-        variables: { ...value },
-      });
+      try {
+        await login({
+          variables: { ...value },
+        });
+      } catch (e) {
+        dispatch(setError(e.message));
+        console.error(e.message);
+      }
     }
   };
   return (
@@ -84,17 +80,6 @@ export default function EmailLoginForm() {
           Submit
         </Button>
       </form>
-      <Modal onClose={onClose} isOpen={isOpen} isCentered>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>{"Oops"}</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>{"Email or password is invalid"}</ModalBody>
-          <ModalFooter>
-            <Button onClick={onClose}>{"Ok"}</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
     </Box>
   );
 }
