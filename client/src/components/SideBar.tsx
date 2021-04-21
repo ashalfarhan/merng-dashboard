@@ -26,8 +26,15 @@ export default function SideBar() {
         <Button onClick={() => handleNav("/dashboard/users")}>
           <FormattedMessage id="menu.allUsers" />
         </Button>
-        <Button>Sale</Button>
-        <Button>Stock</Button>
+        <Button onClick={() => handleNav("/dashboard/stock")}>
+          <FormattedMessage id="menu.stock" />
+        </Button>
+        <Button onClick={() => handleNav("/dashboard/sales")}>
+          <FormattedMessage id="menu.sales" />
+        </Button>
+        <Button onClick={() => handleNav("/dashboard/inventory")}>
+          <FormattedMessage id="menu.inventory" />
+        </Button>
       </VStack>
     </Box>
   );
