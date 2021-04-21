@@ -6,7 +6,7 @@ export const createToken = (user: User) => {
     { userId: user._id, isAdmin: user.isAdmin },
     process.env.ACCESS_TOKEN_SECRET!,
     {
-      expiresIn: "2m",
+      expiresIn: "2 days",
     }
   );
 
@@ -14,7 +14,7 @@ export const createToken = (user: User) => {
     { userId: user._id, isAdmin: user.isAdmin },
     process.env.REFRESH_TOKEN_SECRET!,
     {
-      expiresIn: "7d",
+      expiresIn: "7 days",
     }
   );
   return {
