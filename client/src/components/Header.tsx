@@ -11,25 +11,24 @@ import { IconButton } from "@chakra-ui/button";
 import { BiMenuAltRight } from "react-icons/bi";
 import { ColorModeSwitcher } from "./ColorModeSwitcer";
 import { Link, useHistory } from "react-router-dom";
-import useAuth from "../helpers/auth";
 import { FormattedMessage } from "react-intl";
-import { useContext } from "react";
-import { AppLocale } from "../libs/i18n";
 import { LOCALES } from "../@types/enums";
+import { useDispatch, useSelector } from "../store";
+import { isAuth, removeToken } from "../store/slices/auth";
+import { getLocale, switchLocale } from "../store/slices/locale";
+
 export default function Header() {
   const history = useHistory();
-  const { locale, dispatch } = useContext(AppLocale);
-  const { logout, isLoggedIn } = useAuth();
+  const isLoggedIn = useSelector(isAuth);
+  const currentLocale = useSelector(getLocale);
+  const dispatch = useDispatch();
   const handleLogout = () => {
-    logout();
+    dispatch(removeToken());
     history.push("/login");
   };
-  const isEng = locale === LOCALES.EN;
+  const isEng = currentLocale === LOCALES.EN;
   const handleSwitchLang = () => {
-    dispatch!({
-      type: "SET",
-      payload: isEng ? LOCALES.ID : LOCALES.EN,
-    });
+    dispatch(switchLocale(isEng ? LOCALES.ID : LOCALES.EN));
   };
   return (
     <Box p="4" display="flex" justifyContent="space-between">
@@ -50,7 +49,7 @@ export default function Header() {
                   <FormattedMessage id="settings.account" />
                 </MenuItem>
                 <MenuItem onClick={() => handleSwitchLang()}>
-                  {locale === LOCALES.EN ? "Bahasa Indonesia" : "English"}
+                  {isEng ? "Bahasa Indonesia" : "English"}
                 </MenuItem>
                 <MenuDivider />
                 <MenuItem onClick={handleLogout}>
