@@ -29,6 +29,7 @@ export class CreateInput {
   @Field(() => Int)
   public amount: number;
 }
+
 @InputType()
 export class EditInput {
   @Field(() => ID)
