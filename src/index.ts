@@ -3,7 +3,7 @@ import "dotenv/config";
 import { ApolloError, ApolloServer } from "apollo-server-express";
 import chalk from "chalk";
 import express from "express";
-import { connect } from "mongoose";
+import { set, connect } from "mongoose";
 import { buildSchema } from "type-graphql";
 import { resolvers } from "./resolvers";
 import { TypegooseMiddleware } from "./utils/middleware/typegoose-middleware";
@@ -12,10 +12,17 @@ import { GraphQLError } from "graphql";
 import cookieParser from "cookie-parser";
 import { refreshTokenHandler } from "./utils/refreshToken";
 import path from "path";
+import cors from "cors";
 
 (async () => {
   const PORT = process.env.PORT || 4040;
   const app = express();
+  app.use(
+    cors({
+      credentials: true,
+      origin: "http://localhost:3000",
+    })
+  );
   app.use(express.json());
   app.use(cookieParser());
   app.get("/", (_, res) => {
@@ -34,11 +41,12 @@ import path from "path";
       console.log(chalk.bgYellow("[database] Error: ", e.message));
     });
 
+  set("returnOriginal", false);
+
   const schema = await buildSchema({
     resolvers,
     globalMiddlewares: [TypegooseMiddleware, TypegooseEntityMiddleware],
   });
-
   const server = new ApolloServer({
     schema,
     formatError: (e: GraphQLError) => {
