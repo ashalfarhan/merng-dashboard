@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import auth from "./slices/auth";
 import locale from "./slices/locale";
+import error from "./slices/error";
 import {
   useSelector as useReduxSelector,
   useDispatch as useReduxDispatch,
@@ -11,6 +12,7 @@ export const store = configureStore({
   reducer: {
     auth,
     locale,
+    error,
   },
 });
 
