@@ -1,0 +1,19 @@
+mutation LoginWithEmail($email: String!, $password: String!) {
+  loginWithEmail(email: $email, password: $password) {
+    user {
+      email
+      username
+    }
+    token
+  }
+}
+
+mutation LoginWithUsername($username: String!, $password: String!) {
+  loginWithUsername(username: $username, password: $password) {
+    user {
+      email
+      username
+    }
+    token
+  }
+}
