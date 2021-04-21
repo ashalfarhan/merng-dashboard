@@ -11,6 +11,7 @@ import { TypegooseEntityMiddleware } from "./utils/middleware/typegoose-entity-m
 import { GraphQLError } from "graphql";
 import cookieParser from "cookie-parser";
 import { refreshTokenHandler } from "./utils/refreshToken";
+import path from "path";
 
 (async () => {
   const PORT = process.env.PORT || 4040;
@@ -52,6 +53,17 @@ import { refreshTokenHandler } from "./utils/refreshToken";
   server.applyMiddleware({ app });
 
   app.post("/refresh_token", refreshTokenHandler);
+
+  if (process.env.NODE_ENV === "production") {
+    /**
+     * Serve client
+     */
+    app.use(express.static("client/build"));
+
+    app.get("*", (_, res) => {
+      res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+    });
+  }
 
   app.listen(PORT, () => {
     console.log(
