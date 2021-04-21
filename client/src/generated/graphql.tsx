@@ -146,7 +146,7 @@ export type LoginWithEmailMutation = (
     & Pick<LoginPayload, 'token'>
     & { user: (
       { __typename?: 'User' }
-      & Pick<User, 'email' | 'username'>
+      & Pick<User, '_id' | 'email' | 'username' | 'name'>
     ) }
   )> }
 );
@@ -164,7 +164,7 @@ export type LoginWithUsernameMutation = (
     & Pick<LoginPayload, 'token'>
     & { user: (
       { __typename?: 'User' }
-      & Pick<User, 'email' | 'username'>
+      & Pick<User, '_id' | 'name' | 'email' | 'username'>
     ) }
   )> }
 );
@@ -217,8 +217,10 @@ export const LoginWithEmailDocument = gql`
     mutation LoginWithEmail($email: String!, $password: String!) {
   loginWithEmail(email: $email, password: $password) {
     user {
+      _id
       email
       username
+      name
     }
     token
   }
@@ -255,6 +257,8 @@ export const LoginWithUsernameDocument = gql`
     mutation LoginWithUsername($username: String!, $password: String!) {
   loginWithUsername(username: $username, password: $password) {
     user {
+      _id
+      name
       email
       username
     }
