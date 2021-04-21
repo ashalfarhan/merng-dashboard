@@ -24,7 +24,6 @@ const protectedRoutes = [
   "/dashboard/reports",
   "/dashboard",
 ];
-
 const isProtected = (e: string) => {
   return protectedRoutes.includes(e);
 };
@@ -33,7 +32,6 @@ function App() {
   const dispatch = useDispatch();
   const handleShutError = () => {
     dispatch(closeError());
-    // window.location.reload();
   };
   return (
     <Box
