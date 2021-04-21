@@ -10,3 +10,8 @@ export enum OVERVIEW {
   CLOSE = "4. close",
   VOLUME = "5. volume",
 }
+
+export enum LOGIN {
+  EMAIL = "EMAIL",
+  USERNAME = "USERNAME",
+}
