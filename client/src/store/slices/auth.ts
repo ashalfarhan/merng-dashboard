@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "..";
 import { isValid } from "../../helpers/auth";
+import { setLogin } from "../thunk/login";
 
 interface State {
   isLoggedIn: boolean;
@@ -35,17 +36,20 @@ const authReducer = createSlice({
       state.isLoggedIn = false;
       state.token = null;
     },
-    setLogin: (state) => {
-      if (localStorage.getItem("fmas")) {
-        // @ts-ignore
-        state.isLoggedIn = isValid(localStorage.getItem("fmas"));
-      }
+  },
+  extraReducers: {
+    [setLogin.fulfilled.type]: (state, { payload }) => {
+      state.isAdmin = payload.isAdmin;
+      state.userId = payload.userId;
+    },
+    [setLogin.rejected.type]: (state) => {
       state.isLoggedIn = false;
     },
   },
 });
 
-export const { setToken, removeToken, setLogin } = authReducer.actions;
+export const { setToken, removeToken } = authReducer.actions;
+export const getUser = (state: RootState) => state.auth;
 export const isAuth = (state: RootState) =>
   state.auth.token ? isValid(state.auth.token) : state.auth.isLoggedIn;
 export default authReducer.reducer;
