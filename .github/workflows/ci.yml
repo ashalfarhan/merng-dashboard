@@ -19,17 +19,17 @@ jobs:
     steps:
       - name: Get the working directory
         uses: actions/checkout@v2
-
       - name: Setup Node.js
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-
       - name: Install yarn
-        run: npm i -g yarn
-
-      - name: Install all dependencies
-        run: yarn
-
+         run: npm i -g yarn
+      # - name: Install all dependencies
+      #    run: yarn
+      - name: Install both modules
+         run: yarn modules
       - name: Typescript check
-        run: yarn ts-check
+         run: yarn ts-check
+      - name: Build test
+         run: yarn build

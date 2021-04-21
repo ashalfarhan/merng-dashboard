@@ -25,9 +25,6 @@ export class CreateInput {
 @InputType()
 export class EditInput {
   @Field(() => String, { nullable: true })
-  public reporterId: string;
-
-  @Field(() => String, { nullable: true })
   public stuff: string;
 
   @Field(() => Number, { nullable: true })

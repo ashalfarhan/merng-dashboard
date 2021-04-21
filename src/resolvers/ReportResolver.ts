@@ -55,21 +55,17 @@ export default class ReportResolver {
 
   @Mutation(() => Report)
   async editReport(@Arg("id") id: string, @Arg("data") data: EditInput) {
-    // const before = await ReportModel.findById(id);
-    // console.log("before saved: ", before);
-    const after = await ReportModel.findByIdAndUpdate(
+    const saved = await ReportModel.findByIdAndUpdate(
       id,
-      { ...data },
+      { updatedAt: new Date(), detail: { ...data } },
       {
         new: true,
       }
     );
-    if (!after) {
+    if (!saved) {
       return Error("Report with this id is not exist, please create one");
     }
-    await after.save();
-    // console.log("after saved: ", after);
-    return after;
+    return saved;
   }
 
   @Query(() => [Report], { nullable: true })

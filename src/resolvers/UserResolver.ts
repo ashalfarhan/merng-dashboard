@@ -25,7 +25,7 @@ export default class UserResolver {
   @UseMiddleware(isAuth)
   async me(@Ctx() { payload }: MyContext) {
     if (!payload) {
-      return null;
+      return Error("You have to be a user to access this");
     }
     const user = await UserModel.findOne({ _id: payload.userId });
     return user;
@@ -42,9 +42,9 @@ export default class UserResolver {
   ) {
     try {
       const emailExist = await UserModel.findOne({ email });
-      if (emailExist) return Error(`Oops, email is already exist`);
+      if (emailExist) return Error(`Email is already exist`);
       const usernameExist = await UserModel.findOne({ username });
-      if (usernameExist) return Error(`Oops, username is already exist`);
+      if (usernameExist) return Error(`Username is already exist`);
       const hashedPassword = await bcrypt.hash(password, 12);
       const user = await UserModel.create({
         email,
@@ -69,9 +69,9 @@ export default class UserResolver {
   ) {
     try {
       const user = await UserModel.findOne({ username });
-      if (!user) return null;
+      if (!user) return Error("There's no user with this username");
       const valid = await bcrypt.compare(password, user.password);
-      if (!valid) return null;
+      if (!valid) return Error("Invalid username or password");
       const { accessToken, refreshToken } = createToken(user);
       res.cookie("fwas", refreshToken, { httpOnly: true });
       return {
@@ -91,9 +91,9 @@ export default class UserResolver {
   ) {
     try {
       const user = await UserModel.findOne({ email });
-      if (!user) return null;
+      if (!user) return Error("There's no user with this email");
       const valid = await bcrypt.compare(password, user.password);
-      if (!valid) return null;
+      if (!valid) return Error("Invalid email or password");
       const { accessToken, refreshToken } = createToken(user);
       res.cookie("fwas", refreshToken, { httpOnly: true });
       return {
