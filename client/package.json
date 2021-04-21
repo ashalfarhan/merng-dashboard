@@ -9,6 +9,7 @@
     "@emotion/styled": "^11.3.0",
     "@hookform/resolvers": "^2.4.0",
     "@reduxjs/toolkit": "^1.5.1",
+    "apollo-link-token-refresh": "^0.3.2",
     "chart.js": "2.9.4",
     "flat": "^5.0.2",
     "framer-motion": "^4.1.4",
