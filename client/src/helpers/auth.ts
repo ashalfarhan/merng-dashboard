@@ -1,25 +1,21 @@
-import { useEffect, useState } from "react";
-
-const useAuth = () => {
-  // @ts-ignore
-  const loggedIn = Boolean(JSON.parse(localStorage.getItem("isLoggedIn")));
-  const [isLoggedIn, setIsLoggedIn] = useState(loggedIn);
-
-  useEffect(() => {
-    setIsLoggedIn(loggedIn);
-  }, [loggedIn]);
-
-  const login = () => {
-    localStorage.setItem("isLoggedIn", JSON.stringify(true));
-  };
-  const logout = () => {
-    localStorage.setItem("isLoggedIn", JSON.stringify(false));
-  };
-  return {
-    isLoggedIn,
-    login,
-    logout,
-  };
+import jwtDecode from "jwt-decode";
+interface Token {
+  userId: string;
+  isAdmin: boolean;
+  iat: number;
+  exp: number;
+}
+export const isValid = (token: string) => {
+  if (!token) {
+    return false;
+  }
+  try {
+    const { exp } = jwtDecode<Token>(token);
+    if (Date.now() < exp * 1000) {
+      return true;
+    }
+    return false;
+  } catch {
+    return false;
+  }
 };
-
-export default useAuth;
