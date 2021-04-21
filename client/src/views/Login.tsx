@@ -1,54 +1,52 @@
-import { Button } from "@chakra-ui/button";
-import { FormControl, FormLabel } from "@chakra-ui/form-control";
-import { Input } from "@chakra-ui/input";
 import { Box, Flex, Heading } from "@chakra-ui/layout";
-import { FormEvent, useState } from "react";
-import { useHistory } from "react-router";
-import useAuth from "../helpers/auth";
+import { FormattedMessage } from "react-intl";
+import EmailLoginForm from "../components/EmailLoginForm";
+import UsernameLoginForm from "../components/UsernameLoginForm";
+import { useState } from "react";
+import { LOGIN } from "../@types/enums";
+import { Button } from "@chakra-ui/button";
+import { isAuth } from "../store/slices/auth";
+import { useSelector } from "../store";
+import { Redirect } from "react-router";
 
 export default function LoginPage() {
-  const [email, setEmail] = useState<string | null>(null);
-  const [password, setPassword] = useState<string | null>(null);
-  const [submit, setSubmit] = useState(false);
-  const history = useHistory();
-  const { login } = useAuth();
-  const handleLogin = (e: FormEvent<HTMLFormElement>) => {
-    setSubmit(true);
-    e.preventDefault();
-    setTimeout(() => {
-      console.log(email, password);
-      login();
-      history.push("/");
-    }, 400);
-  };
+  const [loginWith, setLoginWith] = useState(LOGIN.EMAIL);
+  const isLoggedIn = useSelector(isAuth);
+  if (isLoggedIn) {
+    return <Redirect to="/dashboard" />;
+  }
   return (
     <Flex w="full" h="70vh" direction="column" align="center" justify="center">
       <Box w="sm">
         <Box>
-          <Heading>Login</Heading>
-        </Box>
-        <Box mt="8">
-          <form onSubmit={handleLogin}>
-            <FormControl>
-              <FormLabel>Email</FormLabel>
-              <Input
-                onChange={(e) => setEmail(e.target.value)}
-                type="email"
-                placeholder="example@mail.com"
-              />
-            </FormControl>
-            <FormControl mt={6}>
-              <FormLabel>Password</FormLabel>
-              <Input
-                onChange={(e) => setPassword(e.target.value)}
-                type="password"
-                placeholder="***********"
-              />
-            </FormControl>
-            <Button isLoading={submit} w="full" mt={4} type="submit">
-              Sign In
-            </Button>
-          </form>
+          <Heading>
+            <FormattedMessage id="login.heading" />
+          </Heading>
+          <Box mt="4">
+            {loginWith === LOGIN.EMAIL ? (
+              <>
+                <EmailLoginForm />
+                <Button
+                  mt="4"
+                  w="full"
+                  onClick={() => setLoginWith(LOGIN.USERNAME)}
+                >
+                  Login with username
+                </Button>
+              </>
+            ) : (
+              <>
+                <UsernameLoginForm />
+                <Button
+                  mt="4"
+                  w="full"
+                  onClick={() => setLoginWith(LOGIN.EMAIL)}
+                >
+                  Login with email
+                </Button>
+              </>
+            )}
+          </Box>
         </Box>
       </Box>
     </Flex>
