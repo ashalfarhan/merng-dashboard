@@ -13,25 +13,76 @@ import { User, UserModel } from "../entity/User";
 import { LoginPayload, MyContext } from "../utils/@types";
 import { createToken } from "../utils/helpers/createToken";
 import { isAuth } from "../utils/middleware/isAuth";
+import { ReportModel } from "../entity/Report";
 
 @Resolver(() => User)
 export default class UserResolver {
+  /**
+   * @returns FieldResolvers
+   */
   @FieldResolver()
   name(@Root() { lastName, firstName }: User) {
     return `${firstName} ${lastName}`;
   }
 
+  @FieldResolver()
+  async reports(@Root() { _id }: User) {
+    const reports = await ReportModel.find({ reporterId: _id });
+    return reports;
+  }
+
+  /**
+   * @returns Queries
+   */
   @Query(() => User, { nullable: true })
   @UseMiddleware(isAuth)
   async me(@Ctx() { payload }: MyContext) {
     if (!payload) {
       return Error("You have to be a user to access this");
     }
-    const user = await UserModel.findOne({ _id: payload.userId });
-    return user;
+    try {
+      const user = await UserModel.findOne({ _id: payload.userId });
+      return user;
+    } catch (error) {
+      return error.message;
+    }
   }
 
-  @Mutation(() => User)
+  @Query(() => [User], { nullable: true })
+  @UseMiddleware(isAuth)
+  async getAllUsers(@Ctx() { payload }: MyContext) {
+    if (!payload) {
+      return Error("Please login");
+    }
+    if (!payload.isAdmin) {
+      return Error("Only admin can get all users");
+    }
+    try {
+      const users = await UserModel.find();
+      return users;
+    } catch (error) {
+      return error.message;
+    }
+  }
+
+  @Query(() => User, { nullable: true })
+  @UseMiddleware(isAuth)
+  async getUser(@Ctx() { payload }: MyContext, @Arg("userId") userId: string) {
+    if (!payload) {
+      return Error("Please login");
+    }
+    try {
+      const user = await UserModel.findById(userId);
+      return user;
+    } catch (error) {
+      return error.message;
+    }
+  }
+
+  /**
+   * @returns Mutations
+   */
+  @Mutation(() => User, { nullable: true })
   async register(
     @Arg("firstName") firstName: string,
     @Arg("lastName") lastName: string,
