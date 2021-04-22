@@ -1,12 +1,16 @@
 import { ObjectType, Field, ID } from "type-graphql";
-import { getModelForClass, prop } from "@typegoose/typegoose";
-import { Ref } from "../utils/@types";
+import { getModelForClass, prop, Ref } from "@typegoose/typegoose";
 import { ObjectId } from "mongodb";
+import { Report } from "./Report";
 
 @ObjectType()
 export class User {
   @Field(() => ID)
   readonly _id: ObjectId;
+
+  @Field(() => String)
+  @prop({ ref: () => User })
+  readonly name: Ref<User>;
 
   @Field()
   @prop()
@@ -24,13 +28,13 @@ export class User {
   @prop()
   public email: string;
 
-  @Field(() => String)
-  @prop({ ref: () => User })
-  public name?: Ref<User | string>;
-
   @Field(() => Boolean)
   @prop({ type: () => Boolean, default: false })
   public isAdmin?: boolean;
+
+  @Field(() => [Report])
+  @prop({ ref: () => Report, type: () => [Report], default: [] })
+  public reports?: Ref<Report>[];
 
   @prop()
   password: string;
