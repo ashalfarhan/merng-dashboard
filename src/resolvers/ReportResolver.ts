@@ -64,8 +64,16 @@ export default class ReportResolver {
   }
 
   @Mutation(() => Report, { nullable: true })
-  async deleteReport(@Arg("id") id: string) {
+  @UseMiddleware(isAuth)
+  async deleteReport(@Ctx() { payload }: MyContext, @Arg("id") id: string) {
+    if (!payload) {
+      return Error("Please login");
+    }
     try {
+      const report = await ReportModel.findById(id);
+      if (payload.userId !== report?.reporterId) {
+        return Error("Only the creator of this report can delete this report");
+      }
       const deleted = await ReportModel.findByIdAndDelete(id);
       return deleted;
     } catch (error) {
@@ -73,7 +81,7 @@ export default class ReportResolver {
     }
   }
 
-  @Mutation(() => Report)
+  @Mutation(() => Report, { nullable: true })
   @UseMiddleware(isAuth)
   async editReport(
     @Ctx() { payload }: MyContext,
