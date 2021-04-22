@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import "dotenv/config";
-import { ApolloError, ApolloServer } from "apollo-server-express";
+import { ApolloServer } from "apollo-server-express";
 import chalk from "chalk";
 import express from "express";
 import { set, connect } from "mongoose";
@@ -8,7 +8,6 @@ import { buildSchema } from "type-graphql";
 import { resolvers } from "./resolvers";
 import { TypegooseMiddleware } from "./utils/middleware/typegoose-middleware";
 import { TypegooseEntityMiddleware } from "./utils/middleware/typegoose-entity-middleware";
-import { GraphQLError } from "graphql";
 import cookieParser from "cookie-parser";
 import { refreshTokenHandler } from "./utils/refreshToken";
 import path from "path";
@@ -49,11 +48,8 @@ import cors from "cors";
   });
   const server = new ApolloServer({
     schema,
-    formatError: (e: GraphQLError) => {
-      if (e instanceof ApolloError) {
-        console.log("you should see me");
-      }
-      return e;
+    formatError: (e) => {
+      return new Error(e.message);
     },
     context: ({ req, res }) => ({ req, res }),
   });

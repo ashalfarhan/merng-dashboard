@@ -120,7 +120,7 @@ export default class UserResolver {
   ) {
     try {
       const user = await UserModel.findOne({ username });
-      if (!user) return Error("There's no user with this username");
+      if (!user) return Error("Invalid username or password");
       const valid = await bcrypt.compare(password, user.password);
       if (!valid) return Error("Invalid username or password");
       const { accessToken, refreshToken } = createToken(user);
@@ -142,7 +142,7 @@ export default class UserResolver {
   ) {
     try {
       const user = await UserModel.findOne({ email });
-      if (!user) return Error("There's no user with this email");
+      if (!user) return Error("Invalid email or password");
       const valid = await bcrypt.compare(password, user.password);
       if (!valid) return Error("Invalid email or password");
       const { accessToken, refreshToken } = createToken(user);

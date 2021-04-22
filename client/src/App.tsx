@@ -16,6 +16,7 @@ import PrivateRoute from "./components/Private";
 import { useDispatch, useSelector } from "./store";
 import { closeError, getError } from "./store/slices/error";
 import { CgDanger } from "react-icons/cg";
+
 const protectedRoutes = [
   "/dashboard/users",
   "/dashboard/inventory",
@@ -24,9 +25,11 @@ const protectedRoutes = [
   "/dashboard/reports",
   "/dashboard",
 ];
+
 const isProtected = (e: string) => {
   return protectedRoutes.includes(e);
 };
+
 function App() {
   const { isError, message } = useSelector(getError);
   const dispatch = useDispatch();
@@ -53,13 +56,13 @@ function App() {
         <ModalOverlay />
         <ModalContent>
           <ModalHeader display="flex" alignItems="center">
-            <CgDanger />
-            <Text ml="2" color="red.600">
+            <Text mr="2" color="red.500" letterSpacing="wider">
               {"Oops"}
             </Text>
+            <CgDanger color="red" />
           </ModalHeader>
           <ModalBody>{message}</ModalBody>
-          <ModalFooter>
+          <ModalFooter mt="4">
             <Button w="full" variant="outline" onClick={handleShutError}>
               {"Ok"}
             </Button>
