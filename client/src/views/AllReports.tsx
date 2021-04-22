@@ -1,4 +1,3 @@
-import { Box } from "@chakra-ui/layout";
 import {
   Table,
   TableCaption,
@@ -8,49 +7,53 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/table";
-import { useEffect, useState } from "react";
+import { Box } from "@chakra-ui/layout";
 import Layout from "../components/Layout";
-
-interface Report {
-  id: number;
-  name: string;
-  email: string;
-}
+import { useGetAllReportsQuery } from "../generated/graphql";
+import { Spinner } from "@chakra-ui/spinner";
+import { useDispatch, useSelector } from "../store";
+import { setError } from "../store/slices/error";
+import { formatDate } from "../helpers/dateFormatter";
+import { getLocale } from "../store/slices/locale";
 
 export default function AllReports() {
-  const [posts, setPosts] = useState<Report[] | []>([]);
-
-  useEffect(() => {
-    const getPosts = async () => {
-      const response = await fetch(
-        "https://jsonplaceholder.typicode.com/comments"
-      );
-      const json = await response.json();
-      setPosts(json.slice(0, 24));
-    };
-    getPosts();
-  }, []);
-
+  const dispatch = useDispatch();
+  const locale = useSelector(getLocale);
+  const { data, loading } = useGetAllReportsQuery({
+    onError: (e) => {
+      dispatch(setError(e.message));
+    },
+  });
   return (
     <Layout>
-      <Box>
-        <Table variant="striped">
-          <TableCaption>Updated at {new Date().toDateString()}</TableCaption>
-          <Thead>
-            <Th>No.</Th>
-            <Th>Name</Th>
-            <Th>Reporter</Th>
-          </Thead>
-          <Tbody>
-            {posts.map((post: Report) => (
-              <Tr key={post.id}>
-                <Td>{post.id}</Td>
-                <Td>{post.name}</Td>
-                <Td>{post.email}</Td>
+      <Box height="full" display="flex">
+        {!data || loading ? (
+          <Spinner m="auto" />
+        ) : (
+          <Table variant="striped">
+            <Thead>
+              <Tr>
+                <Th>No.</Th>
+                <Th>Name</Th>
+                <Th>Reporter</Th>
+                <Th>Reported On</Th>
               </Tr>
-            ))}
-          </Tbody>
-        </Table>
+            </Thead>
+            <Tbody>
+              {data.getAllReports?.map((report, idx) => (
+                <Tr key={report._id}>
+                  <Td>{idx + 1}</Td>
+                  <Td>{report.name}</Td>
+                  <Td>{report.reporter.name}</Td>
+                  <Td>{formatDate(report.createdAt, locale)}</Td>
+                </Tr>
+              ))}
+            </Tbody>
+            <TableCaption>
+              Last update {new Date().toLocaleString()}
+            </TableCaption>
+          </Table>
+        )}
       </Box>
     </Layout>
   );
