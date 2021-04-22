@@ -11,9 +11,7 @@ interface State {
 }
 
 const initialState: State = {
-  isLoggedIn:
-    // @ts-ignore
-    isValid(localStorage.getItem("fmas")),
+  isLoggedIn: isValid(localStorage.getItem("fmas")),
   // @ts-ignore
   user: JSON.parse(localStorage.getItem("user")),
   token: localStorage.getItem("fmas"),
@@ -41,7 +39,8 @@ const authReducer = createSlice({
   extraReducers: {
     [setLogin.fulfilled.type]: (state, { payload }) => {
       localStorage.setItem("user", JSON.stringify(payload.user));
-      state.user = payload.user;
+      // @ts-ignore
+      state.user = JSON.parse(localStorage.getItem("user")) || payload.user;
     },
     [setLogin.rejected.type]: (state) => {
       localStorage.removeItem("user");
