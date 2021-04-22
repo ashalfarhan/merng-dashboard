@@ -10,10 +10,10 @@ export class Stuff {
   readonly _id: ObjectId;
 
   @Field(() => Date)
-  readonly createdAt?: Date;
+  readonly createdAt: Date;
 
   @Field(() => Date)
-  readonly updatedAt?: Date;
+  readonly updatedAt: Date;
 
   @Field(() => String)
   @prop()
