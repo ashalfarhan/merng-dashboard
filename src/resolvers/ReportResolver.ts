@@ -1,5 +1,3 @@
-import { Report, ReportModel } from "../entity/Report";
-import { UserModel } from "../entity/User";
 import {
   Query,
   Arg,
@@ -9,13 +7,19 @@ import {
   Root,
   UseMiddleware,
   Ctx,
+  Args,
 } from "type-graphql";
-import { CreateInput, EditInput, MyContext } from "../utils/@types";
+import { Stuff, StuffModel } from "../entity/Stuff";
+import { Report, ReportModel } from "../entity/Report";
+import { UserModel } from "../entity/User";
+import { CreateReportArgs, EditReportInput, MyContext } from "../utils/@types";
 import { isAuth } from "../utils/middleware/isAuth";
-import { ReportType } from "../utils/@types/enums";
 
 @Resolver(() => Report)
 export default class ReportResolver {
+  /**
+   * @returns FieldResolvers
+   */
   @FieldResolver()
   async reporter(@Root() { reporterId }: Report) {
     if (!reporterId) return null;
@@ -23,13 +27,20 @@ export default class ReportResolver {
     return user;
   }
 
+  @FieldResolver(() => [Stuff], { nullable: true })
+  async goods(@Root() { _id }: Report) {
+    const stuffs = await StuffModel.find({ reportId: _id });
+    return stuffs;
+  }
+
+  /**
+   * @returns Mutations
+   */
   @Mutation(() => Report, { nullable: true })
   @UseMiddleware(isAuth)
   async createReport(
     @Ctx() { payload }: MyContext,
-    @Arg("name") name: string,
-    @Arg("data") data: CreateInput,
-    @Arg("type") type: ReportType
+    @Args() { data, name, type }: CreateReportArgs
   ) {
     if (!payload) {
       return Error("You should be a user to create a report");
@@ -39,9 +50,13 @@ export default class ReportResolver {
         name,
         type,
         reporterId: payload.userId,
-        detail: { ...data },
       });
       await newReport.save();
+      const newStuff = await StuffModel.create({
+        ...data,
+        reportId: newReport._id,
+      });
+      await newStuff.save();
       return newReport;
     } catch (error) {
       return error.message;
@@ -62,19 +77,15 @@ export default class ReportResolver {
   @UseMiddleware(isAuth)
   async editReport(
     @Ctx() { payload }: MyContext,
-    @Arg("data") data: EditInput
+    @Arg("data") data: EditReportInput
   ) {
     if (!payload) {
       return Error("Must be a user to edit a report");
     }
     try {
       const saved = await ReportModel.findOneAndUpdate(
-        { "detail._id": data._id },
-        {
-          detail: {
-            ...data,
-          },
-        }
+        { _id: data._id },
+        { ...data }
       );
       if (!saved) {
         return Error("Report with this id is not exist, please create one");
@@ -85,6 +96,9 @@ export default class ReportResolver {
     }
   }
 
+  /**
+   * @returns Queries
+   */
   @Query(() => [Report], { nullable: true })
   @UseMiddleware(isAuth)
   async getAllReports(@Ctx() { payload }: MyContext) {
