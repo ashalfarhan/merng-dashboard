@@ -1,31 +1,10 @@
-import { Field, ID, Int, ObjectType } from "type-graphql";
+import { Field, ID, ObjectType } from "type-graphql";
 import { User } from "./User";
 import { getModelForClass, prop } from "@typegoose/typegoose";
 import { Ref } from "../utils/@types";
 import { ObjectId } from "mongodb";
-import { ReportType, StuffType } from "../utils/@types/enums";
-
-@ObjectType({ simpleResolvers: true })
-export class ReportData {
-  @Field(() => ID)
-  readonly _id?: ObjectId | string;
-
-  @Field(() => String)
-  @prop()
-  public stuff: string;
-
-  @Field(() => Int)
-  @prop()
-  public price: number;
-
-  @Field(() => Int)
-  @prop()
-  public amount: number;
-
-  @Field(() => StuffType)
-  @prop()
-  public type: StuffType;
-}
+import { ReportType } from "../utils/@types/enums";
+import { Stuff } from "./Stuff";
 
 @ObjectType()
 export class Report {
@@ -33,14 +12,14 @@ export class Report {
   readonly _id: ObjectId;
 
   @Field(() => Date)
-  public createdAt?: Date;
+  readonly createdAt?: Date;
 
   @Field(() => Date)
-  public updatedAt?: Date;
+  readonly updatedAt?: Date;
 
-  @Field(() => ReportData, { simple: true })
-  @prop({ type: () => ReportData })
-  public detail: ReportData;
+  @Field(() => [Stuff])
+  @prop({ default: [], ref: () => Stuff, type: () => [Stuff] })
+  public goods?: Ref<Stuff>[] | Stuff[];
 
   @Field(() => String)
   @prop()
@@ -50,7 +29,7 @@ export class Report {
   @prop()
   public type: ReportType;
 
-  @Field(() => ID, { nullable: true })
+  @Field(() => ID)
   @prop({ type: () => String })
   public reporterId: string;
 
