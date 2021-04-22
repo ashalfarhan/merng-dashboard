@@ -18,7 +18,7 @@ export class LoginPayload {
 @InputType()
 export class StuffInput {
   @Field(() => ID, { nullable: true })
-  public reportId?: string;
+  readonly reportId: string;
 
   @Field(() => String)
   public name: string;
@@ -32,7 +32,8 @@ export class StuffInput {
   @Field(() => Int)
   public amount: number;
 }
-@InputType()
+
+@ArgsType()
 export class AddStuffInput {
   @Field(() => ID)
   public reportId: string;
@@ -68,16 +69,16 @@ export class EditStuffInput {
   public _id: ObjectId;
 
   @Field(() => String, { nullable: true })
-  public name: string;
+  public name?: string;
 
   @Field(() => Number, { nullable: true })
-  public price: number;
+  public price?: number;
 
   @Field(() => StuffType, { nullable: true })
-  public type: StuffType;
+  public type?: StuffType;
 
   @Field(() => Int, { nullable: true })
-  public amount: number;
+  public amount?: number;
 }
 
 @InputType()
