@@ -1,5 +1,5 @@
 export enum LOCALES {
-  EN = "en-us",
+  EN = "en-uk",
   ID = "id-id",
 }
 
