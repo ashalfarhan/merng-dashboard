@@ -21,6 +21,7 @@ export default function Charts({ display }: { display: OVERVIEW }) {
   return (
     <Box>
       <Line
+        type=""
         height={400}
         width={600}
         options={{
