@@ -13,8 +13,10 @@ import { useGetAllReportsQuery } from "../generated/graphql";
 import { Spinner } from "@chakra-ui/spinner";
 import { useDispatch, useSelector } from "../store";
 import { setError } from "../store/slices/error";
-import { formatDate } from "../helpers/dateFormatter";
 import { getLocale } from "../store/slices/locale";
+import moment from "moment";
+import { Link } from "react-router-dom";
+import { FormattedMessage } from "react-intl";
 
 export default function AllReports() {
   const dispatch = useDispatch();
@@ -34,23 +36,36 @@ export default function AllReports() {
             <Thead>
               <Tr>
                 <Th>No.</Th>
-                <Th>Name</Th>
-                <Th>Reporter</Th>
-                <Th>Reported On</Th>
+                <Th>
+                  <FormattedMessage id="report.nameLabel" />
+                </Th>
+                <Th>
+                  <FormattedMessage id="report.reporterLabel" />
+                </Th>
+                <Th>
+                  <FormattedMessage id="report.reportedOnLabel" />
+                </Th>
               </Tr>
             </Thead>
             <Tbody>
               {data.getAllReports?.map((report, idx) => (
                 <Tr key={report._id}>
                   <Td>{idx + 1}</Td>
-                  <Td>{report.name}</Td>
+                  <Td>
+                    <Link to={`/report/${report._id}`}>{report.name}</Link>
+                  </Td>
                   <Td>{report.reporter.name}</Td>
-                  <Td>{formatDate(report.createdAt, locale)}</Td>
+                  <Td>
+                    {moment(report.createdAt)
+                      .locale(locale)
+                      .format("ddd DD-MM-YYYY")}
+                  </Td>
                 </Tr>
               ))}
             </Tbody>
             <TableCaption>
-              Last update {new Date().toLocaleString()}
+              <FormattedMessage id="lastUpdateLabel" />{" "}
+              {new Date().toLocaleString()}
             </TableCaption>
           </Table>
         )}
