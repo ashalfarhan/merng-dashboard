@@ -64,7 +64,7 @@
     "@graphql-codegen/cli": "1.21.4",
     "@graphql-codegen/typescript": "1.22.0",
     "@graphql-codegen/typescript-operations": "1.17.16",
-    "@graphql-codegen/typescript-react-apollo": "2.2.4",
+    "@graphql-codegen/typescript-react-apollo": "^2.2.4",
     "@types/flat": "^5.0.1",
     "@types/lodash": "^4.14.168"
   }

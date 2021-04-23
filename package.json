@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "nodemon src/index.ts --trace-warnings",
-    "modules": "yarn && yarn --cwd client",
+    "modules": "yarn && yarn --cwd client install --frozen-lockfile",
     "start:client": "yarn --cwd client start",
     "ts-check": "tsc && yarn --cwd client ts",
     "build": "yarn build:server && yarn build:client",
