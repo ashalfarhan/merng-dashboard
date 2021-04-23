@@ -83,6 +83,7 @@ query GetReport($id: String!) {
     }
     goods {
       _id
+      name
       createdAt
       updatedAt
       price

@@ -244,6 +244,19 @@ export type CreateReportMutation = (
   )> }
 );
 
+export type DeleteReportMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type DeleteReportMutation = (
+  { __typename?: 'Mutation' }
+  & { deleteReport?: Maybe<(
+    { __typename?: 'Report' }
+    & Pick<Report, 'name'>
+  )> }
+);
+
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -328,7 +341,7 @@ export type GetReportQuery = (
       & Pick<User, 'name'>
     ), goods: Array<(
       { __typename?: 'Stuff' }
-      & Pick<Stuff, '_id' | 'createdAt' | 'updatedAt' | 'price' | 'type' | 'amount'>
+      & Pick<Stuff, '_id' | 'name' | 'createdAt' | 'updatedAt' | 'price' | 'type' | 'amount'>
     )> }
   )> }
 );
@@ -487,6 +500,39 @@ export function useCreateReportMutation(baseOptions?: Apollo.MutationHookOptions
 export type CreateReportMutationHookResult = ReturnType<typeof useCreateReportMutation>;
 export type CreateReportMutationResult = Apollo.MutationResult<CreateReportMutation>;
 export type CreateReportMutationOptions = Apollo.BaseMutationOptions<CreateReportMutation, CreateReportMutationVariables>;
+export const DeleteReportDocument = gql`
+    mutation DeleteReport($id: String!) {
+  deleteReport(id: $id) {
+    name
+  }
+}
+    `;
+export type DeleteReportMutationFn = Apollo.MutationFunction<DeleteReportMutation, DeleteReportMutationVariables>;
+
+/**
+ * __useDeleteReportMutation__
+ *
+ * To run a mutation, you first call `useDeleteReportMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteReportMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteReportMutation, { data, loading, error }] = useDeleteReportMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteReportMutation(baseOptions?: Apollo.MutationHookOptions<DeleteReportMutation, DeleteReportMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteReportMutation, DeleteReportMutationVariables>(DeleteReportDocument, options);
+      }
+export type DeleteReportMutationHookResult = ReturnType<typeof useDeleteReportMutation>;
+export type DeleteReportMutationResult = Apollo.MutationResult<DeleteReportMutation>;
+export type DeleteReportMutationOptions = Apollo.BaseMutationOptions<DeleteReportMutation, DeleteReportMutationVariables>;
 export const MeDocument = gql`
     query ME {
   me {
@@ -686,6 +732,7 @@ export const GetReportDocument = gql`
     }
     goods {
       _id
+      name
       createdAt
       updatedAt
       price

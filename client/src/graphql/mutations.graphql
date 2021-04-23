@@ -33,3 +33,9 @@ mutation CreateReport($name: String!, $type: ReportType!, $data: StuffInput!) {
     }
   }
 }
+
+mutation DeleteReport($id: String!) {
+  deleteReport(id: $id) {
+    name
+  }
+}
