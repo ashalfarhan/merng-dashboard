@@ -9,6 +9,11 @@
     "@emotion/styled": "^11.3.0",
     "@hookform/resolvers": "^2.4.0",
     "@reduxjs/toolkit": "^1.5.1",
+    "@types/node": "12.0.0",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "@types/react-redux": "^7.1.16",
+    "@types/react-router-dom": "^5.1.7",
     "apollo-link-token-refresh": "^0.3.2",
     "chart.js": "3.1.1",
     "flat": "^5.0.2",
@@ -61,11 +66,6 @@
     "@graphql-codegen/typescript-operations": "1.17.16",
     "@graphql-codegen/typescript-react-apollo": "2.2.4",
     "@types/flat": "^5.0.1",
-    "@types/lodash": "^4.14.168",
-    "@types/node": "^14.14.41",
-    "@types/react": "^17.0.0",
-    "@types/react-dom": "^17.0.0",
-    "@types/react-redux": "^7.1.16",
-    "@types/react-router-dom": "^5.1.7"
+    "@types/lodash": "^4.14.168"
   }
 }
