@@ -62,7 +62,7 @@ import cors from "cors";
      */
     app.use(express.static("client/build"));
 
-    app.get("/*", (_, res) => {
+    app.get("*", (_, res) => {
       res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
     });
   }
