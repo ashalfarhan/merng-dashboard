@@ -1,21 +1,9 @@
-import {
-  Box,
-  Button,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  Text,
-} from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import { Switch, Route } from "react-router-dom";
 import Header from "./components/Header";
 import { routes } from "./routes";
 import PrivateRoute from "./components/Private";
-import { useDispatch, useSelector } from "./store";
-import { closeError, getError } from "./store/slices/error";
-import { CgDanger } from "react-icons/cg";
+import ErrorModal from "./components/ErrorModal";
 
 const protectedRoutes = [
   "/dashboard/users",
@@ -24,6 +12,8 @@ const protectedRoutes = [
   "/dashboard/stock",
   "/dashboard/reports",
   "/dashboard",
+  "/report/:id",
+  "/me",
 ];
 
 const isProtected = (e: string) => {
@@ -31,11 +21,6 @@ const isProtected = (e: string) => {
 };
 
 function App() {
-  const { isError, message } = useSelector(getError);
-  const dispatch = useDispatch();
-  const handleShutError = () => {
-    dispatch(closeError());
-  };
   return (
     <Box
       style={{
@@ -52,23 +37,7 @@ function App() {
           )
         )}
       </Switch>
-      <Modal onClose={handleShutError} isOpen={isError} isCentered>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader display="flex" alignItems="center">
-            <Text mr="2" color="red.500" letterSpacing="wider">
-              {"Oops"}
-            </Text>
-            <CgDanger color="red" />
-          </ModalHeader>
-          <ModalBody>{message}</ModalBody>
-          <ModalFooter mt="4">
-            <Button w="full" variant="outline" onClick={handleShutError}>
-              {"Ok"}
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      <ErrorModal />
     </Box>
   );
 }
