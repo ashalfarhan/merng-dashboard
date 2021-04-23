@@ -28,7 +28,6 @@ export default function Charts({ display }: { display: OVERVIEW }) {
           y: {
             ticks: {
               callback: (val: number) => {
-                console.log("ticks y: ", val);
                 return `$${val}`;
               },
             },
