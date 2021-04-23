@@ -6,7 +6,7 @@ import { emailLoginSchema } from "../helpers/validation";
 import { Button } from "@chakra-ui/button";
 import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import { Input } from "@chakra-ui/input";
-import { useLoginWithEmailMutation } from "../generated/graphql";
+import { MeDocument, useLoginWithEmailMutation } from "../generated/graphql";
 import { useHistory } from "react-router";
 import { useDispatch } from "../store";
 import { setLogin } from "../store/thunk/login";
@@ -15,10 +15,22 @@ import { setError } from "../store/slices/error";
 export default function EmailLoginForm() {
   const history = useHistory();
   const dispatch = useDispatch();
-  const [login, { loading, error }] = useLoginWithEmailMutation({
+  const [login, { loading }] = useLoginWithEmailMutation({
+    refetchQueries: [
+      {
+        query: MeDocument,
+      },
+    ],
+    onError: (e) => {
+      dispatch(setError(e.message));
+    },
     onCompleted: ({ loginWithEmail }) => {
-      if (!loginWithEmail || error) {
-        return dispatch(setError("Invalid email or password"));
+      if (!loginWithEmail) {
+        return dispatch(
+          setError(
+            "Cannot retrive the data after logged you in, please try again"
+          )
+        );
       }
       const { token, user } = loginWithEmail;
       dispatch(setLogin({ token, user }));
@@ -43,7 +55,6 @@ export default function EmailLoginForm() {
         });
       } catch (e) {
         dispatch(setError(e.message));
-        console.error(e.message);
       }
     }
   };
