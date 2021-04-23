@@ -20,6 +20,7 @@ const authLink = setContext((_, { headers }) => {
     },
   };
 });
+
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors) {
     graphQLErrors.map(({ message, locations, path }) => {
@@ -29,17 +30,16 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
     });
   }
   if (networkError) {
-    console.log(`[Network error]: ${networkError}`);
-    return;
+    console.error(`[Network error]: ${networkError.message}`);
   }
-  console.log(`[Unknown error]`);
+  console.error(`[Unknown error]`);
 });
 
 const refreshTokenLink = new TokenRefreshLink({
   accessTokenField: "accessToken",
   isTokenValidOrUndefined: () => {
     const token = localStorage.getItem("fmas");
-    return isValid(token);
+    return !isValid(token);
   },
   fetchAccessToken: () => {
     return fetch("/refresh_token", {
@@ -52,8 +52,7 @@ const refreshTokenLink = new TokenRefreshLink({
     localStorage.setItem("fmas", accessToken);
   },
   handleError: (err) => {
-    console.warn("Your refresh token is invalid. Try to relogin");
-    console.error(err);
+    console.warn("Your refresh token is invalid. Try to relogin" + err.message);
   },
 });
 
@@ -62,7 +61,7 @@ const httpLink = createHttpLink({
 });
 
 const client = new ApolloClient({
-  link: ApolloLink.from([refreshTokenLink, authLink, errorLink, httpLink]),
+  link: ApolloLink.from([authLink, errorLink, refreshTokenLink, httpLink]),
   cache: new InMemoryCache(),
   credentials: "include",
 });
