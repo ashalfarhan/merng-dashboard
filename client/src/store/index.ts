@@ -14,6 +14,7 @@ export const store = configureStore({
     locale,
     error,
   },
+  devTools: process.env.NODE_ENV === "development",
 });
 
 export type RootState = ReturnType<typeof store.getState>;
