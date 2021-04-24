@@ -64,7 +64,7 @@ const refreshTokenLink = new TokenRefreshLink({
 
 const gqlApi = isDev
   ? "http://localhost:4040/graphql"
-  : process.env.REACT_APP_GQL_API;
+  : process.env.REACT_APP_GQL_API + "/graphql";
 
 const httpLink = createHttpLink({
   uri: gqlApi,
