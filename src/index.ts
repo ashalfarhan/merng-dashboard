@@ -13,24 +13,18 @@ import { refreshTokenHandler } from "./utils/refreshToken";
 import cors from "cors";
 
 (async () => {
-  // const whiteList = [
-  //   "http://localhost:3000",
-  //   "https://inspiring-feynman-0a1cb1.netlify.app/",
-  // ];
+  const whiteList = [
+    "http://localhost:3000",
+    "https://inspiring-feynman-0a1cb1.netlify.app/",
+  ];
   const PORT = process.env.PORT || 4040;
   const app = express();
   app.use(
-    cors()
-    //   {
-    //   credentials: true,
-    //   origin: (origin, callback) => {
-    //     if (whiteList.indexOf(origin!) !== -1) {
-    //       callback(null, true);
-    //     } else {
-    //       callback(new Error("not allowed"));
-    //     }
-    //   },
-    // }
+    cors({
+      credentials: true,
+      origin: whiteList,
+      allowedHeaders: ["Content-Type", "Authorization"],
+    })
   );
   app.use(express.json());
   app.use(cookieParser());
