@@ -37,6 +37,10 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
   console.error(`[Unknown error]`);
 });
 
+const backend = isDev
+  ? "http://localhost:4040/refresh_token"
+  : process.env.REACT_APP_GQL_API!;
+
 const refreshTokenLink = new TokenRefreshLink({
   accessTokenField: "accessToken",
   isTokenValidOrUndefined: () => {
@@ -44,9 +48,10 @@ const refreshTokenLink = new TokenRefreshLink({
     return !isValid(token);
   },
   fetchAccessToken: () => {
-    return fetch("/refresh_token", {
+    return fetch(backend, {
       method: "POST",
       credentials: "include",
+      mode: "no-cors",
     });
   },
   handleFetch: (accessToken) => {
@@ -57,8 +62,12 @@ const refreshTokenLink = new TokenRefreshLink({
   },
 });
 
+const gqlApi = isDev
+  ? "http://localhost:4040/graphql"
+  : process.env.REACT_APP_GQL_API;
+
 const httpLink = createHttpLink({
-  uri: isDev ? "/graphql" : process.env.REACT_APP_GQL_API,
+  uri: gqlApi,
 });
 
 const client = new ApolloClient({
