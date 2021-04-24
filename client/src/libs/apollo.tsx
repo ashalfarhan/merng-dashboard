@@ -51,7 +51,7 @@ const refreshTokenLink = new TokenRefreshLink({
     return fetch(backend, {
       method: "POST",
       credentials: "include",
-      mode: "cors",
+      mode: "no-cors",
     });
   },
   handleFetch: (accessToken) => {
@@ -73,7 +73,7 @@ const httpLink = createHttpLink({
 const client = new ApolloClient({
   link: ApolloLink.from([authLink, errorLink, refreshTokenLink, httpLink]),
   cache: new InMemoryCache(),
-  credentials: "no-cors",
+  credentials: "include",
 });
 export const ApolloGqlProvider = ({ children }: PropsWithChildren<any>) => {
   return <ApolloProvider client={client}>{children}</ApolloProvider>;

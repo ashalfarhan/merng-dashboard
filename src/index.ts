@@ -24,6 +24,8 @@ import cors from "cors";
       credentials: true,
       origin: whiteList,
       allowedHeaders: ["Content-Type", "Authorization"],
+      optionsSuccessStatus: 200,
+      methods: ["GET", "POST"],
     })
   );
   app.use(express.json());
