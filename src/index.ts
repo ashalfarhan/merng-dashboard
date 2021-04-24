@@ -58,7 +58,7 @@ import cors from "cors";
     context: ({ req, res }) => ({ req, res }),
   });
 
-  server.applyMiddleware({ app });
+  server.applyMiddleware({ app, cors: false });
 
   app.post("/refresh_token", refreshTokenHandler);
 
