@@ -52,7 +52,6 @@ import cors from "cors";
     context: ({ req, res }) => ({ req, res }),
   });
 
-  app.use(express.static("client/build"));
   server.applyMiddleware({ app });
 
   app.post("/refresh_token", refreshTokenHandler);
@@ -61,9 +60,10 @@ import cors from "cors";
     /**
      * Serve client
      */
+    app.use(express.static(path.join(__dirname, "client/build")));
 
-    app.get("/*", (_, res) => {
-      res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+    app.get("*", (_, res) => {
+      res.sendFile(path.join(__dirname, "client/build", "index.html"));
     });
   }
 
