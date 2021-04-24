@@ -11,6 +11,8 @@ import { PropsWithChildren } from "react";
 import { TokenRefreshLink } from "apollo-link-token-refresh";
 import { isValid } from "../helpers/auth";
 
+const isDev = process.env.NODE_ENV !== "production";
+
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem("fmas");
   return {
@@ -57,7 +59,7 @@ const refreshTokenLink = new TokenRefreshLink({
 });
 
 const httpLink = createHttpLink({
-  uri: "/graphql",
+  uri: isDev ? "/graphql" : process.env.REACT_APP_GQL_API,
 });
 
 const client = new ApolloClient({

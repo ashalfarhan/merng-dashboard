@@ -10,16 +10,16 @@ import { TypegooseMiddleware } from "./utils/middleware/typegoose-middleware";
 import { TypegooseEntityMiddleware } from "./utils/middleware/typegoose-entity-middleware";
 import cookieParser from "cookie-parser";
 import { refreshTokenHandler } from "./utils/refreshToken";
-import path from "path";
 import cors from "cors";
 
 (async () => {
+  const isDev = process.env.NODE_ENV !== "production";
   const PORT = process.env.PORT || 4040;
   const app = express();
   app.use(
     cors({
       credentials: true,
-      origin: "http://localhost:3000",
+      origin: isDev ? "http://localhost:3000" : process.env.CLIENT_URL,
     })
   );
   app.use(express.json());
@@ -55,17 +55,6 @@ import cors from "cors";
   server.applyMiddleware({ app });
 
   app.post("/refresh_token", refreshTokenHandler);
-
-  if (process.env.NODE_ENV === "production") {
-    /**
-     * Serve client
-     */
-    app.use(express.static("client/build"));
-
-    app.get("/*", (_, res) => {
-      res.sendFile(path.join(__dirname, "client", "build", "index.html"));
-    });
-  }
 
   app.listen(PORT, () => {
     console.log(
