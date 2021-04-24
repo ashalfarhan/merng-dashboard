@@ -47,7 +47,6 @@ const refreshTokenLink = new TokenRefreshLink({
     return fetch("/refresh_token", {
       method: "POST",
       credentials: "include",
-      mode: "same-origin",
     });
   },
   handleFetch: (accessToken) => {
