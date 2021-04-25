@@ -6,7 +6,7 @@ import { emailLoginSchema } from "../helpers/validation";
 import { Button } from "@chakra-ui/button";
 import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import { Input } from "@chakra-ui/input";
-import { MeDocument, useLoginWithEmailMutation } from "../generated/graphql";
+import { useLoginWithEmailMutation } from "../generated/graphql";
 import { useHistory } from "react-router";
 import { useDispatch } from "../store";
 import { setLogin } from "../store/thunk/login";
@@ -16,11 +16,6 @@ export default function EmailLoginForm() {
   const history = useHistory();
   const dispatch = useDispatch();
   const [login, { loading }] = useLoginWithEmailMutation({
-    refetchQueries: [
-      {
-        query: MeDocument,
-      },
-    ],
     onError: (e) => {
       dispatch(setError(e.message));
     },
