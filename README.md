@@ -12,5 +12,5 @@
 
 - [ ] Add more features for admin
 - [ ] Add more data in db document
-- [ ] A report can has one or mode stuff reported / array type
 - [ ] Add favicon
+- [ ] Fix CORS to difference client

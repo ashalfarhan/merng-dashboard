@@ -39,6 +39,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "buildto:server": "react-scripts build && mv build ../public",
     "eject": "react-scripts eject",
     "ts": "tsc",
     "gen": "graphql-codegen --config codegen.yml"

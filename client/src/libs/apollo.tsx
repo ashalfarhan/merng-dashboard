@@ -2,7 +2,7 @@ import {
   ApolloClient,
   ApolloLink,
   ApolloProvider,
-  createHttpLink,
+  // createHttpLink,
   InMemoryCache,
 } from "@apollo/client";
 import { onError } from "@apollo/client/link/error";
@@ -34,9 +34,9 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
   }
 });
 
-const backend = isDev
-  ? "http://localhost:4040/refresh_token"
-  : process.env.REACT_APP_GQL_API!;
+// const backend = isDev
+//   ? "http://localhost:4040/refresh_token"
+//   : process.env.REACT_APP_GQL_API!;
 
 const refreshTokenLink = new TokenRefreshLink({
   accessTokenField: "accessToken",
@@ -45,7 +45,7 @@ const refreshTokenLink = new TokenRefreshLink({
     return !isValid(token);
   },
   fetchAccessToken: () => {
-    return fetch(backend, {
+    return fetch("/refresh_token", {
       method: "POST",
       credentials: "include",
       mode: "no-cors",
@@ -59,18 +59,21 @@ const refreshTokenLink = new TokenRefreshLink({
   },
 });
 
-const gqlApi = isDev
-  ? "http://localhost:4040/graphql"
-  : process.env.REACT_APP_GQL_API + "/graphql";
+const gqlApi = isDev ? "http://localhost:4040/graphql" : "/graphql";
+// const gqlApi = isDev
+//   ? "http://localhost:4040/graphql"
+//   : process.env.REACT_APP_GQL_API + "/graphql";
 
-const httpLink = createHttpLink({
-  uri: gqlApi,
-  credentials: "include",
-});
+// const httpLink = createHttpLink({
+//   uri: gqlApi,
+//   credentials: "include",
+// });
 
 const client = new ApolloClient({
-  link: ApolloLink.from([authLink, errorLink, refreshTokenLink, httpLink]),
+  // link: ApolloLink.from([authLink, errorLink, refreshTokenLink, httpLink]),
+  link: ApolloLink.from([authLink, refreshTokenLink, errorLink]),
   uri: gqlApi,
+  credentials: "include",
   cache: new InMemoryCache(),
 });
 

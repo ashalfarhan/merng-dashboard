@@ -12,9 +12,9 @@
     "ts-check": "tsc && yarn --cwd client ts",
     "build": "yarn build:server && yarn build:client",
     "build:server": "tsc -p ./",
-    "build:client": "yarn --cwd client build",
+    "build:client": "yarn --cwd client install && yarn --cwd client buildto:server",
     "start": "node dist/index.js",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm i -g yarn && npm i -g typescript && yarn && yarn build:server"
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm i -g yarn && npm i -g typescript && yarn && yarn build"
   },
   "dependencies": {
     "apollo-server-express": "^2.23.0",
