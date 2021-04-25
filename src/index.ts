@@ -10,21 +10,21 @@ import { TypegooseMiddleware } from "./utils/middleware/typegoose-middleware";
 import { TypegooseEntityMiddleware } from "./utils/middleware/typegoose-entity-middleware";
 import cookieParser from "cookie-parser";
 import { refreshTokenHandler } from "./utils/refreshToken";
-// import cors from "cors";
+import cors from "cors";
 
 (async () => {
-  const whiteList = [
+  const whitelist = [
     "http://localhost:3000",
-    "https://inspiring-feynman-0a1cb1.netlify.app/",
+    "https://dashboard-haans.netlify.app/",
   ];
   const PORT = process.env.PORT || 4040;
   const app = express();
-  // app.use(
-  //   cors({
-  //     credentials: true,
-  //     origin: whiteList,
-  //   })
-  // );
+  app.use(
+    cors({
+      credentials: true,
+      origin: whitelist,
+    })
+  );
   app.use(express.json());
   app.use(cookieParser());
 
@@ -47,6 +47,7 @@ import { refreshTokenHandler } from "./utils/refreshToken";
     resolvers,
     globalMiddlewares: [TypegooseMiddleware, TypegooseEntityMiddleware],
   });
+
   const server = new ApolloServer({
     schema,
     formatError: (e) => {
@@ -55,13 +56,7 @@ import { refreshTokenHandler } from "./utils/refreshToken";
     context: ({ req, res }) => ({ req, res }),
   });
 
-  server.applyMiddleware({
-    app,
-    cors: {
-      credentials: true,
-      origin: whiteList,
-    },
-  });
+  server.applyMiddleware({ app, cors: false });
 
   app.post("/refresh_token", refreshTokenHandler);
 
