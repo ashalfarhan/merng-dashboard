@@ -10,7 +10,6 @@ import { TypegooseMiddleware } from "./utils/middleware/typegoose-middleware";
 import { TypegooseEntityMiddleware } from "./utils/middleware/typegoose-entity-middleware";
 import cookieParser from "cookie-parser";
 import { refreshTokenHandler } from "./utils/refreshToken";
-import cors from "cors";
 
 (async () => {
   const whitelist = [
@@ -19,12 +18,6 @@ import cors from "cors";
   ];
   const PORT = process.env.PORT || 4040;
   const app = express();
-  app.use(
-    cors({
-      credentials: true,
-      origin: whitelist,
-    })
-  );
   app.use(express.json());
   app.use(cookieParser());
 
@@ -56,7 +49,13 @@ import cors from "cors";
     context: ({ req, res }) => ({ req, res }),
   });
 
-  server.applyMiddleware({ app, cors: false });
+  server.applyMiddleware({
+    app,
+    cors: {
+      origin: whitelist,
+      credentials: true,
+    },
+  });
 
   app.post("/refresh_token", refreshTokenHandler);
 

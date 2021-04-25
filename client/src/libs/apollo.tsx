@@ -59,7 +59,6 @@ const refreshTokenLink = new TokenRefreshLink({
   },
 });
 
-// const gqlApi = isDev ? "http://localhost:4040/graphql" : "/graphql";
 const gqlApi = isDev
   ? "http://localhost:4040/graphql"
   : process.env.REACT_APP_GQL_API + "/graphql";
@@ -73,6 +72,7 @@ const client = new ApolloClient({
   // link: ApolloLink.from([authLink, errorLink, refreshTokenLink, httpLink]),
   link: ApolloLink.from([authLink, refreshTokenLink, errorLink, httpLink]),
   cache: new InMemoryCache(),
+  // credentials: "include",
 });
 
 export const ApolloGqlProvider = ({ children }: PropsWithChildren<any>) => {
