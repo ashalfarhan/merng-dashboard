@@ -51,7 +51,7 @@ import cors from "cors";
   const server = new ApolloServer({
     schema,
     formatError: (e) => {
-      return new Error(e.message);
+      return Error(e.message);
     },
     context: ({ req, res }) => ({ req, res }),
   });
