@@ -15,7 +15,7 @@ export const isValid = (token: string | null) => {
       return true;
     }
     return false;
-  } catch {
+  } catch (e) {
     return false;
   }
 };
