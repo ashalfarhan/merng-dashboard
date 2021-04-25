@@ -52,8 +52,15 @@ import { refreshTokenHandler } from "./utils/refreshToken";
   server.applyMiddleware({
     app,
     cors: {
-      origin: whitelist,
       credentials: true,
+      origin: (origin, callback) => {
+        // @ts-ignore
+        if (whitelist.indexOf(origin) !== -1) {
+          callback(null, true);
+        } else {
+          callback(Error("Blocked by cors"));
+        }
+      },
     },
   });
 
