@@ -36,7 +36,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 
 const backend = isDev
   ? "http://localhost:4040/refresh_token"
-  : process.env.REACT_APP_GQL_API!;
+  : process.env.REACT_APP_GQL_API + "/graphql";
 
 const refreshTokenLink = new TokenRefreshLink({
   accessTokenField: "accessToken",
@@ -48,7 +48,7 @@ const refreshTokenLink = new TokenRefreshLink({
     return fetch(backend, {
       method: "POST",
       credentials: "include",
-      mode: "cors",
+      mode: "no-cors",
     });
   },
   handleFetch: (accessToken) => {
@@ -68,7 +68,7 @@ const httpLink = createHttpLink({
   credentials: "include",
   // test
   fetchOptions: {
-    mode: "cors",
+    mode: "no-cors",
   },
 });
 
