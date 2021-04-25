@@ -109,6 +109,9 @@ export type Query = {
   getUser?: Maybe<User>;
   getAllReports?: Maybe<Array<Report>>;
   getReport?: Maybe<Report>;
+  getStock?: Maybe<Array<Report>>;
+  getSales?: Maybe<Array<Report>>;
+  getInventory?: Maybe<Array<Stuff>>;
   hello: Scalars['String'];
 };
 
@@ -257,6 +260,53 @@ export type DeleteReportMutation = (
   )> }
 );
 
+export type EditReportMutationVariables = Exact<{
+  data: EditReportInput;
+}>;
+
+
+export type EditReportMutation = (
+  { __typename?: 'Mutation' }
+  & { editReport?: Maybe<(
+    { __typename?: 'Report' }
+    & Pick<Report, 'name' | 'updatedAt'>
+  )> }
+);
+
+export type EditStuffMutationVariables = Exact<{
+  data: EditStuffInput;
+}>;
+
+
+export type EditStuffMutation = (
+  { __typename?: 'Mutation' }
+  & { editStuff?: Maybe<(
+    { __typename?: 'Stuff' }
+    & Pick<Stuff, 'name' | 'updatedAt'>
+  )> }
+);
+
+export type AddStuffMutationVariables = Exact<{
+  reportId: Scalars['ID'];
+  name: Scalars['String'];
+  price: Scalars['Int'];
+  type: StuffType;
+  amount: Scalars['Int'];
+}>;
+
+
+export type AddStuffMutation = (
+  { __typename?: 'Mutation' }
+  & { addStuff?: Maybe<(
+    { __typename?: 'Report' }
+    & Pick<Report, 'name'>
+    & { reporter: (
+      { __typename?: 'User' }
+      & Pick<User, 'name'>
+    ) }
+  )> }
+);
+
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -344,6 +394,53 @@ export type GetReportQuery = (
       & Pick<Stuff, '_id' | 'name' | 'createdAt' | 'updatedAt' | 'price' | 'type' | 'amount'>
     )> }
   )> }
+);
+
+export type GetSalesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetSalesQuery = (
+  { __typename?: 'Query' }
+  & { getSales?: Maybe<Array<(
+    { __typename?: 'Report' }
+    & Pick<Report, '_id' | 'name' | 'createdAt'>
+    & { reporter: (
+      { __typename?: 'User' }
+      & Pick<User, 'name'>
+    ), goods: Array<(
+      { __typename?: 'Stuff' }
+      & Pick<Stuff, 'type' | '_id' | 'name' | 'price' | 'amount'>
+    )> }
+  )>> }
+);
+
+export type GetStockQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetStockQuery = (
+  { __typename?: 'Query' }
+  & { getStock?: Maybe<Array<(
+    { __typename?: 'Report' }
+    & Pick<Report, '_id' | 'name' | 'createdAt'>
+    & { reporter: (
+      { __typename?: 'User' }
+      & Pick<User, 'name'>
+    ), goods: Array<(
+      { __typename?: 'Stuff' }
+      & Pick<Stuff, '_id' | 'type' | 'name' | 'price' | 'amount'>
+    )> }
+  )>> }
+);
+
+export type GetInventoryQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetInventoryQuery = (
+  { __typename?: 'Query' }
+  & { getInventory?: Maybe<Array<(
+    { __typename?: 'Stuff' }
+    & Pick<Stuff, '_id' | 'createdAt' | 'type' | 'name' | 'price' | 'amount'>
+  )>> }
 );
 
 
@@ -533,6 +630,120 @@ export function useDeleteReportMutation(baseOptions?: Apollo.MutationHookOptions
 export type DeleteReportMutationHookResult = ReturnType<typeof useDeleteReportMutation>;
 export type DeleteReportMutationResult = Apollo.MutationResult<DeleteReportMutation>;
 export type DeleteReportMutationOptions = Apollo.BaseMutationOptions<DeleteReportMutation, DeleteReportMutationVariables>;
+export const EditReportDocument = gql`
+    mutation EditReport($data: EditReportInput!) {
+  editReport(data: $data) {
+    name
+    updatedAt
+  }
+}
+    `;
+export type EditReportMutationFn = Apollo.MutationFunction<EditReportMutation, EditReportMutationVariables>;
+
+/**
+ * __useEditReportMutation__
+ *
+ * To run a mutation, you first call `useEditReportMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditReportMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editReportMutation, { data, loading, error }] = useEditReportMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useEditReportMutation(baseOptions?: Apollo.MutationHookOptions<EditReportMutation, EditReportMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EditReportMutation, EditReportMutationVariables>(EditReportDocument, options);
+      }
+export type EditReportMutationHookResult = ReturnType<typeof useEditReportMutation>;
+export type EditReportMutationResult = Apollo.MutationResult<EditReportMutation>;
+export type EditReportMutationOptions = Apollo.BaseMutationOptions<EditReportMutation, EditReportMutationVariables>;
+export const EditStuffDocument = gql`
+    mutation EditStuff($data: EditStuffInput!) {
+  editStuff(data: $data) {
+    name
+    updatedAt
+  }
+}
+    `;
+export type EditStuffMutationFn = Apollo.MutationFunction<EditStuffMutation, EditStuffMutationVariables>;
+
+/**
+ * __useEditStuffMutation__
+ *
+ * To run a mutation, you first call `useEditStuffMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditStuffMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editStuffMutation, { data, loading, error }] = useEditStuffMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useEditStuffMutation(baseOptions?: Apollo.MutationHookOptions<EditStuffMutation, EditStuffMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EditStuffMutation, EditStuffMutationVariables>(EditStuffDocument, options);
+      }
+export type EditStuffMutationHookResult = ReturnType<typeof useEditStuffMutation>;
+export type EditStuffMutationResult = Apollo.MutationResult<EditStuffMutation>;
+export type EditStuffMutationOptions = Apollo.BaseMutationOptions<EditStuffMutation, EditStuffMutationVariables>;
+export const AddStuffDocument = gql`
+    mutation AddStuff($reportId: ID!, $name: String!, $price: Int!, $type: StuffType!, $amount: Int!) {
+  addStuff(
+    reportId: $reportId
+    name: $name
+    price: $price
+    type: $type
+    amount: $amount
+  ) {
+    name
+    reporter {
+      name
+    }
+  }
+}
+    `;
+export type AddStuffMutationFn = Apollo.MutationFunction<AddStuffMutation, AddStuffMutationVariables>;
+
+/**
+ * __useAddStuffMutation__
+ *
+ * To run a mutation, you first call `useAddStuffMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddStuffMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addStuffMutation, { data, loading, error }] = useAddStuffMutation({
+ *   variables: {
+ *      reportId: // value for 'reportId'
+ *      name: // value for 'name'
+ *      price: // value for 'price'
+ *      type: // value for 'type'
+ *      amount: // value for 'amount'
+ *   },
+ * });
+ */
+export function useAddStuffMutation(baseOptions?: Apollo.MutationHookOptions<AddStuffMutation, AddStuffMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddStuffMutation, AddStuffMutationVariables>(AddStuffDocument, options);
+      }
+export type AddStuffMutationHookResult = ReturnType<typeof useAddStuffMutation>;
+export type AddStuffMutationResult = Apollo.MutationResult<AddStuffMutation>;
+export type AddStuffMutationOptions = Apollo.BaseMutationOptions<AddStuffMutation, AddStuffMutationVariables>;
 export const MeDocument = gql`
     query ME {
   me {
@@ -770,3 +981,134 @@ export function useGetReportLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type GetReportQueryHookResult = ReturnType<typeof useGetReportQuery>;
 export type GetReportLazyQueryHookResult = ReturnType<typeof useGetReportLazyQuery>;
 export type GetReportQueryResult = Apollo.QueryResult<GetReportQuery, GetReportQueryVariables>;
+export const GetSalesDocument = gql`
+    query GetSales {
+  getSales {
+    _id
+    name
+    reporter {
+      name
+    }
+    createdAt
+    goods {
+      type
+      _id
+      name
+      price
+      amount
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetSalesQuery__
+ *
+ * To run a query within a React component, call `useGetSalesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetSalesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetSalesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetSalesQuery(baseOptions?: Apollo.QueryHookOptions<GetSalesQuery, GetSalesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetSalesQuery, GetSalesQueryVariables>(GetSalesDocument, options);
+      }
+export function useGetSalesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetSalesQuery, GetSalesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetSalesQuery, GetSalesQueryVariables>(GetSalesDocument, options);
+        }
+export type GetSalesQueryHookResult = ReturnType<typeof useGetSalesQuery>;
+export type GetSalesLazyQueryHookResult = ReturnType<typeof useGetSalesLazyQuery>;
+export type GetSalesQueryResult = Apollo.QueryResult<GetSalesQuery, GetSalesQueryVariables>;
+export const GetStockDocument = gql`
+    query GetStock {
+  getStock {
+    _id
+    name
+    reporter {
+      name
+    }
+    createdAt
+    goods {
+      _id
+      type
+      name
+      price
+      amount
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetStockQuery__
+ *
+ * To run a query within a React component, call `useGetStockQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetStockQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetStockQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetStockQuery(baseOptions?: Apollo.QueryHookOptions<GetStockQuery, GetStockQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetStockQuery, GetStockQueryVariables>(GetStockDocument, options);
+      }
+export function useGetStockLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetStockQuery, GetStockQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetStockQuery, GetStockQueryVariables>(GetStockDocument, options);
+        }
+export type GetStockQueryHookResult = ReturnType<typeof useGetStockQuery>;
+export type GetStockLazyQueryHookResult = ReturnType<typeof useGetStockLazyQuery>;
+export type GetStockQueryResult = Apollo.QueryResult<GetStockQuery, GetStockQueryVariables>;
+export const GetInventoryDocument = gql`
+    query GetInventory {
+  getInventory {
+    _id
+    createdAt
+    type
+    name
+    price
+    amount
+  }
+}
+    `;
+
+/**
+ * __useGetInventoryQuery__
+ *
+ * To run a query within a React component, call `useGetInventoryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetInventoryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetInventoryQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetInventoryQuery(baseOptions?: Apollo.QueryHookOptions<GetInventoryQuery, GetInventoryQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetInventoryQuery, GetInventoryQueryVariables>(GetInventoryDocument, options);
+      }
+export function useGetInventoryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetInventoryQuery, GetInventoryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetInventoryQuery, GetInventoryQueryVariables>(GetInventoryDocument, options);
+        }
+export type GetInventoryQueryHookResult = ReturnType<typeof useGetInventoryQuery>;
+export type GetInventoryLazyQueryHookResult = ReturnType<typeof useGetInventoryLazyQuery>;
+export type GetInventoryQueryResult = Apollo.QueryResult<GetInventoryQuery, GetInventoryQueryVariables>;
