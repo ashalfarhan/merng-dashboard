@@ -48,7 +48,7 @@ const refreshTokenLink = new TokenRefreshLink({
     return fetch(backend, {
       method: "POST",
       credentials: "include",
-      mode: "no-cors",
+      mode: "cors",
     });
   },
   handleFetch: (accessToken) => {
@@ -68,7 +68,7 @@ const httpLink = createHttpLink({
   credentials: "include",
   // test
   fetchOptions: {
-    mode: "no-cors",
+    mode: "cors",
   },
 });
 

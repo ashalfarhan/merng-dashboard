@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import "dotenv/config";
-import { ApolloServer } from "apollo-server-express";
+import { ApolloServer, CorsOptions } from "apollo-server-express";
 import chalk from "chalk";
 import express from "express";
 import { set, connect } from "mongoose";
@@ -10,14 +10,27 @@ import { TypegooseMiddleware } from "./utils/middleware/typegoose-middleware";
 import { TypegooseEntityMiddleware } from "./utils/middleware/typegoose-entity-middleware";
 import cookieParser from "cookie-parser";
 import { refreshTokenHandler } from "./utils/refreshToken";
+import cors from "cors";
 
 (async () => {
   const whitelist = [
     "http://localhost:3000",
     "https://dashboard-haans.netlify.app/",
   ];
+  const corsOptions: CorsOptions = {
+    credentials: true,
+    origin: (origin, callback) => {
+      // @ts-ignore
+      if (whitelist.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(Error("Blocked by cors"));
+      }
+    },
+  };
   const PORT = process.env.PORT || 4040;
   const app = express();
+  app.use(cors(corsOptions));
   app.use(express.json());
   app.use(cookieParser());
 
@@ -51,17 +64,7 @@ import { refreshTokenHandler } from "./utils/refreshToken";
 
   server.applyMiddleware({
     app,
-    cors: {
-      credentials: true,
-      origin: (origin, callback) => {
-        // @ts-ignore
-        if (whitelist.indexOf(origin) !== -1) {
-          callback(null, true);
-        } else {
-          callback(Error("Blocked by cors"));
-        }
-      },
-    },
+    cors: corsOptions,
   });
 
   app.post("/refresh_token", refreshTokenHandler);
