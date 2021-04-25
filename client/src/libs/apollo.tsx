@@ -25,16 +25,13 @@ const authLink = setContext((_, { headers }) => {
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors) {
-    graphQLErrors.map(({ message, locations, path }) => {
-      return console.log(
-        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
-      );
+    graphQLErrors.map(({ message }) => {
+      return console.error(`[GraphQL error]: ${message}`);
     });
   }
   if (networkError) {
     console.error(`[Network error]: ${networkError.message}`);
   }
-  console.error(`[Unknown error]`);
 });
 
 const backend = isDev
@@ -68,13 +65,15 @@ const gqlApi = isDev
 
 const httpLink = createHttpLink({
   uri: gqlApi,
+  credentials: "include",
 });
 
 const client = new ApolloClient({
   link: ApolloLink.from([authLink, errorLink, refreshTokenLink, httpLink]),
+  uri: gqlApi,
   cache: new InMemoryCache(),
-  credentials: "include",
 });
+
 export const ApolloGqlProvider = ({ children }: PropsWithChildren<any>) => {
   return <ApolloProvider client={client}>{children}</ApolloProvider>;
 };
