@@ -2,7 +2,7 @@ import {
   ApolloClient,
   ApolloLink,
   ApolloProvider,
-  // createHttpLink,
+  createHttpLink,
   InMemoryCache,
 } from "@apollo/client";
 import { onError } from "@apollo/client/link/error";
@@ -64,16 +64,14 @@ const gqlApi = isDev
   ? "http://localhost:4040/graphql"
   : process.env.REACT_APP_GQL_API + "/graphql";
 
-// const httpLink = createHttpLink({
-//   uri: gqlApi,
-//   credentials: "include",
-// });
+const httpLink = createHttpLink({
+  uri: gqlApi,
+  credentials: "include",
+});
 
 const client = new ApolloClient({
   // link: ApolloLink.from([authLink, errorLink, refreshTokenLink, httpLink]),
-  link: ApolloLink.from([authLink, refreshTokenLink, errorLink]),
-  uri: gqlApi,
-  credentials: "include",
+  link: ApolloLink.from([authLink, refreshTokenLink, errorLink, httpLink]),
   cache: new InMemoryCache(),
 });
 
