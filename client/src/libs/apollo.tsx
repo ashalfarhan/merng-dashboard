@@ -73,10 +73,8 @@ const httpLink = createHttpLink({
 });
 
 const client = new ApolloClient({
-  // link: ApolloLink.from([authLink, errorLink, refreshTokenLink, httpLink]),
   link: ApolloLink.from([authLink, refreshTokenLink, errorLink, httpLink]),
   cache: new InMemoryCache(),
-  // credentials: "include",
 });
 
 export const ApolloGqlProvider = ({ children }: PropsWithChildren<any>) => {
