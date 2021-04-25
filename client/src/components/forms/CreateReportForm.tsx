@@ -2,7 +2,7 @@ import {
   CreateReportMutationVariables,
   GetAllReportsDocument,
   useCreateReportMutation,
-} from "../generated/graphql";
+} from "../../generated/graphql";
 import {
   FormControl,
   FormLabel,
@@ -14,10 +14,10 @@ import {
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { createInputSchema } from "../helpers/validation";
-import { useDispatch } from "../store";
-import { setError } from "../store/slices/error";
-import { ReportOptions, StuffOptions } from "../helpers/constants";
+import { createInputSchema } from "../../helpers/validation";
+import { useDispatch } from "../../store";
+import { setError } from "../../store/slices/error";
+import { ReportOptions, StuffOptions } from "../../helpers/constants";
 import { useIntl } from "react-intl";
 
 interface Props {

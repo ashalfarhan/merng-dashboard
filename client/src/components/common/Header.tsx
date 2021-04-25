@@ -9,15 +9,15 @@ import { Avatar } from "@chakra-ui/avatar";
 import { Box, Heading, HStack } from "@chakra-ui/layout";
 import { IconButton } from "@chakra-ui/button";
 import { BiMenuAltRight } from "react-icons/bi";
-import { ColorModeSwitcher } from "./ColorModeSwitcer";
+import { ColorModeSwitcher } from "../switchers/ColorModeSwitcer";
 import { Link, useHistory } from "react-router-dom";
 import { FormattedMessage } from "react-intl";
-import { useDispatch, useSelector } from "../store";
-import { getUser, isAuth, removeToken } from "../store/slices/auth";
+import { useDispatch, useSelector } from "../../store";
+import { getUser, isAuth, removeToken } from "../../store/slices/auth";
 import { Tooltip } from "@chakra-ui/tooltip";
-import { getLocale } from "../store/slices/locale";
-import { LOCALES } from "../@types/enums";
-import LangSwitcher from "./LangSwitcher";
+import { getLocale } from "../../store/slices/locale";
+import { LOCALES } from "../../@types/enums";
+import LangSwitcher from "../switchers/LangSwitcher";
 
 export default function Header() {
   const history = useHistory();

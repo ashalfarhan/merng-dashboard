@@ -5,7 +5,7 @@ import { FormattedMessage } from "react-intl";
 import { useHistory } from "react-router";
 import { useSelector } from "../store";
 import { getUser } from "../store/slices/auth";
-import CreateReportModal from "./CreateReportModal";
+import CreateReportModal from "./modals/CreateReportModal";
 
 export default function SideBar() {
   const history = useHistory();

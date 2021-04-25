@@ -15,11 +15,11 @@ import {
   MeDocument,
   MeQuery,
   useDeleteReportMutation,
-} from "../generated/graphql";
-import { formatDate } from "../helpers/dateFormatter";
-import { useDispatch, useSelector } from "../store";
-import { setError } from "../store/slices/error";
-import { getLocale } from "../store/slices/locale";
+} from "../../generated/graphql";
+import { formatDate } from "../../helpers/dateFormatter";
+import { useDispatch, useSelector } from "../../store";
+import { setError } from "../../store/slices/error";
+import { getLocale } from "../../store/slices/locale";
 
 interface Props {
   data: MeQuery | undefined;
