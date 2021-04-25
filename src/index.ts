@@ -11,22 +11,20 @@ import { TypegooseEntityMiddleware } from "./utils/middleware/typegoose-entity-m
 import cookieParser from "cookie-parser";
 import { refreshTokenHandler } from "./utils/refreshToken";
 import cors from "cors";
-import path from "path";
 
 (async () => {
-  // const whitelist = [
-  //   "http://localhost:3000",
-  //   "https://dashboard-haans.netlify.app/",
-  // ];
+  const whitelist = [
+    "http://localhost:3000",
+    "https://dashboard-haans.netlify.app/",
+  ];
   const PORT = process.env.PORT || 4040;
   const app = express();
-  // app.use(
-  //   cors({
-  //     credentials: true,
-  //     origin: whitelist[1],
-  //   })
-  // );
-  app.use(cors());
+  app.use(
+    cors({
+      credentials: true,
+      origin: whitelist,
+    })
+  );
   app.use(express.json());
   app.use(cookieParser());
 
@@ -61,13 +59,6 @@ import path from "path";
   server.applyMiddleware({ app, cors: false });
 
   app.post("/refresh_token", refreshTokenHandler);
-
-  if (process.env.NODE_ENV === "production") {
-    app.use(express.static("public"));
-    app.get("*", (_, res) => {
-      res.sendFile(path.resolve(__dirname, "public", "index.html"));
-    });
-  }
 
   app.listen(PORT, () => {
     console.log(
