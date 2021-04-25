@@ -15,7 +15,7 @@ import cors from "cors";
 (async () => {
   const whitelist = [
     "http://localhost:3000",
-    "https://dashboard-haans.netlify.app/",
+    "https://dashboard-haans.netlify.app",
   ];
   const corsOptions: CorsOptions = {
     credentials: true,
