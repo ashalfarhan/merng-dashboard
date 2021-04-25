@@ -48,7 +48,7 @@ const refreshTokenLink = new TokenRefreshLink({
     return fetch(backend, {
       method: "POST",
       credentials: "include",
-      mode: "no-cors",
+      mode: "cors",
     });
   },
   handleFetch: (accessToken) => {
@@ -66,6 +66,10 @@ const gqlApi = isDev
 const httpLink = createHttpLink({
   uri: gqlApi,
   credentials: "include",
+  // test
+  fetchOptions: {
+    mode: "cors",
+  },
 });
 
 const client = new ApolloClient({
