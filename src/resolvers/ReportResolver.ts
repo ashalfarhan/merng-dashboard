@@ -9,6 +9,7 @@ import {
   Ctx,
   Args,
 } from "type-graphql";
+import { ReportType } from "../utils/@types/enums";
 import { Stuff, StuffModel } from "../entity/Stuff";
 import { Report, ReportModel } from "../entity/Report";
 import { UserModel } from "../entity/User";
@@ -71,7 +72,12 @@ export default class ReportResolver {
     }
     try {
       const report = await ReportModel.findById(id);
-      if (payload.userId !== report?.reporterId) {
+      if (!report) {
+        return Error(
+          "There's no report with this id, or probably it's already deleted"
+        );
+      }
+      if (payload.userId !== report.reporterId) {
         return Error("Only the creator of this report can delete this report");
       }
       const deleted = await ReportModel.findByIdAndDelete(id);
@@ -122,11 +128,46 @@ export default class ReportResolver {
   }
 
   @Query(() => Report, { nullable: true })
-  async getReport(@Arg("id") id: string) {
+  @UseMiddleware(isAuth)
+  async getReport(@Ctx() { payload }: MyContext, @Arg("id") id: string) {
+    if (!payload) {
+      return null;
+    }
     try {
       const report = await ReportModel.findById(id);
       if (!report) return Error(`There's no report with this ${id}`);
       return report;
+    } catch (error) {
+      return error.message;
+    }
+  }
+
+  @Query(() => [Report], { nullable: true })
+  @UseMiddleware(isAuth)
+  async getStock(@Ctx() { payload }: MyContext) {
+    if (!payload) {
+      return null;
+    }
+    try {
+      const items = await ReportModel.find({ type: ReportType.WHOLESALE });
+      return items;
+    } catch (error) {
+      return error.message;
+    }
+  }
+
+  @Query(() => [Report], { nullable: true })
+  @UseMiddleware(isAuth)
+  async getSales(@Ctx() { payload }: MyContext) {
+    if (!payload) {
+      return null;
+    }
+    try {
+      if (!payload.isAdmin) {
+        return Error("This is only admin features");
+      }
+      const items = await ReportModel.find({ type: ReportType.SELL });
+      return items;
     } catch (error) {
       return error.message;
     }

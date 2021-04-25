@@ -3,11 +3,13 @@ import {
   Args,
   Ctx,
   Mutation,
+  Query,
   Resolver,
   UseMiddleware,
 } from "type-graphql";
 import { Report, ReportModel } from "../entity/Report";
 import { Stuff, StuffModel } from "../entity/Stuff";
+import { StuffType } from "../utils/@types/enums";
 import { MyContext, EditStuffInput, AddStuffInput } from "../utils/@types";
 import { isAuth } from "../utils/middleware/isAuth";
 
@@ -74,6 +76,16 @@ export class StuffResolver {
         }
       );
       return added;
+    } catch (error) {
+      return error.message;
+    }
+  }
+
+  @Query(() => [Stuff], { nullable: true })
+  async getInventory() {
+    try {
+      const items = await StuffModel.find({ type: StuffType.STATIONARY });
+      return items;
     } catch (error) {
       return error.message;
     }
