@@ -44,14 +44,14 @@ const id = {
     nameLabel: "Nama",
     actionLabel: "Aksi",
     type: {
-      wholesale: "Grosi",
+      wholesale: "Grosir",
       purchase: "Pembelian",
       sell: "Penjualan",
     },
   },
   stuff: {
     type: {
-      foodsLabel: "Makanan",
+      foodsLabel: "Konsumsi",
       othersLabel: "Lainnya",
       personalLabel: "Pribadi",
       stationaryLabel: "Kantor",
