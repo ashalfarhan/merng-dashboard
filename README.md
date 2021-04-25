@@ -14,7 +14,6 @@
 
 ## TODO
 
-- [ ] Add more features for admin
 - [ ] Add more data in db document
-- [ ] Add favicon
-- [ ] Fix CORS to difference client
+- [ ] Queries for specific reports
+- [ ] Edit report action
