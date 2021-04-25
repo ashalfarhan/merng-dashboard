@@ -20,11 +20,12 @@ import cors from "cors";
   const corsOptions: CorsOptions = {
     credentials: true,
     origin: (origin, callback) => {
+      console.log(origin);
       // @ts-ignore
       if (whitelist.indexOf(origin) !== -1) {
-        callback(null, true);
+        callback(null, origin);
       } else {
-        callback(Error("Blocked by cors"));
+        callback(Error("Blocked by cors"), origin);
       }
     },
   };
