@@ -20,7 +20,7 @@ import cors from "cors";
   const corsOptions: CorsOptions = {
     credentials: true,
     origin: (origin, callback) => {
-      console.log(origin);
+      console.log("Some origin accessed: ", origin);
       // @ts-ignore
       if (whitelist.indexOf(origin) !== -1) {
         callback(null, origin);
