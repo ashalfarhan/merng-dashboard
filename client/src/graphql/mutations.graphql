@@ -5,6 +5,7 @@ mutation LoginWithEmail($email: String!, $password: String!) {
       email
       username
       name
+      isAdmin
     }
     token
   }
@@ -15,9 +16,26 @@ mutation LoginWithUsername($username: String!, $password: String!) {
     user {
       _id
       name
+      isAdmin
       email
       username
     }
     token
+  }
+}
+
+mutation CreateReport($name: String!, $type: ReportType!, $data: StuffInput!) {
+  createReport(name: $name, type: $type, data: $data) {
+    name
+    createdAt
+    reporter {
+      name
+    }
+  }
+}
+
+mutation DeleteReport($id: String!) {
+  deleteReport(id: $id) {
+    name
   }
 }

@@ -1,5 +1,3 @@
-import { Report, ReportModel } from "../entity/Report";
-import { UserModel } from "../entity/User";
 import {
   Query,
   Arg,
@@ -9,12 +7,19 @@ import {
   Root,
   UseMiddleware,
   Ctx,
+  Args,
 } from "type-graphql";
-import { CreateInput, EditInput, MyContext } from "../utils/@types";
+import { Stuff, StuffModel } from "../entity/Stuff";
+import { Report, ReportModel } from "../entity/Report";
+import { UserModel } from "../entity/User";
+import { CreateReportArgs, EditReportInput, MyContext } from "../utils/@types";
 import { isAuth } from "../utils/middleware/isAuth";
 
 @Resolver(() => Report)
 export default class ReportResolver {
+  /**
+   * @returns FieldResolvers
+   */
   @FieldResolver()
   async reporter(@Root() { reporterId }: Report) {
     if (!reporterId) return null;
@@ -22,21 +27,36 @@ export default class ReportResolver {
     return user;
   }
 
-  @Mutation(() => Report)
+  @FieldResolver(() => [Stuff], { nullable: true })
+  async goods(@Root() { _id }: Report) {
+    const stuffs = await StuffModel.find({ reportId: _id });
+    return stuffs;
+  }
+
+  /**
+   * @returns Mutations
+   */
+  @Mutation(() => Report, { nullable: true })
+  @UseMiddleware(isAuth)
   async createReport(
-    @Arg("name") name: string,
-    @Arg("data") data: CreateInput,
-    @Arg("reporterId", { nullable: true }) reporterId?: string,
-    @Arg("createdAt", { nullable: true }) createdAt?: Date
+    @Ctx() { payload }: MyContext,
+    @Args() { data, name, type }: CreateReportArgs
   ) {
+    if (!payload) {
+      return Error("You should be a user to create a report");
+    }
     try {
       const newReport = await ReportModel.create({
         name,
-        createdAt,
-        reporterId,
-        detail: { ...data },
+        type,
+        reporterId: payload.userId,
       });
       await newReport.save();
+      const newStuff = await StuffModel.create({
+        ...data,
+        reportId: newReport._id,
+      });
+      await newStuff.save();
       return newReport;
     } catch (error) {
       return error.message;
@@ -44,8 +64,16 @@ export default class ReportResolver {
   }
 
   @Mutation(() => Report, { nullable: true })
-  async deleteReport(@Arg("id") id: string) {
+  @UseMiddleware(isAuth)
+  async deleteReport(@Ctx() { payload }: MyContext, @Arg("id") id: string) {
+    if (!payload) {
+      return Error("Please login");
+    }
     try {
+      const report = await ReportModel.findById(id);
+      if (payload.userId !== report?.reporterId) {
+        return Error("Only the creator of this report can delete this report");
+      }
       const deleted = await ReportModel.findByIdAndDelete(id);
       return deleted;
     } catch (error) {
@@ -53,29 +81,37 @@ export default class ReportResolver {
     }
   }
 
-  @Mutation(() => Report)
-  async editReport(@Arg("id") id: string, @Arg("data") data: EditInput) {
-    const saved = await ReportModel.findByIdAndUpdate(
-      id,
-      { updatedAt: new Date(), detail: { ...data } },
-      {
-        new: true,
-      }
-    );
-    if (!saved) {
-      return Error("Report with this id is not exist, please create one");
+  @Mutation(() => Report, { nullable: true })
+  @UseMiddleware(isAuth)
+  async editReport(
+    @Ctx() { payload }: MyContext,
+    @Arg("data") data: EditReportInput
+  ) {
+    if (!payload) {
+      return Error("Must be a user to edit a report");
     }
-    return saved;
+    try {
+      const saved = await ReportModel.findOneAndUpdate(
+        { _id: data._id },
+        { ...data }
+      );
+      if (!saved) {
+        return Error("Report with this id is not exist, please create one");
+      }
+      return saved;
+    } catch (error) {
+      return error.message;
+    }
   }
 
+  /**
+   * @returns Queries
+   */
   @Query(() => [Report], { nullable: true })
   @UseMiddleware(isAuth)
   async getAllReports(@Ctx() { payload }: MyContext) {
     if (!payload) {
       return null;
-    }
-    if (!payload.isAdmin) {
-      return Error("Must be an admin");
     }
     try {
       const reports = await ReportModel.find();
@@ -85,7 +121,7 @@ export default class ReportResolver {
     }
   }
 
-  @Query(() => Report)
+  @Query(() => Report, { nullable: true })
   async getReport(@Arg("id") id: string) {
     try {
       const report = await ReportModel.findById(id);

@@ -7,6 +7,8 @@ import Overview from "../views/Overview";
 import Inventory from "../views/Inventory";
 import Sales from "../views/Sales";
 import Stock from "../views/Stock";
+import MePage from "../views/Me";
+import ReportPage from "../views/Report";
 
 export const routes = [
   {
@@ -15,8 +17,18 @@ export const routes = [
     exact: true,
   },
   {
+    path: "/me",
+    component: MePage,
+    exact: true,
+  },
+  {
     path: "/login",
     component: LoginPage,
+    exact: true,
+  },
+  {
+    path: "/report/:id",
+    component: ReportPage,
     exact: true,
   },
   {

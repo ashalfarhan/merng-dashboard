@@ -34,9 +34,9 @@ export const refreshTokenHandler: RequestHandler = async (req, res) => {
     });
   }
   const { accessToken } = createToken(user);
-  return res.status(200).json({
+  return res.status(200).send({
     ok: true,
     message: "Success create access token",
-    token: accessToken,
+    accessToken,
   });
 };

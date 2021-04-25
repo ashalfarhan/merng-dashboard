@@ -21,6 +21,7 @@ export default function Charts({ display }: { display: OVERVIEW }) {
   return (
     <Box>
       <Line
+        type=""
         height={400}
         width={600}
         options={{
@@ -28,7 +29,6 @@ export default function Charts({ display }: { display: OVERVIEW }) {
           y: {
             ticks: {
               callback: (val: number) => {
-                console.log("ticks y: ", val);
                 return `$${val}`;
               },
             },

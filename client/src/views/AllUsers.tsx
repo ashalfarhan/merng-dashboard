@@ -1,4 +1,3 @@
-import { Box } from "@chakra-ui/layout";
 import {
   Table,
   TableCaption,
@@ -8,52 +7,50 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/table";
-import { useEffect, useState } from "react";
+import { Box } from "@chakra-ui/layout";
+import { Spinner } from "@chakra-ui/spinner";
 import Layout from "../components/Layout";
-
-interface User {
-  id: number;
-  name: string;
-  username: string;
-  email: string;
-}
+import { useGetAllUsersQuery } from "../generated/graphql";
+import { useDispatch } from "../store";
+import { setError } from "../store/slices/error";
 
 export default function AllUsers() {
-  const [users, setUsers] = useState<User[] | []>([]);
-
-  useEffect(() => {
-    const getPosts = async () => {
-      const response = await fetch(
-        "https://jsonplaceholder.typicode.com/users"
-      );
-      const json = await response.json();
-      setUsers(json);
-    };
-    getPosts();
-  }, []);
-
+  const dispatch = useDispatch();
+  const { data, loading } = useGetAllUsersQuery({
+    onError: (e) => {
+      dispatch(setError(e.message));
+    },
+  });
   return (
     <Layout>
-      <Box>
-        <Table variant="striped">
-          <TableCaption>Updated at {new Date().toDateString()}</TableCaption>
-          <Thead>
-            <Th>No.</Th>
-            <Th>Name</Th>
-            <Th>Username</Th>
-            <Th>Email</Th>
-          </Thead>
-          <Tbody>
-            {users.map((user: User) => (
-              <Tr key={user.id}>
-                <Td>{user.id}</Td>
-                <Td>{user.name}</Td>
-                <Td>{user.username}</Td>
-                <Td>{user.email}</Td>
+      <Box height="full" display="flex">
+        {!data || loading ? (
+          <Spinner m="auto" />
+        ) : (
+          <Table variant="striped">
+            <Thead>
+              <Tr>
+                <Th>No.</Th>
+                <Th>Name</Th>
+                <Th>Username</Th>
+                <Th>Email</Th>
               </Tr>
-            ))}
-          </Tbody>
-        </Table>
+            </Thead>
+            <Tbody>
+              {data.getAllUsers?.map((user, idx) => (
+                <Tr key={user._id}>
+                  <Td>{idx + 1}</Td>
+                  <Td>{user.name}</Td>
+                  <Td>{user.username}</Td>
+                  <Td>{user.email}</Td>
+                </Tr>
+              ))}
+            </Tbody>
+            <TableCaption>
+              Last update {new Date().toLocaleString()}
+            </TableCaption>
+          </Table>
+        )}
       </Box>
     </Layout>
   );

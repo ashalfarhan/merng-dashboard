@@ -1,7 +1,94 @@
 query ME {
   me {
     username
-    name
+    isAdmin
     _id
+    name
+    email
+    reports {
+      _id
+      name
+      createdAt
+      updatedAt
+      type
+      goods {
+        _id
+        createdAt
+        updatedAt
+        price
+        type
+        amount
+      }
+    }
+  }
+}
+
+query GetAllReports {
+  getAllReports {
+    _id
+    name
+    createdAt
+    updatedAt
+    type
+    goods {
+      _id
+      createdAt
+      updatedAt
+      price
+      type
+      amount
+    }
+    reporter {
+      _id
+      name
+    }
+  }
+}
+
+query GetAllUsers {
+  getAllUsers {
+    username
+    email
+    name
+    isAdmin
+    _id
+    reports {
+      name
+      createdAt
+      updatedAt
+    }
+  }
+}
+
+query GetUser($id: String!) {
+  getUser(userId: $id) {
+    _id
+    isAdmin
+    reports {
+      name
+      createdAt
+      updatedAt
+    }
+  }
+}
+
+query GetReport($id: String!) {
+  getReport(id: $id) {
+    name
+    createdAt
+    updatedAt
+    type
+    reporter {
+      name
+    }
+    goods {
+      _id
+      name
+      createdAt
+      updatedAt
+      price
+      type
+      amount
+    }
   }
 }

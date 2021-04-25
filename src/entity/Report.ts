@@ -1,48 +1,42 @@
-import { Field, ID, Int, ObjectType } from "type-graphql";
+import { Field, ID, ObjectType } from "type-graphql";
 import { User } from "./User";
 import { getModelForClass, prop } from "@typegoose/typegoose";
-import { Ref } from "../utils/@types";
 import { ObjectId } from "mongodb";
-
-@ObjectType({ simpleResolvers: true })
-class ReportData {
-  @Field(() => String)
-  @prop()
-  public stuff: string;
-
-  @Field(() => Int)
-  @prop()
-  public price: number;
-}
-
+import { ReportType } from "../utils/@types/enums";
+import { Stuff } from "./Stuff";
+import { Ref } from "../utils/@types";
 @ObjectType()
 export class Report {
   @Field(() => ID)
   readonly _id: ObjectId;
 
   @Field(() => Date)
-  @prop({ type: () => Date, default: new Date() })
-  public createdAt?: Date;
+  readonly createdAt: Date;
 
   @Field(() => Date)
-  @prop({ type: () => Date, default: new Date() })
-  public updatedAt?: Date;
+  readonly updatedAt: Date;
 
-  @Field(() => ReportData, { simple: true })
-  @prop({ type: () => ReportData })
-  public detail: ReportData;
+  @Field(() => [Stuff])
+  @prop({ default: [], ref: () => Stuff, type: () => [Stuff] })
+  readonly goods: Ref<Stuff>[];
+
+  @Field(() => User)
+  @prop({ ref: () => "User", type: () => User })
+  readonly reporter: Ref<User>;
 
   @Field(() => String)
   @prop()
   public name: string;
 
-  @Field(() => ID, { nullable: true })
-  @prop({ type: () => String })
-  public reporterId?: string;
+  @Field(() => ReportType)
+  @prop()
+  public type: ReportType;
 
-  @Field(() => User, { nullable: true })
-  @prop({ ref: () => User, type: () => User })
-  public reporter?: Ref<User> | null;
+  @Field(() => ID)
+  @prop({ type: () => String })
+  public reporterId: Ref<User | string>;
 }
 
-export const ReportModel = getModelForClass(Report);
+export const ReportModel = getModelForClass(Report, {
+  schemaOptions: { timestamps: true },
+});
