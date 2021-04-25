@@ -3,8 +3,6 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import { ColorModeScript, ChakraProvider, theme } from "@chakra-ui/react";
 import { BrowserRouter } from "react-router-dom";
-// import { ApolloProvider } from "@apollo/client";
-// import { client } from "./libs/apollo";
 import { ApolloGqlProvider } from "./libs/apollo";
 import LocaleProvider from "./libs/i18n";
 import { Provider } from "react-redux";
