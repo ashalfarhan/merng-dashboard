@@ -5,13 +5,13 @@ import { isValid } from "../../helpers/auth";
 import { setLogin } from "../thunk/login";
 
 interface State {
-  isLoggedIn: boolean;
+  // isLoggedIn: boolean;
   user: User | null;
   token?: string | null;
 }
 
 const initialState: State = {
-  isLoggedIn: isValid(localStorage.getItem("fmas")),
+  // isLoggedIn: isValid(localStorage.getItem("fmas")),
   // @ts-ignore
   user: JSON.parse(localStorage.getItem("user")),
   token: localStorage.getItem("fmas"),
@@ -26,13 +26,14 @@ const authReducer = createSlice({
       state = {
         ...state,
         token: localStorage.getItem("fmas") || payload,
-        isLoggedIn: isValid(payload),
+        // isLoggedIn: isValid(payload),
       };
     },
     removeToken: (state) => {
       localStorage.removeItem("fmas");
       localStorage.removeItem("user");
-      state.isLoggedIn = false;
+      // state.isLoggedIn = false;
+      state.user = null;
       state.token = null;
     },
   },
@@ -44,13 +45,17 @@ const authReducer = createSlice({
     },
     [setLogin.rejected.type]: (state) => {
       localStorage.removeItem("user");
-      state.isLoggedIn = false;
+      // state.isLoggedIn = false;
     },
   },
 });
 
 export const { setToken, removeToken } = authReducer.actions;
 export const getUser = (state: RootState) => state.auth.user;
-export const isAuth = (state: RootState) =>
-  state.auth.token ? isValid(state.auth.token) : state.auth.isLoggedIn;
+export const isAuth = (state: RootState) => {
+  if (state.auth.token) {
+    return isValid(state.auth.token);
+  }
+  return isValid(localStorage.getItem("fmas"));
+};
 export default authReducer.reducer;
