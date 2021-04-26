@@ -1,7 +1,8 @@
 import {
-  CreateReportMutationVariables,
-  GetAllReportsDocument,
-  useCreateReportMutation,
+  EditReportMutationVariables,
+  GetReportDocument,
+  ReportType,
+  useEditReportMutation,
 } from "../../generated/graphql";
 import {
   FormControl,
@@ -10,26 +11,30 @@ import {
   Button,
   FormErrorMessage,
   Select,
-  Text,
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { createInputSchema } from "../../helpers/validation";
+import { editReportSchema } from "../../helpers/validation";
 import { useDispatch } from "../../store";
 import { setError } from "../../store/slices/error";
-import { ReportOptions, StuffOptions } from "../../helpers/constants";
+import { ReportOptions } from "../../helpers/constants";
 import { useIntl } from "react-intl";
 
 interface Props {
   onComplete: () => void;
+  data: {
+    type: ReportType;
+    id: string;
+    name: string;
+  };
 }
 
-export default function CreateReportForm({ onComplete }: Props) {
+export default function EditReportForm({ data, onComplete }: Props) {
   const { formatMessage } = useIntl();
   const dispatch = useDispatch();
-  const [create, { loading }] = useCreateReportMutation({
-    onCompleted: ({ createReport }) => {
-      if (createReport) {
+  const [editReport, { loading }] = useEditReportMutation({
+    onCompleted: ({ editReport }) => {
+      if (editReport) {
         onComplete();
       }
     },
@@ -38,7 +43,8 @@ export default function CreateReportForm({ onComplete }: Props) {
     },
     refetchQueries: [
       {
-        query: GetAllReportsDocument,
+        query: GetReportDocument,
+        variables: { id: data.id },
       },
     ],
   });
@@ -46,16 +52,20 @@ export default function CreateReportForm({ onComplete }: Props) {
     handleSubmit,
     register,
     formState: { errors, isDirty, isValid },
-  } = useForm<CreateReportMutationVariables>({
-    resolver: yupResolver(createInputSchema),
+  } = useForm<EditReportMutationVariables>({
+    resolver: yupResolver(editReportSchema),
     mode: "onChange",
   });
-  const handleCreateReport = async (value: CreateReportMutationVariables) => {
-    if (isDirty && isValid) {
+  const handleCreateReport = async (value: EditReportMutationVariables) => {
+    if (isValid) {
       try {
-        await create({
+        const variable = {
+          ...value.data,
+          _id: data.id,
+        };
+        await editReport({
           variables: {
-            ...value,
+            data: variable,
           },
         });
       } catch (error) {
@@ -69,77 +79,23 @@ export default function CreateReportForm({ onComplete }: Props) {
         <FormLabel>
           {formatMessage({ id: "createReport.reportNameLabel" })}
         </FormLabel>
-        <Input {...register("name")} id="name" placeholder="Awesome Report" />
+        <Input
+          {...register("data.name")}
+          id="name"
+          defaultValue={data.name}
+          placeholder="Awesome Report"
+        />
         <FormErrorMessage>
-          {errors.name && errors.name.message}
+          {errors.data?.name && errors.data?.name.message}
         </FormErrorMessage>
       </FormControl>
-      <FormControl mt={6}>
+      <FormControl mt={4}>
         <FormLabel>
           {formatMessage({ id: "createReport.reportTypeLabel" })}
         </FormLabel>
-        <Select {...register("type")} name="type">
+        <Select {...register("data.type")} name="type" defaultValue={data.type}>
           {ReportOptions.map((type, idx) => (
             <option key={idx} value={type.value}>
-              {formatMessage({ id: type.label })}
-            </option>
-          ))}
-        </Select>
-        <FormErrorMessage>
-          {errors.type && errors.type.message}
-        </FormErrorMessage>
-      </FormControl>
-      <Text fontSize="24" mb="4">
-        {formatMessage({ id: "createReport.stuffLabel" })}
-      </Text>
-      <FormControl>
-        <FormLabel>
-          {formatMessage({ id: "createReport.stuffNameLabel" })}
-        </FormLabel>
-        <Input
-          {...register("data.name")}
-          id="data.name"
-          placeholder="Urgent Stuff"
-        />
-        <FormErrorMessage>
-          {errors.data?.name && errors.data.name.message}
-        </FormErrorMessage>
-      </FormControl>
-      <FormControl>
-        <FormLabel>
-          {formatMessage({ id: "createReport.stuffPriceLabel" })}
-        </FormLabel>
-        <Input
-          {...register("data.price")}
-          type="number"
-          id="data.price"
-          placeholder="$100"
-        />
-        <FormErrorMessage>
-          {errors.data?.price && errors.data.price.message}
-        </FormErrorMessage>
-      </FormControl>
-      <FormControl>
-        <FormLabel>
-          {formatMessage({ id: "createReport.stuffAmountLabel" })}
-        </FormLabel>
-        <Input
-          {...register("data.amount")}
-          id="data.amount"
-          type="number"
-          placeholder="12 in pcs"
-        />
-        <FormErrorMessage>
-          {errors.data?.amount && errors.data?.amount.message}
-        </FormErrorMessage>
-      </FormControl>
-      <FormControl mt={6}>
-        <FormLabel>
-          {formatMessage({ id: "createReport.stuffTypeLabel" })}
-        </FormLabel>
-        <Select {...register("data.type")} name="data.type">
-          {StuffOptions.map((type, idx) => (
-            <option key={type.value + idx} value={type.value}>
               {formatMessage({ id: type.label })}
             </option>
           ))}
