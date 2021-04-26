@@ -1,12 +1,22 @@
-import { Line } from "react-chartjs-2";
-import { Box } from "@chakra-ui/layout";
-import { useFetch } from "../helpers/useFetch";
+import { Box, Text } from "@chakra-ui/layout";
+import {
+  LineChart,
+  Tooltip,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 import { OVERVIEW } from "../@types/enums";
 import { Spinner } from "@chakra-ui/spinner";
+import { useGetSalesQuery } from "../generated/graphql";
+import { getChartData } from "../helpers/getChartData";
 
 export default function Charts({ display }: { display: OVERVIEW }) {
-  const { data, loading } = useFetch(display, 24);
-  if (loading) {
+  const { data, loading } = useGetSalesQuery();
+  if (loading || !data) {
     return (
       <Box
         height={400}
@@ -18,47 +28,23 @@ export default function Charts({ display }: { display: OVERVIEW }) {
       </Box>
     );
   }
+  const { displayData } = getChartData({ data: data.getSales, type: "REPORT" });
   return (
-    <Box>
-      <Line
-        type=""
-        height={400}
-        width={600}
-        options={{
-          maintainAspectRatio: false,
-          y: {
-            ticks: {
-              callback: (val: number) => {
-                return `$${val}`;
-              },
-            },
-          },
-        }}
-        data={{
-          labels: [
-            "Jan",
-            "Feb",
-            "March",
-            "April",
-            "May",
-            "June",
-            "July",
-            "August",
-            "Sept",
-            "Oct",
-            "Nov",
-            "Desc",
-          ],
-          datasets: [
-            {
-              label: "Last 2021",
-              data: data,
-              backgroundColor: ["rgba(255, 99, 132, 0.2)"],
-              borderColor: ["rgba(255, 99, 132, 1)"],
-            },
-          ],
-        }}
-      />
+    <Box height="60vh">
+      <Text align="center">Among 2021</Text>
+      <ResponsiveContainer width={"100%"} height="80%">
+        <LineChart
+          data={displayData}
+          margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="createdAt" />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          <Line type="monotone" dataKey={display} stroke="#8884d8" />
+        </LineChart>
+      </ResponsiveContainer>
     </Box>
   );
 }

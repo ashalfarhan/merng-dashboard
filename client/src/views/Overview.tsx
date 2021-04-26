@@ -8,7 +8,7 @@ import Layout from "../components/common/Layout";
 
 export default function Overview() {
   const { formatMessage } = useIntl();
-  const [display, setDisplay] = useState(OVERVIEW.OPEN);
+  const [display, setDisplay] = useState(OVERVIEW.INCOME);
   return (
     <Layout>
       <Box>
@@ -18,30 +18,16 @@ export default function Overview() {
           <Button
             colorScheme="teal"
             variant="outline"
-            onClick={() => setDisplay(OVERVIEW.OPEN)}
+            onClick={() => setDisplay(OVERVIEW.INCOME)}
           >
-            Open
+            Income
           </Button>
           <Button
             colorScheme="teal"
             variant="outline"
-            onClick={() => setDisplay(OVERVIEW.CLOSE)}
+            onClick={() => setDisplay(OVERVIEW.AMOUNT)}
           >
-            Close
-          </Button>
-          <Button
-            colorScheme="teal"
-            variant="outline"
-            onClick={() => setDisplay(OVERVIEW.HIGH)}
-          >
-            High
-          </Button>
-          <Button
-            colorScheme="teal"
-            variant="outline"
-            onClick={() => setDisplay(OVERVIEW.LOW)}
-          >
-            Low
+            Amount
           </Button>
         </Stack>
       </Box>
