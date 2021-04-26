@@ -19,6 +19,8 @@ const id = {
     inventory: "Inventaris",
     stock: "Stok Gudang",
     createReportLabel: "Buat Laporan",
+    editReportLabel: "Edit Laporan",
+    addStuffLabel: "Tambahkan Barang",
   },
   overview: {
     heading: "Statistik",
@@ -56,6 +58,8 @@ const id = {
       personalLabel: "Pribadi",
       stationaryLabel: "Kantor",
     },
+    amountLabel: "Jumlah",
+    priceLabel: "Harga",
   },
   lastUpdateLabel: "Terakhir diperbarui pada",
   account: {
