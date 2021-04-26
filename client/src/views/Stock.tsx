@@ -1,4 +1,4 @@
-import { Box, Heading } from "@chakra-ui/layout";
+import { Box, Heading, ListItem, UnorderedList } from "@chakra-ui/layout";
 import {
   Link,
   Spinner,
@@ -41,6 +41,7 @@ export default function Stock() {
                   <Th>{formatMessage({ id: "report.nameLabel" })}</Th>
                   <Th>{formatMessage({ id: "report.reporterLabel" })}</Th>
                   <Th>{formatMessage({ id: "report.reportedOnLabel" })}</Th>
+                  <Th>{formatMessage({ id: "Stuff" })}</Th>
                 </Tr>
               </Thead>
               <Tbody>
@@ -52,6 +53,13 @@ export default function Stock() {
                     </Td>
                     <Td>{report.reporter.name}</Td>
                     <Td>{moment(report.createdAt).format("ddd DD-MM-YYYY")}</Td>
+                    <Td>
+                      <UnorderedList>
+                        {report.goods.map((item) => (
+                          <ListItem>{item.name}</ListItem>
+                        ))}
+                      </UnorderedList>
+                    </Td>
                   </Tr>
                 ))}
               </Tbody>
