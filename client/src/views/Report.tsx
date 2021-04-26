@@ -7,29 +7,25 @@ import {
   Tbody,
   Td,
   TableCaption,
-  Button,
-  useDisclosure,
 } from "@chakra-ui/react";
 import { Spinner } from "@chakra-ui/spinner";
 import moment from "moment";
 import { FaCheck } from "react-icons/fa";
-import { AiOutlineEdit } from "react-icons/ai";
 import { useIntl } from "react-intl";
 import { useParams } from "react-router";
-import EditReportModal from "../components/modals/EditReportModal";
 import { useGetReportQuery } from "../generated/graphql";
 import { formatDate } from "../helpers/dateFormatter";
 import { useDispatch, useSelector } from "../store";
 import { setError } from "../store/slices/error";
 import { getLocale } from "../store/slices/locale";
+import DetailStuffHeading from "../components/HeadingSection/DetailStuffHeading";
+import EditReporSection from "../components/HeadingSection/EditReportSection";
 
 export default function ReportPage() {
   const { formatMessage } = useIntl();
   const locale = useSelector(getLocale);
   const dispatch = useDispatch();
   const { id } = useParams<{ id: string }>();
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
   const { data, loading, error } = useGetReportQuery({
     variables: { id },
   });
@@ -75,56 +71,13 @@ export default function ReportPage() {
             </Flex>
           </Flex>
           <Box fontSize="24" mt="8">
-            <Flex
-              pb="4"
-              borderBottom="1px"
-              borderColor="yellow"
-              justify="space-between"
-              align="center"
-            >
-              <Heading fontSize="32">
-                {formatMessage({ id: "report.reporterLabel" }) +
-                  ": " +
-                  data.getReport.reporter.name}
-              </Heading>
-              <Button onClick={onOpen} variant="solid" colorScheme="yellow">
-                <EditReportModal
-                  isOpen={isOpen}
-                  onClose={onClose}
-                  data={{
-                    id,
-                    type: data.getReport.type,
-                    name: data.getReport.name,
-                  }}
-                />
-                <AiOutlineEdit style={{ marginRight: "4px" }} />
-                {formatMessage({ id: "menu.editReportLabel" })}
-              </Button>
-            </Flex>
-            <Flex
-              pb="4"
-              borderBottom="1px"
-              borderColor="green.500"
-              justify="space-between"
-              align="center"
-            >
-              <Heading mt="8" mb="4" fontSize="24">
-                Detail Stuff:
-              </Heading>
-              <Button onClick={onOpen} variant="solid" colorScheme="green">
-                <EditReportModal
-                  isOpen={isOpen}
-                  onClose={onClose}
-                  data={{
-                    id,
-                    type: data.getReport.type,
-                    name: data.getReport.name,
-                  }}
-                />
-                <AiOutlineEdit style={{ marginRight: "4px" }} />
-                {formatMessage({ id: "menu.addStuffLabel" })}
-              </Button>
-            </Flex>
+            <EditReporSection
+              reportId={id}
+              reportName={data.getReport?.name}
+              reportType={data.getReport?.type}
+              reporterName={data.getReport?.reporter.name}
+            />
+            <DetailStuffHeading reportId={id} />
             <Box>
               <Table variant="simple" size="sm">
                 <Thead>
