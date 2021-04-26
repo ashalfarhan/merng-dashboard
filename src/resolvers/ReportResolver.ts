@@ -97,6 +97,13 @@ export default class ReportResolver {
       return Error("Must be a user to edit a report");
     }
     try {
+      const report = await ReportModel.findById(data._id);
+      if (!report) {
+        return Error("Cannot get the report");
+      }
+      if (report.reporterId !== payload.userId || !payload.isAdmin) {
+        return Error("Only Admin can edit any report or the reporter itself");
+      }
       const saved = await ReportModel.findOneAndUpdate(
         { _id: data._id },
         { ...data }
