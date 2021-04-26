@@ -1,6 +1,9 @@
 import {
   CreateReportMutationVariables,
   GetAllReportsDocument,
+  GetInventoryDocument,
+  GetSalesDocument,
+  GetStockDocument,
   useCreateReportMutation,
 } from "../../generated/graphql";
 import {
@@ -39,6 +42,15 @@ export default function CreateReportForm({ onComplete }: Props) {
     refetchQueries: [
       {
         query: GetAllReportsDocument,
+      },
+      {
+        query: GetStockDocument,
+      },
+      {
+        query: GetSalesDocument,
+      },
+      {
+        query: GetInventoryDocument,
       },
     ],
   });
