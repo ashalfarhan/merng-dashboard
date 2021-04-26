@@ -13,7 +13,3 @@
 - React
 
 ## TODO
-
-- [ ] Add more data in db document
-- [ ] Queries for specific reports
-- [ ] Edit report action
