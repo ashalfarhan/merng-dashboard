@@ -1,5 +1,5 @@
 import { Box, Flex, Heading } from "@chakra-ui/layout";
-import { FormattedMessage } from "react-intl";
+import { useIntl } from "react-intl";
 import EmailLoginForm from "../components/forms/EmailLoginForm";
 import UsernameLoginForm from "../components/forms/UsernameLoginForm";
 import { useState } from "react";
@@ -10,6 +10,7 @@ import { useSelector } from "../store";
 import { Redirect } from "react-router";
 
 export default function LoginPage() {
+  const { formatMessage } = useIntl();
   const [loginWith, setLoginWith] = useState(LOGIN.EMAIL);
   const isLoggedIn = useSelector(isAuth);
   if (isLoggedIn) {
@@ -19,9 +20,7 @@ export default function LoginPage() {
     <Flex w="full" h="70vh" direction="column" align="center" justify="center">
       <Box w="sm">
         <Box>
-          <Heading>
-            <FormattedMessage id="login.heading" />
-          </Heading>
+          <Heading>{formatMessage({ id: "login.heading" })}</Heading>
           <Box mt="4">
             {loginWith === LOGIN.EMAIL ? (
               <>
@@ -31,7 +30,7 @@ export default function LoginPage() {
                   w="full"
                   onClick={() => setLoginWith(LOGIN.USERNAME)}
                 >
-                  <FormattedMessage id="login.withUsername" />
+                  {formatMessage({ id: "login.withUsername" })}
                 </Button>
               </>
             ) : (
@@ -42,7 +41,7 @@ export default function LoginPage() {
                   w="full"
                   onClick={() => setLoginWith(LOGIN.EMAIL)}
                 >
-                  <FormattedMessage id="login.withEmail" />
+                  {formatMessage({ id: "login.withEmail" })}
                 </Button>
               </>
             )}

@@ -16,9 +16,10 @@ import { setError } from "../store/slices/error";
 import { getLocale } from "../store/slices/locale";
 import moment from "moment";
 import { Link } from "react-router-dom";
-import { FormattedMessage } from "react-intl";
+import { useIntl } from "react-intl";
 
 export default function AllReports() {
+  const { formatMessage } = useIntl();
   const dispatch = useDispatch();
   const locale = useSelector(getLocale);
   const { data, loading } = useGetAllReportsQuery({
@@ -36,15 +37,9 @@ export default function AllReports() {
             <Thead>
               <Tr>
                 <Th>No.</Th>
-                <Th>
-                  <FormattedMessage id="report.nameLabel" />
-                </Th>
-                <Th>
-                  <FormattedMessage id="report.reporterLabel" />
-                </Th>
-                <Th>
-                  <FormattedMessage id="report.reportedOnLabel" />
-                </Th>
+                <Th>{formatMessage({ id: "report.nameLabel" })}</Th>
+                <Th>{formatMessage({ id: "report.reporterLabel" })}</Th>
+                <Th>{formatMessage({ id: "report.reportedOnLabel" })}</Th>
               </Tr>
             </Thead>
             <Tbody>
@@ -64,8 +59,9 @@ export default function AllReports() {
               ))}
             </Tbody>
             <TableCaption>
-              <FormattedMessage id="lastUpdateLabel" />{" "}
-              {new Date().toLocaleString()}
+              {formatMessage({ id: "lastUpdateLabel" }) +
+                " " +
+                new Date().toLocaleString()}
             </TableCaption>
           </Table>
         )}

@@ -1,7 +1,7 @@
 import { Button } from "@chakra-ui/button";
 import { Box, VStack } from "@chakra-ui/layout";
 import { useDisclosure } from "@chakra-ui/react";
-import { FormattedMessage } from "react-intl";
+import { useIntl } from "react-intl";
 import { useHistory } from "react-router";
 import { useSelector } from "../store";
 import { getUser } from "../store/slices/auth";
@@ -9,6 +9,7 @@ import CreateReportModal from "./modals/CreateReportModal";
 
 export default function SideBar() {
   const history = useHistory();
+  const { formatMessage } = useIntl();
   const user = useSelector(getUser);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const handleNav = (e: string) => {
@@ -24,28 +25,28 @@ export default function SideBar() {
         py="24px"
       >
         <Button onClick={() => handleNav("/dashboard")}>
-          <FormattedMessage id="menu.overview" />
+          {formatMessage({ id: "menu.overview" })}
         </Button>
         <Button onClick={() => handleNav("/dashboard/reports")}>
-          <FormattedMessage id="menu.allReports" />
+          {formatMessage({ id: "menu.allReports" })}
         </Button>
         {user?.isAdmin && (
           <Button onClick={() => handleNav("/dashboard/users")}>
-            <FormattedMessage id="menu.allUsers" />
+            {formatMessage({ id: "menu.allUsers" })}
           </Button>
         )}
         <Button onClick={() => handleNav("/dashboard/stock")}>
-          <FormattedMessage id="menu.stock" />
+          {formatMessage({ id: "menu.stock" })}
         </Button>
         <Button onClick={() => handleNav("/dashboard/sales")}>
-          <FormattedMessage id="menu.sales" />
+          {formatMessage({ id: "menu.sales" })}
         </Button>
         <Button onClick={() => handleNav("/dashboard/inventory")}>
-          <FormattedMessage id="menu.inventory" />
+          {formatMessage({ id: "menu.inventory" })}
         </Button>
         <Button onClick={onOpen}>
           <CreateReportModal isOpen={isOpen} onClose={onClose} />
-          <FormattedMessage id="menu.createReportLabel" />
+          {formatMessage({ id: "menu.createReportLabel" })}
         </Button>
       </VStack>
     </Box>
