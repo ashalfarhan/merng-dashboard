@@ -31,15 +31,17 @@ export default function SideBar() {
           {formatMessage({ id: "menu.allReports" })}
         </Button>
         {user?.isAdmin && (
-          <Button onClick={() => handleNav("/dashboard/users")}>
-            {formatMessage({ id: "menu.allUsers" })}
-          </Button>
+          <>
+            <Button onClick={() => handleNav("/dashboard/users")}>
+              {formatMessage({ id: "menu.allUsers" })}
+            </Button>
+            <Button onClick={() => handleNav("/dashboard/sales")}>
+              {formatMessage({ id: "menu.sales" })}
+            </Button>
+          </>
         )}
         <Button onClick={() => handleNav("/dashboard/stock")}>
           {formatMessage({ id: "menu.stock" })}
-        </Button>
-        <Button onClick={() => handleNav("/dashboard/sales")}>
-          {formatMessage({ id: "menu.sales" })}
         </Button>
         <Button onClick={() => handleNav("/dashboard/inventory")}>
           {formatMessage({ id: "menu.inventory" })}
