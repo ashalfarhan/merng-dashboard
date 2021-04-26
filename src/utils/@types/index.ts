@@ -89,7 +89,7 @@ export class EditReportInput {
   @Field(() => String, { nullable: true })
   public name: string;
 
-  @Field(() => StuffType, { nullable: true })
+  @Field(() => ReportType, { nullable: true })
   public type: ReportType;
 }
 
