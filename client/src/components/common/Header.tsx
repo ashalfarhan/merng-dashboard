@@ -8,10 +8,11 @@ import {
 import { Avatar } from "@chakra-ui/avatar";
 import { Box, Heading, HStack } from "@chakra-ui/layout";
 import { IconButton } from "@chakra-ui/button";
-import { BiMenuAltRight } from "react-icons/bi";
+import { BiMenuAltRight, BiLogOut } from "react-icons/bi";
+import { RiAccountPinBoxLine, RiDashboardLine } from "react-icons/ri";
 import { ColorModeSwitcher } from "../switchers/ColorModeSwitcer";
 import { Link, useHistory } from "react-router-dom";
-import { FormattedMessage } from "react-intl";
+import { useIntl } from "react-intl";
 import { useDispatch, useSelector } from "../../store";
 import { getUser, isAuth, removeToken } from "../../store/slices/auth";
 import { Tooltip } from "@chakra-ui/tooltip";
@@ -21,6 +22,7 @@ import LangSwitcher from "../switchers/LangSwitcher";
 
 export default function Header() {
   const history = useHistory();
+  const { formatMessage } = useIntl();
   const isLoggedIn = useSelector(isAuth);
   const user = useSelector(getUser);
   const currentLocale = useSelector(getLocale);
@@ -29,6 +31,9 @@ export default function Header() {
   const handleLogout = () => {
     dispatch(removeToken());
     history.push("/login");
+  };
+  const handleNav = (e: string) => {
+    history.push(e);
   };
 
   return (
@@ -60,29 +65,21 @@ export default function Header() {
             <Menu>
               <MenuButton as={IconButton} icon={<BiMenuAltRight />} />
               <MenuList>
-                <MenuItem>
-                  <Link
-                    to="/me"
-                    style={{
-                      width: "100%",
-                    }}
-                  >
-                    <FormattedMessage id="settings.account" />
-                  </Link>
+                <MenuItem
+                  onClick={() => handleNav("/me")}
+                  icon={<RiAccountPinBoxLine />}
+                >
+                  {formatMessage({ id: "settings.account" })}
                 </MenuItem>
-                <MenuItem>
-                  <Link
-                    to="/dashboard"
-                    style={{
-                      width: "100%",
-                    }}
-                  >
-                    Dashboard
-                  </Link>
+                <MenuItem
+                  onClick={() => handleNav("/dashboard")}
+                  icon={<RiDashboardLine />}
+                >
+                  Dashboard
                 </MenuItem>
                 <MenuDivider />
-                <MenuItem onClick={handleLogout}>
-                  <FormattedMessage id="settings.logout" />
+                <MenuItem icon={<BiLogOut />} onClick={handleLogout}>
+                  {formatMessage({ id: "settings.logout" })}
                 </MenuItem>
               </MenuList>
             </Menu>
