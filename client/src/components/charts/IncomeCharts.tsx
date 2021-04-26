@@ -9,7 +9,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import { OVERVIEW } from "../../@types/enums";
+import { SALES } from "../../@types/enums";
 import { Spinner } from "@chakra-ui/spinner";
 import { useGetSalesQuery } from "../../generated/graphql";
 import { getChartData } from "../../helpers/getChartData";
@@ -19,7 +19,7 @@ import { useState } from "react";
 import { Button } from "@chakra-ui/button";
 
 export default function SalesCharts() {
-  const [display, setDisplay] = useState(OVERVIEW.INCOME);
+  const [display, setDisplay] = useState(SALES.INCOME);
 
   const dispatch = useDispatch();
   const { data, loading } = useGetSalesQuery({
@@ -60,14 +60,14 @@ export default function SalesCharts() {
         <Button
           colorScheme="teal"
           variant="outline"
-          onClick={() => setDisplay(OVERVIEW.INCOME)}
+          onClick={() => setDisplay(SALES.INCOME)}
         >
           Income
         </Button>
         <Button
           colorScheme="teal"
           variant="outline"
-          onClick={() => setDisplay(OVERVIEW.AMOUNT)}
+          onClick={() => setDisplay(SALES.AMOUNT)}
         >
           Amount
         </Button>

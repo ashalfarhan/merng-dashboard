@@ -3,9 +3,14 @@ export enum LOCALES {
   ID = "id-id",
 }
 
-export enum OVERVIEW {
+export enum SALES {
   AMOUNT = "amount",
   INCOME = "income",
+}
+
+export enum INVENTORY {
+  AMOUNT = "amount",
+  SPENDS = "spends",
 }
 
 export enum LOGIN {
