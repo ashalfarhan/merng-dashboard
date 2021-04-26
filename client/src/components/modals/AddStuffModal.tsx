@@ -6,28 +6,25 @@ import {
   ModalHeader,
   ModalOverlay,
 } from "@chakra-ui/react";
-import { ReportType } from "../../generated/graphql";
-import EditReportForm from "../forms/EditReportForm";
+import AddStuffForm from "../forms/AddStuffForm";
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
   data: {
-    type: ReportType;
     id: string;
-    name: string;
   };
 }
 
-export default function EditReportModal({ data, isOpen, onClose }: Props) {
+export default function AddStuffModal({ data, isOpen, onClose }: Props) {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Edit Report</ModalHeader>
+        <ModalHeader>Add Stuff</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <EditReportForm data={data} onComplete={onClose} />
+          <AddStuffForm data={data} onComplete={onClose} />
         </ModalBody>
       </ModalContent>
     </Modal>
