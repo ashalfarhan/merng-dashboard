@@ -1,4 +1,4 @@
-<h1 style="text-align: center;">Dashboard App</h1>
+<h1 align="center">Dashboard App</h1>
 
 ## Deployment
 
