@@ -6,7 +6,7 @@ import { FormattedMessage } from "react-intl";
 import { useMeQuery } from "../generated/graphql";
 import { useDispatch } from "../store";
 import { setError } from "../store/slices/error";
-import MyReportsTable from "../components/MyReportsTable";
+import MyReportsTable from "../components/tables/MyReportsTable";
 
 export default function MePage() {
   const dispatch = useDispatch();

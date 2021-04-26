@@ -8,7 +8,7 @@ import {
   Tr,
 } from "@chakra-ui/table";
 import { Box } from "@chakra-ui/layout";
-import Layout from "../components/Layout";
+import Layout from "../components/common/Layout";
 import { useGetAllReportsQuery } from "../generated/graphql";
 import { Spinner } from "@chakra-ui/spinner";
 import { useDispatch, useSelector } from "../store";

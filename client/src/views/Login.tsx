@@ -1,7 +1,7 @@
 import { Box, Flex, Heading } from "@chakra-ui/layout";
 import { FormattedMessage } from "react-intl";
-import EmailLoginForm from "../components/EmailLoginForm";
-import UsernameLoginForm from "../components/UsernameLoginForm";
+import EmailLoginForm from "../components/forms/EmailLoginForm";
+import UsernameLoginForm from "../components/forms/UsernameLoginForm";
 import { useState } from "react";
 import { LOGIN } from "../@types/enums";
 import { Button } from "@chakra-ui/button";

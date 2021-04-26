@@ -4,7 +4,7 @@ import { useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { OVERVIEW } from "../@types/enums";
 import Charts from "../components/Charts";
-import Layout from "../components/Layout";
+import Layout from "../components/common/Layout";
 
 export default function Overview() {
   const [display, setDisplay] = useState(OVERVIEW.OPEN);
