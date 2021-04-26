@@ -1,4 +1,4 @@
-# Dashboard App
+<h1 style="text-align: center;">Dashboard App</h1>
 
 ## Deployment
 
@@ -13,3 +13,5 @@
 - React
 
 ## TODO
+
+- [ ] None
