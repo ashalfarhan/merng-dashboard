@@ -1,6 +1,5 @@
 import { Box, Heading } from "@chakra-ui/layout";
 import {
-  Link,
   Spinner,
   Table,
   TableCaption,
@@ -47,9 +46,7 @@ export default function Stock() {
                 {data.getSales?.map((report, idx) => (
                   <Tr key={report._id}>
                     <Td>{idx + 1}</Td>
-                    <Td>
-                      <Link to={`/report/${report._id}`}>{report.name}</Link>
-                    </Td>
+                    <Td>{report.name}</Td>
                     <Td>{report.reporter.name}</Td>
                     <Td>{moment(report.createdAt).format("ddd DD-MM-YYYY")}</Td>
                   </Tr>
