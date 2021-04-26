@@ -34,9 +34,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
   }
 });
 
-const backend = isDev
-  ? "http://localhost:4040/refresh_token"
-  : process.env.REACT_APP_GQL_API;
+const backend = isDev ? "http://localhost:4040" : process.env.REACT_APP_GQL_API;
 
 const refreshTokenLink = new TokenRefreshLink({
   accessTokenField: "accessToken",
