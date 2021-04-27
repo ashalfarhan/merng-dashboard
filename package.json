@@ -18,8 +18,7 @@
     "heroku-postbuild": "yarn build:server"
   },
   "engines": {
-    "node": "14.x",
-    "yarn": "1.x"
+    "node": "14.x"
   },
   "dependencies": {
     "@typegoose/typegoose": "7.6.0",
