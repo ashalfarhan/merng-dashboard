@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import "dotenv/config";
-import { ApolloServer, CorsOptions } from "apollo-server-express";
+import { CorsOptions, ApolloServer } from "apollo-server-express";
 import chalk from "chalk";
 import express from "express";
 import { set, connect } from "mongoose";
@@ -13,24 +13,15 @@ import { refreshTokenHandler } from "./utils/refreshToken";
 import cors from "cors";
 
 (async () => {
-  const whitelist = [
-    "http://localhost:3000",
-    "https://dashboard-haans.netlify.app",
-  ];
-  const corsOptions: CorsOptions = {
-    credentials: true,
-    origin: (origin, callback) => {
-      console.log("Some origin accessed: ", origin);
-      // @ts-ignore
-      if (whitelist.indexOf(origin) !== -1) {
-        callback(null, origin);
-      } else {
-        callback(Error("Blocked by cors"), origin);
-      }
-    },
-  };
+  const isDev = process.env.NODE_ENV !== "production";
   const PORT = process.env.PORT || 4040;
   const app = express();
+  const corsOptions: CorsOptions = {
+    credentials: true,
+    origin: isDev
+      ? "http://localhost:3000"
+      : "https://dashboard-haans.netlify.app",
+  };
   app.use(cors(corsOptions));
   app.use(express.json());
   app.use(cookieParser());
@@ -65,7 +56,7 @@ import cors from "cors";
 
   server.applyMiddleware({
     app,
-    cors: corsOptions,
+    cors: false,
   });
 
   app.post("/refresh_token", refreshTokenHandler);
