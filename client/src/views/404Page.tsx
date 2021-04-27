@@ -10,10 +10,7 @@ export default function Page404() {
     <Box px="12" mt="8" minH="80vh">
       <Heading>404 Not Found</Heading>
       <Heading>
-        {"Oops" +
-          formatMessage({ id: "notFound.heading" }) +
-          " " +
-          { pathname }}
+        {"Oops " + formatMessage({ id: "notFound.heading" }) + " " + pathname}
       </Heading>
       <Text>
         {formatMessage({ id: "notFound.content.main" }) + " "}
