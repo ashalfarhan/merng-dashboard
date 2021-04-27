@@ -3,12 +3,14 @@ export enum LOCALES {
   ID = "id-id",
 }
 
-export enum OVERVIEW {
-  OPEN = "1. open",
-  HIGH = "2. high",
-  LOW = "3. low",
-  CLOSE = "4. close",
-  VOLUME = "5. volume",
+export enum SALES {
+  AMOUNT = "amount",
+  INCOME = "income",
+}
+
+export enum INVENTORY {
+  AMOUNT = "amount",
+  SPENDS = "spends",
 }
 
 export enum LOGIN {

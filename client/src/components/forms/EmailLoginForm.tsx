@@ -1,26 +1,33 @@
 import { Box, Text } from "@chakra-ui/layout";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { UsernameLogin } from "../@types";
-import { usernameLoginSchema } from "../helpers/validation";
+import { EmailLogin } from "../../@types";
+import { emailLoginSchema } from "../../helpers/validation";
 import { Button } from "@chakra-ui/button";
 import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import { Input } from "@chakra-ui/input";
+import { useLoginWithEmailMutation } from "../../generated/graphql";
 import { useHistory } from "react-router";
-import { useDispatch } from "../store";
-import { useLoginWithUsernameMutation } from "../generated/graphql";
-import { setError } from "../store/slices/error";
-import { setLogin } from "../store/thunk/login";
+import { useDispatch } from "../../store";
+import { setLogin } from "../../store/thunk/login";
+import { setError } from "../../store/slices/error";
 
-export default function UsernameLoginForm() {
+export default function EmailLoginForm() {
   const history = useHistory();
   const dispatch = useDispatch();
-  const [login, { loading, error }] = useLoginWithUsernameMutation({
-    onCompleted: ({ loginWithUsername }) => {
-      if (!loginWithUsername || error) {
-        return dispatch(setError("Invalid username or password"));
+  const [login, { loading }] = useLoginWithEmailMutation({
+    onError: (e) => {
+      dispatch(setError(e.message));
+    },
+    onCompleted: ({ loginWithEmail }) => {
+      if (!loginWithEmail) {
+        return dispatch(
+          setError(
+            "Cannot retrive the data after logged you in, please try again"
+          )
+        );
       }
-      const { token, user } = loginWithUsername;
+      const { token, user } = loginWithEmail;
       dispatch(setLogin({ token, user }));
       setTimeout(() => {
         history.push("/");
@@ -30,20 +37,19 @@ export default function UsernameLoginForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid, isDirty },
-  } = useForm<UsernameLogin>({
-    resolver: yupResolver(usernameLoginSchema),
+    formState: { errors, isDirty, isValid },
+  } = useForm<EmailLogin>({
+    resolver: yupResolver(emailLoginSchema),
     mode: "onChange",
   });
-  const handleLogin = async (value: UsernameLogin) => {
+  const handleLogin = async (value: EmailLogin) => {
     if (isDirty && isValid) {
       try {
         await login({
           variables: { ...value },
         });
-      } catch (error) {
-        dispatch(setError(error.message));
-        console.error(error.message);
+      } catch (e) {
+        dispatch(setError(e.message));
       }
     }
   };
@@ -51,16 +57,17 @@ export default function UsernameLoginForm() {
     <Box mt="8">
       <form onSubmit={handleSubmit(handleLogin)}>
         <FormControl>
-          <FormLabel>Username</FormLabel>
+          <FormLabel>{"Email"}</FormLabel>
           <Input
-            {...register("username")}
-            id="username"
-            placeholder="johndoe2021"
+            {...register("email")}
+            id="email"
+            type="email"
+            placeholder="example@mail.com"
           />
-          {errors.username && <Text>{errors.username.message}</Text>}
+          {errors.email && <Text>{errors.email.message}</Text>}
         </FormControl>
         <FormControl mt={6}>
-          <FormLabel>Password</FormLabel>
+          <FormLabel>{"Password"}</FormLabel>
           <Input
             {...register("password")}
             id="password"

@@ -92,3 +92,50 @@ query GetReport($id: String!) {
     }
   }
 }
+
+query GetSales {
+  getSales {
+    _id
+    name
+    reporter {
+      name
+    }
+    createdAt
+    goods {
+      type
+      _id
+      name
+      price
+      amount
+    }
+  }
+}
+
+query GetStock {
+  getStock {
+    _id
+    name
+    reporter {
+      name
+    }
+    createdAt
+    goods {
+      _id
+      type
+      name
+      price
+      amount
+    }
+  }
+}
+
+query GetInventory {
+  getInventory {
+    _id
+    createdAt
+    type
+    name
+    price
+    amount
+  }
+}

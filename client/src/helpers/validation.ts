@@ -24,3 +24,17 @@ export const createInputSchema = yup.object().shape({
     type: yup.string().oneOf(["STATIONARY", "FOODS", "PERSONAL", "OTHERS"]),
   }),
 });
+
+export const editReportSchema = yup.object().shape({
+  data: yup.object().shape({
+    name: yup.string().required("Please include the report name"),
+    type: yup.string().oneOf(["WHOLESALE", "PURCHASE", "SELL"]),
+  }),
+});
+
+export const addStuffSchema = yup.object().shape({
+  name: yup.string().required("Please include stuff name"),
+  price: yup.number().required("Include the price"),
+  amount: yup.number().required("Include the amount"),
+  type: yup.string().oneOf(["STATIONARY", "FOODS", "PERSONAL", "OTHERS"]),
+});

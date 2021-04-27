@@ -1,4 +1,4 @@
-# Dashboard App
+<h1 align="center">Dashboard App</h1>
 
 ## Deployment
 
@@ -14,6 +14,4 @@
 
 ## TODO
 
-- [ ] Add more data in db document
-- [ ] Queries for specific reports
-- [ ] Edit report action
+- [ ] None

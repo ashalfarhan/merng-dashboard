@@ -1,5 +1,5 @@
 import { Box, Grid, GridItem } from "@chakra-ui/layout";
-import SideBar from "./SideBar";
+import SideBar from "../SideBar";
 interface Props {
   children: JSX.Element;
 }

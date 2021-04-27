@@ -1,10 +1,10 @@
 import { Image } from "@chakra-ui/image";
-import IdLogo from "../images/id-id.png";
-import EnLogo from "../images/en-uk.png";
+import IdLogo from "../../images/id-id.png";
+import EnLogo from "../../images/en-uk.png";
 import { IconButton } from "@chakra-ui/react";
-import { LOCALES } from "../@types/enums";
-import { getLocale, switchLocale } from "../store/slices/locale";
-import { useDispatch, useSelector } from "../store";
+import { LOCALES } from "../../@types/enums";
+import { getLocale, switchLocale } from "../../store/slices/locale";
+import { useDispatch, useSelector } from "../../store";
 
 export default function LangSwitcher() {
   const dispatch = useDispatch();

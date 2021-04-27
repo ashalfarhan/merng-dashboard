@@ -9,22 +9,23 @@ import {
   Button,
   ButtonGroup,
 } from "@chakra-ui/react";
-import { FormattedMessage } from "react-intl";
+import { useIntl } from "react-intl";
 import {
   GetAllReportsDocument,
   MeDocument,
   MeQuery,
   useDeleteReportMutation,
-} from "../generated/graphql";
-import { formatDate } from "../helpers/dateFormatter";
-import { useDispatch, useSelector } from "../store";
-import { setError } from "../store/slices/error";
-import { getLocale } from "../store/slices/locale";
+} from "../../generated/graphql";
+import { formatDate } from "../../helpers/dateFormatter";
+import { useDispatch, useSelector } from "../../store";
+import { setError } from "../../store/slices/error";
+import { getLocale } from "../../store/slices/locale";
 
 interface Props {
   data: MeQuery | undefined;
 }
 export default function MyReportsTable({ data }: Props) {
+  const { formatMessage } = useIntl();
   const dispatch = useDispatch();
   const [deleteReport, { loading }] = useDeleteReportMutation({
     onError: (e) => {
@@ -55,15 +56,9 @@ export default function MyReportsTable({ data }: Props) {
       <Thead>
         <Tr>
           <Th>No.</Th>
-          <Th w="xl">
-            <FormattedMessage id="report.nameLabel" />
-          </Th>
-          <Th>
-            <FormattedMessage id="report.createdAtLabel" />
-          </Th>
-          <Th w="xs">
-            <FormattedMessage id="report.actionLabel" />
-          </Th>
+          <Th w="xl">{formatMessage({ id: "report.nameLabel" })}</Th>
+          <Th>{formatMessage({ id: "report.createdAtLabel" })}</Th>
+          <Th w="xs">{formatMessage({ id: "report.actionLabel" })}</Th>
         </Tr>
       </Thead>
       <Tbody>
@@ -87,7 +82,8 @@ export default function MyReportsTable({ data }: Props) {
         ))}
       </Tbody>
       <TableCaption>
-        <FormattedMessage id="lastUpdateLabel" /> {new Date().toLocaleString()}
+        {formatMessage({ id: "lastUpdateLabel" }) +
+          +new Date().toLocaleString()}
       </TableCaption>
     </Table>
   );

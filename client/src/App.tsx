@@ -1,9 +1,9 @@
 import { Box } from "@chakra-ui/react";
 import { Switch, Route } from "react-router-dom";
-import Header from "./components/Header";
+import Header from "./components/common/Header";
 import { routes } from "./routes";
 import PrivateRoute from "./components/Private";
-import ErrorModal from "./components/ErrorModal";
+import ErrorModal from "./components/modals/ErrorModal";
 
 const protectedRoutes = [
   "/dashboard/users",

@@ -39,3 +39,38 @@ mutation DeleteReport($id: String!) {
     name
   }
 }
+
+mutation EditReport($data: EditReportInput!) {
+  editReport(data: $data) {
+    name
+    updatedAt
+  }
+}
+
+mutation EditStuff($data: EditStuffInput!) {
+  editStuff(data: $data) {
+    name
+    updatedAt
+  }
+}
+
+mutation AddStuff(
+  $reportId: ID!
+  $name: String!
+  $price: Int!
+  $type: StuffType!
+  $amount: Int!
+) {
+  addStuff(
+    reportId: $reportId
+    name: $name
+    price: $price
+    type: $type
+    amount: $amount
+  ) {
+    name
+    reporter {
+      name
+    }
+  }
+}

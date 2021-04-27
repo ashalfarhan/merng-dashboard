@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/table";
 import { Box } from "@chakra-ui/layout";
 import { Spinner } from "@chakra-ui/spinner";
-import Layout from "../components/Layout";
+import Layout from "../components/common/Layout";
 import { useGetAllUsersQuery } from "../generated/graphql";
 import { useDispatch } from "../store";
 import { setError } from "../store/slices/error";

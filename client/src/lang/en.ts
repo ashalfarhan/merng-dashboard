@@ -19,6 +19,8 @@ const en = {
     inventory: "Inventory",
     stock: "Stock",
     createReportLabel: "Create Report",
+    editReportLabel: "Edit Report",
+    addStuffLabel: "Add Stuff",
   },
   overview: {
     heading: "Overview",
@@ -56,6 +58,8 @@ const en = {
       personalLabel: "Personal",
       stationaryLabel: "Stationary",
     },
+    amountLabel: "Amount",
+    priceLabel: "Price",
   },
   lastUpdateLabel: "Last update at",
   account: {

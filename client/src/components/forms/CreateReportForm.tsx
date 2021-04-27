@@ -1,8 +1,11 @@
 import {
   CreateReportMutationVariables,
   GetAllReportsDocument,
+  GetInventoryDocument,
+  GetSalesDocument,
+  GetStockDocument,
   useCreateReportMutation,
-} from "../generated/graphql";
+} from "../../generated/graphql";
 import {
   FormControl,
   FormLabel,
@@ -14,10 +17,10 @@ import {
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { createInputSchema } from "../helpers/validation";
-import { useDispatch } from "../store";
-import { setError } from "../store/slices/error";
-import { ReportOptions, StuffOptions } from "../helpers/constants";
+import { createInputSchema } from "../../helpers/validation";
+import { useDispatch } from "../../store";
+import { setError } from "../../store/slices/error";
+import { ReportOptions, StuffOptions } from "../../helpers/constants";
 import { useIntl } from "react-intl";
 
 interface Props {
@@ -39,6 +42,15 @@ export default function CreateReportForm({ onComplete }: Props) {
     refetchQueries: [
       {
         query: GetAllReportsDocument,
+      },
+      {
+        query: GetStockDocument,
+      },
+      {
+        query: GetSalesDocument,
+      },
+      {
+        query: GetInventoryDocument,
       },
     ],
   });
