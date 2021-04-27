@@ -14,7 +14,12 @@
     "build:server": "tsc -p ./",
     "build:client": "yarn --cwd client build",
     "start": "node dist/index.js",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm i -g yarn && npm i -g typescript && yarn && yarn build:server"
+    "heroku-prebuild": "yarn global add typescript",
+    "heroku-postbuild": "yarn build:server"
+  },
+  "engines": {
+    "node": "14.x",
+    "yarn": "1.x"
   },
   "dependencies": {
     "@typegoose/typegoose": "7.6.0",
