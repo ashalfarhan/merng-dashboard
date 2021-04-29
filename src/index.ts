@@ -11,6 +11,8 @@ import { TypegooseEntityMiddleware } from "./utils/middleware/typegoose-entity-m
 import cookieParser from "cookie-parser";
 import { refreshTokenHandler } from "./utils/refreshToken";
 import cors from "cors";
+import helmet from "helmet";
+import morgan from "morgan";
 
 (async () => {
   const isDev = process.env.NODE_ENV !== "production";
@@ -22,6 +24,8 @@ import cors from "cors";
       ? "http://localhost:3000"
       : "https://dashboard-haans.netlify.app",
   };
+  app.use(helmet());
+  app.use(morgan(":method :url :response-time ms :status - :date[web]"));
   app.use(cors(corsOptions));
   app.use(express.json());
   app.use(cookieParser());
