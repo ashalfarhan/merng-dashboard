@@ -22,9 +22,6 @@ export const refreshTokenHandler: RequestHandler = async (req, res) => {
       accessToken: "",
     });
   }
-  /**
-   * Now token is should be valid
-   */
   const user = await UserModel.findOne({ _id: payload.userId });
   if (!user) {
     return res.status(403).json({

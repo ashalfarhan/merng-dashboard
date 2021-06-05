@@ -93,11 +93,13 @@ export class EditReportInput {
   public type: ReportType;
 }
 
+interface MyPayload {
+  userId: string;
+  isAdmin: boolean;
+}
+
 export interface MyContext {
   req: Request;
   res: Response;
-  payload?: {
-    userId: string;
-    isAdmin: boolean;
-  };
+  payload: MyPayload;
 }

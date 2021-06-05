@@ -5,14 +5,14 @@ import { MyContext } from "../@types";
 export const isAuth: MiddlewareFn<MyContext> = async ({ context }, next) => {
   const bearer = context.req.headers["authorization"];
   if (!bearer) {
-    return Error("Please include your token to access this route");
+    throw Error("Please include your token to access this route");
   }
   try {
     const token = bearer.split(" ")[1];
     const payload = verify(token, process.env.ACCESS_TOKEN_SECRET!);
     context.payload = payload as any;
   } catch (error) {
-    return Error(error.message);
+    throw Error(error.message);
   }
   return next();
 };

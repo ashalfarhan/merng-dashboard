@@ -17,29 +17,19 @@ import { ReportModel } from "../entity/Report";
 
 @Resolver(() => User)
 export default class UserResolver {
-  /**
-   * @returns FieldResolvers
-   */
   @FieldResolver()
   name(@Root() { lastName, firstName }: User) {
     return `${firstName} ${lastName}`;
   }
-
   @FieldResolver()
   async reports(@Root() { _id }: User) {
     const reports = await ReportModel.find({ reporterId: _id });
     return reports;
   }
 
-  /**
-   * @returns Queries
-   */
   @Query(() => User, { nullable: true })
   @UseMiddleware(isAuth)
   async me(@Ctx() { payload }: MyContext) {
-    if (!payload) {
-      return Error("You have to be a user to access this");
-    }
     try {
       const user = await UserModel.findOne({ _id: payload.userId });
       return user;
@@ -51,11 +41,8 @@ export default class UserResolver {
   @Query(() => [User], { nullable: true })
   @UseMiddleware(isAuth)
   async getAllUsers(@Ctx() { payload }: MyContext) {
-    if (!payload) {
-      return Error("Please login");
-    }
     if (!payload.isAdmin) {
-      return Error("Only admin can get all users");
+      throw Error("Only admin can get all users");
     }
     try {
       const users = await UserModel.find();
@@ -67,10 +54,7 @@ export default class UserResolver {
 
   @Query(() => User, { nullable: true })
   @UseMiddleware(isAuth)
-  async getUser(@Ctx() { payload }: MyContext, @Arg("userId") userId: string) {
-    if (!payload) {
-      return Error("Please login");
-    }
+  async getUser(@Arg("userId") userId: string) {
     try {
       const user = await UserModel.findById(userId);
       return user;
@@ -79,9 +63,6 @@ export default class UserResolver {
     }
   }
 
-  /**
-   * @returns Mutations
-   */
   @Mutation(() => User, { nullable: true })
   async register(
     @Arg("firstName") firstName: string,
@@ -93,9 +74,13 @@ export default class UserResolver {
   ) {
     try {
       const emailExist = await UserModel.findOne({ email });
-      if (emailExist) return Error(`Email is already exist`);
+      if (emailExist) {
+        throw Error(`Email is already exist`);
+      }
       const usernameExist = await UserModel.findOne({ username });
-      if (usernameExist) return Error(`Username is already exist`);
+      if (usernameExist) {
+        throw Error(`Username is already exist`);
+      }
       const hashedPassword = await bcrypt.hash(password, 12);
       const user = await UserModel.create({
         email,
@@ -120,9 +105,13 @@ export default class UserResolver {
   ) {
     try {
       const user = await UserModel.findOne({ username });
-      if (!user) return Error("Invalid username or password");
+      if (!user) {
+        throw Error("Invalid username or password");
+      }
       const valid = await bcrypt.compare(password, user.password);
-      if (!valid) return Error("Invalid username or password");
+      if (!valid) {
+        throw Error("Invalid username or password");
+      }
       const { accessToken, refreshToken } = createToken(user);
       res.cookie("fwas", refreshToken, { httpOnly: true });
       return {

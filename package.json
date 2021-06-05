@@ -1,6 +1,6 @@
 {
   "name": "merng-dashboard",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Exercise create dashboard app with merng stack",
   "main": "dist/index.js",
   "author": "ashal farhan",
