@@ -9,21 +9,22 @@ import {
   Ctx,
   Args,
 } from "type-graphql";
-import { ReportType } from "../utils/@types/enums";
-import { Stuff, StuffModel } from "../entity/Stuff";
-import { Report, ReportModel } from "../entity/Report";
-import { UserModel } from "../entity/User";
-import { CreateReportArgs, EditReportInput, MyContext } from "../utils/@types";
-import { isAuth } from "../utils/middleware/isAuth";
+import { UserModel, Report, ReportModel, Stuff, StuffModel } from "../entity";
+import {
+  ReportType,
+  CreateReportArgs,
+  EditReportInput,
+  MyContext,
+} from "../@types";
+import { isAuth } from "../utils";
 
 @Resolver(() => Report)
 export default class ReportResolver {
-  /**
-   * @returns FieldResolvers
-   */
   @FieldResolver()
   async reporter(@Root() { reporterId }: Report) {
-    if (!reporterId) return null;
+    if (!reporterId) {
+      return null;
+    }
     const user = await UserModel.findOne({ _id: reporterId });
     return user;
   }
@@ -34,18 +35,12 @@ export default class ReportResolver {
     return stuffs;
   }
 
-  /**
-   * @returns Mutations
-   */
   @Mutation(() => Report, { nullable: true })
   @UseMiddleware(isAuth)
   async createReport(
     @Ctx() { payload }: MyContext,
-    @Args() { data, name, type }: CreateReportArgs
+    @Args() { data, name, type }: CreateReportArgs,
   ) {
-    if (!payload) {
-      return Error("You should be a user to create a report");
-    }
     try {
       const newReport = await ReportModel.create({
         name,
@@ -60,30 +55,27 @@ export default class ReportResolver {
       await newStuff.save();
       return newReport;
     } catch (error) {
-      return error.message;
+      return error;
     }
   }
 
   @Mutation(() => Report, { nullable: true })
   @UseMiddleware(isAuth)
   async deleteReport(@Ctx() { payload }: MyContext, @Arg("id") id: string) {
-    if (!payload) {
-      return Error("Please login");
-    }
     try {
       const report = await ReportModel.findById(id);
       if (!report) {
-        return Error(
-          "There's no report with this id, or probably it's already deleted"
+        throw Error(
+          "There's no report with this id, or probably it's already deleted",
         );
       }
       if (payload.userId !== report.reporterId) {
-        return Error("Only the creator of this report can delete this report");
+        throw Error("Only the creator of this report can delete this report");
       }
       const deleted = await ReportModel.findByIdAndDelete(id);
       return deleted;
     } catch (error) {
-      return error.message;
+      return error;
     }
   }
 
@@ -91,92 +83,76 @@ export default class ReportResolver {
   @UseMiddleware(isAuth)
   async editReport(
     @Ctx() { payload }: MyContext,
-    @Arg("data") data: EditReportInput
+    @Arg("data") data: EditReportInput,
   ) {
-    if (!payload) {
-      return Error("Must be a user to edit a report");
-    }
     try {
       const report = await ReportModel.findById(data._id);
       if (!report) {
-        return Error("Cannot get the report");
+        throw Error("Cannot get the report");
       }
-      if (report.reporterId !== payload.userId || !payload.isAdmin) {
-        return Error("Only Admin can edit any report or the reporter itself");
+      if (report.reporterId === payload.userId || payload.isAdmin) {
+        const { _id, ...rest } = data;
+        const saved = await ReportModel.findByIdAndUpdate(_id, {
+          ...rest,
+        });
+        if (!saved) {
+          throw Error("Report with this id is not exist, please create one");
+        }
+        return saved;
       }
-      const saved = await ReportModel.findOneAndUpdate(
-        { _id: data._id },
-        { ...data }
-      );
-      if (!saved) {
-        return Error("Report with this id is not exist, please create one");
-      }
-      return saved;
+      throw Error("Only Admin can edit any report or the reporter itself");
     } catch (error) {
-      return error.message;
+      return error;
     }
   }
 
-  /**
-   * @returns Queries
-   */
-  @Query(() => [Report], { nullable: true })
+  @Query(() => [Report])
   @UseMiddleware(isAuth)
-  async getAllReports(@Ctx() { payload }: MyContext) {
-    if (!payload) {
-      return null;
-    }
+  async getAllReports() {
     try {
       const reports = await ReportModel.find();
       return reports;
     } catch (error) {
-      return error.message;
+      return error;
     }
   }
 
   @Query(() => Report, { nullable: true })
   @UseMiddleware(isAuth)
-  async getReport(@Ctx() { payload }: MyContext, @Arg("id") id: string) {
-    if (!payload) {
-      return null;
-    }
+  async getReport(@Arg("id") id: string) {
     try {
       const report = await ReportModel.findById(id);
-      if (!report) return Error(`There's no report with this ${id}`);
+      if (!report) {
+        throw Error(`There's no report with the id of: ${id}`);
+      }
       return report;
     } catch (error) {
-      return error.message;
+      return error;
     }
   }
 
   @Query(() => [Report], { nullable: true })
   @UseMiddleware(isAuth)
-  async getStock(@Ctx() { payload }: MyContext) {
-    if (!payload) {
-      return null;
-    }
+  async getStock() {
     try {
       const items = await ReportModel.find({ type: ReportType.WHOLESALE });
       return items;
     } catch (error) {
-      return error.message;
+      return error;
     }
   }
 
   @Query(() => [Report], { nullable: true })
   @UseMiddleware(isAuth)
   async getSales(@Ctx() { payload }: MyContext) {
-    if (!payload) {
-      return null;
-    }
     try {
       if (!payload.isAdmin) {
-        return Error("This is only admin features");
+        throw Error("This is only admin features");
       }
       const items = await ReportModel.find({ type: ReportType.SELL });
       return items;
     } catch (error) {
-      return error.message;
+      return error;
     }
   }
 }

@@ -1,6 +1,6 @@
 import { Field, ID, Int, ObjectType } from "type-graphql";
 import { ObjectId } from "mongodb";
-import { StuffType } from "../utils/@types/enums";
+import { StuffType } from "../@types/enums";
 import { getModelForClass, prop, Ref } from "@typegoose/typegoose";
 import { Report } from "./Report";
 

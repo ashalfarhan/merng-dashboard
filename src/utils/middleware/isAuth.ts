@@ -1,18 +1,18 @@
 import { verify } from "jsonwebtoken";
 import { MiddlewareFn } from "type-graphql";
-import { MyContext } from "../@types";
+import { MyContext } from "../../@types";
 
 export const isAuth: MiddlewareFn<MyContext> = async ({ context }, next) => {
   const bearer = context.req.headers["authorization"];
-  if (!bearer) {
-    return Error("Please include your token to access this route");
-  }
   try {
-    const token = bearer.split(" ")[1];
+    if (!bearer) {
+      throw Error("Authentication failed, no token in headers");
+    }
+    const [_, token] = bearer.split(" ");
     const payload = verify(token, process.env.ACCESS_TOKEN_SECRET!);
     context.payload = payload as any;
   } catch (error) {
-    return Error(error.message);
+    return error;
   }
   return next();
 };

@@ -1,4 +1,4 @@
-import { User } from "../../entity/User";
+import { User } from "../entity/User";
 import { ArgsType, Field, ID, InputType, Int, ObjectType } from "type-graphql";
 import { ObjectId } from "mongodb";
 import { Request, Response } from "express";
@@ -10,7 +10,7 @@ export type Ref<T> = T | ObjectId;
 export class LoginPayload {
   @Field()
   public user: User;
-
+  
   @Field()
   public token: string;
 }
@@ -19,16 +19,16 @@ export class LoginPayload {
 export class StuffInput {
   @Field(() => ID, { nullable: true })
   readonly reportId: string;
-
+  
   @Field(() => String)
   public name: string;
-
+  
   @Field(() => Int)
   public price: number;
-
+  
   @Field(() => StuffType)
   public type: StuffType;
-
+  
   @Field(() => Int)
   public amount: number;
 }
@@ -37,16 +37,16 @@ export class StuffInput {
 export class AddStuffInput {
   @Field(() => ID)
   public reportId: string;
-
+  
   @Field(() => String)
   public name: string;
-
+  
   @Field(() => Int)
   public price: number;
-
+  
   @Field(() => StuffType)
   public type: StuffType;
-
+  
   @Field(() => Int)
   public amount: number;
 }
@@ -55,10 +55,10 @@ export class AddStuffInput {
 export class CreateReportArgs {
   @Field(() => String)
   public name: string;
-
+  
   @Field(() => StuffInput)
   public data: StuffInput;
-
+  
   @Field(() => ReportType)
   public type: ReportType;
 }
@@ -67,16 +67,16 @@ export class CreateReportArgs {
 export class EditStuffInput {
   @Field(() => ID)
   public _id: ObjectId;
-
+  
   @Field(() => String, { nullable: true })
   public name?: string;
-
+  
   @Field(() => Number, { nullable: true })
   public price?: number;
-
+  
   @Field(() => StuffType, { nullable: true })
   public type?: StuffType;
-
+  
   @Field(() => Int, { nullable: true })
   public amount?: number;
 }
@@ -85,10 +85,10 @@ export class EditStuffInput {
 export class EditReportInput {
   @Field(() => ID)
   public _id: ObjectId;
-
+  
   @Field(() => String, { nullable: true })
   public name: string;
-
+  
   @Field(() => ReportType, { nullable: true })
   public type: ReportType;
 }
@@ -96,8 +96,10 @@ export class EditReportInput {
 export interface MyContext {
   req: Request;
   res: Response;
-  payload?: {
+  payload: {
     userId: string;
     isAdmin: boolean;
   };
 }
+
+export * from './enums'

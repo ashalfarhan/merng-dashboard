@@ -2,9 +2,10 @@ import { Field, ID, ObjectType } from "type-graphql";
 import { User } from "./User";
 import { getModelForClass, prop } from "@typegoose/typegoose";
 import { ObjectId } from "mongodb";
-import { ReportType } from "../utils/@types/enums";
+import { ReportType } from "../@types/enums";
 import { Stuff } from "./Stuff";
-import { Ref } from "../utils/@types";
+import { Ref } from "../@types";
+
 @ObjectType()
 export class Report {
   @Field(() => ID)

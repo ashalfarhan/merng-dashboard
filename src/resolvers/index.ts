@@ -10,6 +10,7 @@ export class Main {
     return "Hello from graphql!";
   }
 }
+
 export const resolvers = [
   Main,
   UserResolver,
