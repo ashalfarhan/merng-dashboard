@@ -3,31 +3,32 @@ import {
   MenuButton,
   MenuDivider,
   MenuItem,
+  Tooltip,
   MenuList,
-} from "@chakra-ui/menu";
-import { Avatar } from "@chakra-ui/avatar";
-import { Box, Heading, HStack } from "@chakra-ui/layout";
-import { IconButton } from "@chakra-ui/button";
+  Avatar,
+  Box,
+  Heading,
+  HStack,
+  IconButton,
+} from "@chakra-ui/react";
 import { BiMenuAltRight, BiLogOut } from "react-icons/bi";
 import { RiAccountPinBoxLine, RiDashboardLine } from "react-icons/ri";
-import { ColorModeSwitcher } from "../switchers/ColorModeSwitcer";
+import { LangSwitcher, ColorModeSwitcher } from "../switchers";
 import { Link, useHistory } from "react-router-dom";
-import { useIntl } from "react-intl";
-import { useDispatch, useSelector } from "../../store";
+import { useAppDispatch, useAppSelector } from "../../store";
 import { getUser, isAuth, removeToken } from "../../store/slices/auth";
-import { Tooltip } from "@chakra-ui/tooltip";
-import { getLocale } from "../../store/slices/locale";
-import { LOCALES } from "../../@types/enums";
-import LangSwitcher from "../switchers/LangSwitcher";
+import { useLocale } from "../../context/LocaleContext";
+import { memo } from "react";
+import { useIntl } from "react-intl";
 
-export default function Header() {
+const Header = () => {
   const history = useHistory();
+  const isLoggedIn = useAppSelector(isAuth);
+  const user = useAppSelector(getUser);
   const { formatMessage } = useIntl();
-  const isLoggedIn = useSelector(isAuth);
-  const user = useSelector(getUser);
-  const currentLocale = useSelector(getLocale);
-  const isEng = currentLocale === LOCALES.EN;
-  const dispatch = useDispatch();
+  const { locale } = useLocale();
+  const isEng = locale === "en-uk";
+  const dispatch = useAppDispatch();
   const handleLogout = () => {
     dispatch(removeToken());
     history.push("/login");
@@ -35,7 +36,6 @@ export default function Header() {
   const handleNav = (e: string) => {
     history.push(e);
   };
-
   return (
     <Box
       p="4"
@@ -88,4 +88,6 @@ export default function Header() {
       </HStack>
     </Box>
   );
-}
+};
+
+export default memo(Header);

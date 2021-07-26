@@ -2,17 +2,15 @@ import React, { PropsWithChildren } from "react";
 import { IntlProvider } from "react-intl";
 import { resources } from "../lang";
 import flatten from "flat";
-import { useSelector } from "../store";
-import { getLocale } from "../store/slices/locale";
+import { useLocale } from "../context/LocaleContext";
 
 const LocaleProvider = ({ children }: PropsWithChildren<any>) => {
-  const currentLocale = useSelector(getLocale);
+  const { locale } = useLocale();
   return (
     <IntlProvider
       textComponent={React.Fragment}
-      locale={currentLocale}
-      // @ts-ignore
-      messages={flatten(resources[currentLocale])}
+      locale={locale}
+      messages={flatten(resources[locale])}
     >
       {children}
     </IntlProvider>

@@ -2,7 +2,7 @@ import { Flex, Heading, Button, useDisclosure } from "@chakra-ui/react";
 import { AiOutlineEdit } from "react-icons/ai";
 import { useIntl } from "react-intl";
 import { ReportType } from "../../generated/graphql";
-import EditReportModal from "../modals/EditReportModal";
+import { EditReportModal } from "../modals";
 
 interface Props {
   reporterName: string;

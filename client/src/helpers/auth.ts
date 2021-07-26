@@ -5,6 +5,7 @@ export interface Token {
   iat: number;
   exp: number;
 }
+
 export const isValid = (token: string | null) => {
   if (!token) {
     return false;

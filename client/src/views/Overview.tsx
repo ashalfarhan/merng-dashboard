@@ -1,19 +1,30 @@
-import { Box, Flex, Heading } from "@chakra-ui/layout";
 import {
+  Box,
+  Flex,
+  Heading,
   IconButton,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
+  Spinner,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import { useIntl } from "react-intl";
 import { ImStatsDots } from "react-icons/im";
 import { RiBuilding4Line } from "react-icons/ri";
 import { FaDolly } from "react-icons/fa";
-import SalesCharts from "../components/charts/IncomeCharts";
-import SpendingCharts from "../components/charts/SpendingChats";
-import Layout from "../components/common/Layout";
+import { Layout } from "../components/common";
+import Loadable from "react-loadable";
+import { useIntl } from "react-intl";
+
+const SalesCharts = Loadable({
+  loader: () => import("../components/charts/IncomeCharts"),
+  loading: Spinner,
+});
+const SpendingCharts = Loadable({
+  loader: () => import("../components/charts/SpendingChats"),
+  loading: Spinner,
+});
 
 export default function Overview() {
   const { formatMessage } = useIntl();

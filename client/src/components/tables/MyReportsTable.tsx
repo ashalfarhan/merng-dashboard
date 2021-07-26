@@ -10,23 +10,23 @@ import {
   ButtonGroup,
 } from "@chakra-ui/react";
 import { useIntl } from "react-intl";
+import { useLocale } from "../../context/LocaleContext";
 import {
   GetAllReportsDocument,
   MeDocument,
   MeQuery,
   useDeleteReportMutation,
 } from "../../generated/graphql";
-import { formatDate } from "../../helpers/dateFormatter";
-import { useDispatch, useSelector } from "../../store";
+import { formatDate } from "../../helpers";
+import { useAppDispatch } from "../../store";
 import { setError } from "../../store/slices/error";
-import { getLocale } from "../../store/slices/locale";
 
 interface Props {
   data: MeQuery | undefined;
 }
+
 export default function MyReportsTable({ data }: Props) {
-  const { formatMessage } = useIntl();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [deleteReport, { loading }] = useDeleteReportMutation({
     onError: (e) => {
       dispatch(setError(e.message));
@@ -38,7 +38,8 @@ export default function MyReportsTable({ data }: Props) {
       { query: MeDocument },
     ],
   });
-  const locale = useSelector(getLocale);
+  const { formatMessage } = useIntl();
+  const { locale } = useLocale();
   if (!data) {
     return <span>There's no reports, please create one</span>;
   }

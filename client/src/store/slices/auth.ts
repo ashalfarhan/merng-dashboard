@@ -5,15 +5,12 @@ import { isValid } from "../../helpers/auth";
 import { setLogin } from "../thunk/login";
 
 interface State {
-  // isLoggedIn: boolean;
   user: User | null;
   token?: string | null;
 }
 
 const initialState: State = {
-  // isLoggedIn: isValid(localStorage.getItem("fmas")),
-  // @ts-ignore
-  user: JSON.parse(localStorage.getItem("user")),
+  user: JSON.parse(localStorage.getItem("user") as string) || null,
   token: localStorage.getItem("fmas"),
 };
 
@@ -22,40 +19,47 @@ const authReducer = createSlice({
   initialState,
   reducers: {
     setToken: (state, { payload }: PayloadAction<string>) => {
-      localStorage.setItem("fmas", String(payload));
-      state = {
+      localStorage.setItem("fmas", JSON.stringify(payload));
+      return {
         ...state,
-        token: localStorage.getItem("fmas") || payload,
-        // isLoggedIn: isValid(payload),
+        token: payload,
       };
     },
     removeToken: (state) => {
       localStorage.removeItem("fmas");
       localStorage.removeItem("user");
-      // state.isLoggedIn = false;
-      state.user = null;
-      state.token = null;
+      return {
+        ...state,
+        user: null,
+        token: null,
+      };
     },
   },
-  extraReducers: {
-    [setLogin.fulfilled.type]: (state, { payload }) => {
-      localStorage.setItem("user", JSON.stringify(payload.user));
-      // @ts-ignore
-      state.user = JSON.parse(localStorage.getItem("user")) || payload.user;
-    },
-    [setLogin.rejected.type]: (state) => {
-      localStorage.removeItem("user");
-      // state.isLoggedIn = false;
-    },
+  extraReducers: (builder) => {
+    builder.addCase(setLogin.fulfilled, (state, { payload }) => {
+      if (payload) {
+        localStorage.setItem("user", JSON.stringify(payload.user));
+        return {
+          ...state,
+          user: payload.user,
+        };
+      }
+      return {
+        ...state,
+      };
+    });
   },
 });
 
 export const { setToken, removeToken } = authReducer.actions;
+
 export const getUser = (state: RootState) => state.auth.user;
+
 export const isAuth = (state: RootState) => {
   if (state.auth.token) {
     return isValid(state.auth.token);
   }
   return isValid(localStorage.getItem("fmas"));
 };
+
 export default authReducer.reducer;

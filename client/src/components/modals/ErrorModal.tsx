@@ -9,12 +9,12 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { CgDanger } from "react-icons/cg";
-import { useDispatch, useSelector } from "../../store";
+import { useAppDispatch, useAppSelector } from "../../store";
 import { closeError, getError } from "../../store/slices/error";
 
 export default function ErrorModal() {
-  const dispatch = useDispatch();
-  const { isError, message } = useSelector(getError);
+  const dispatch = useAppDispatch();
+  const { isError, message } = useAppSelector(getError);
   const handleShutError = () => {
     dispatch(closeError());
   };

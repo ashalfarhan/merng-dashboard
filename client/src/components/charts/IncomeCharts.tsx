@@ -1,4 +1,4 @@
-import { Box, Stack, Text } from "@chakra-ui/layout";
+import { Button, Spinner, Box, Stack, Text } from "@chakra-ui/react";
 import {
   LineChart,
   Tooltip,
@@ -9,19 +9,16 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import { SALES } from "../../@types/enums";
-import { Spinner } from "@chakra-ui/spinner";
+import { SALES } from "../../@types";
 import { useGetSalesQuery } from "../../generated/graphql";
-import { getChartData } from "../../helpers/getChartData";
-import { useDispatch } from "../../store";
+import { getChartData } from "../../helpers";
+import { useAppDispatch } from "../../store";
 import { setError } from "../../store/slices/error";
 import { useState } from "react";
-import { Button } from "@chakra-ui/button";
 
 export default function SalesCharts() {
   const [display, setDisplay] = useState(SALES.INCOME);
-
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { data, loading } = useGetSalesQuery({
     onError: (e) => {
       dispatch(setError(e.message));

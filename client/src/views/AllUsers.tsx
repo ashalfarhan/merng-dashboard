@@ -5,17 +5,17 @@ import {
   Td,
   Th,
   Thead,
+  Box,
   Tr,
-} from "@chakra-ui/table";
-import { Box } from "@chakra-ui/layout";
-import { Spinner } from "@chakra-ui/spinner";
-import Layout from "../components/common/Layout";
+  Spinner,
+} from "@chakra-ui/react";
+import { Layout } from "../components/common";
 import { useGetAllUsersQuery } from "../generated/graphql";
-import { useDispatch } from "../store";
+import { useAppDispatch } from "../store";
 import { setError } from "../store/slices/error";
 
 export default function AllUsers() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { data, loading } = useGetAllUsersQuery({
     onError: (e) => {
       dispatch(setError(e.message));

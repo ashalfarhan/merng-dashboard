@@ -11,14 +11,14 @@ import {
 } from "@chakra-ui/react";
 import moment from "moment";
 import { useIntl } from "react-intl";
-import Layout from "../components/common/Layout";
+import { Layout } from "../components/common";
 import { useGetInventoryQuery } from "../generated/graphql";
-import { useDispatch } from "../store";
+import { useAppDispatch } from "../store";
 import { setError } from "../store/slices/error";
 
 export default function Stock() {
   const { formatMessage } = useIntl();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { data, loading } = useGetInventoryQuery({
     onError: (e) => {
       dispatch(setError(e.message));

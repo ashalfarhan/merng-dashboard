@@ -4,24 +4,24 @@ import {
   Tbody,
   Td,
   Th,
+  Box,
   Thead,
   Tr,
-} from "@chakra-ui/table";
-import { Box } from "@chakra-ui/layout";
-import Layout from "../components/common/Layout";
+  Spinner,
+} from "@chakra-ui/react";
+import { Layout } from "../components/common";
 import { useGetAllReportsQuery } from "../generated/graphql";
-import { Spinner } from "@chakra-ui/spinner";
-import { useDispatch, useSelector } from "../store";
+import { useAppDispatch } from "../store";
 import { setError } from "../store/slices/error";
-import { getLocale } from "../store/slices/locale";
 import moment from "moment";
 import { Link } from "react-router-dom";
 import { useIntl } from "react-intl";
+import { useLocale } from "../context/LocaleContext";
 
 export default function AllReports() {
+  const dispatch = useAppDispatch();
+  const { locale } = useLocale();
   const { formatMessage } = useIntl();
-  const dispatch = useDispatch();
-  const locale = useSelector(getLocale);
   const { data, loading } = useGetAllReportsQuery({
     onError: (e) => {
       dispatch(setError(e.message));

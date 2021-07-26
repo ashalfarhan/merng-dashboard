@@ -1,5 +1,6 @@
-import { Box, Heading } from "@chakra-ui/layout";
 import {
+  Box,
+  Heading,
   Spinner,
   Table,
   TableCaption,
@@ -11,14 +12,14 @@ import {
 } from "@chakra-ui/react";
 import moment from "moment";
 import { useIntl } from "react-intl";
-import Layout from "../components/common/Layout";
+import { Layout } from "../components/common";
 import { useGetSalesQuery } from "../generated/graphql";
-import { useDispatch } from "../store";
+import { useAppDispatch } from "../store";
 import { setError } from "../store/slices/error";
 
 export default function Stock() {
   const { formatMessage } = useIntl();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { data, loading } = useGetSalesQuery({
     onError: (e) => {
       dispatch(setError(e.message));

@@ -1,8 +1,7 @@
-import { Flex } from "@chakra-ui/layout";
-import { Heading, Button, useDisclosure } from "@chakra-ui/react";
+import { Flex, Heading, Button, useDisclosure } from "@chakra-ui/react";
 import { BsPlusSquareFill } from "react-icons/bs";
 import { useIntl } from "react-intl";
-import AddStuffModal from "../modals/AddStuffModal";
+import { AddStuffModal } from "../modals";
 
 export default function DetailStuffHeading({ reportId }: { reportId: string }) {
   const { formatMessage } = useIntl();

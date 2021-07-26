@@ -1,20 +1,24 @@
-import { Box, Text } from "@chakra-ui/layout";
+import {
+  Box,
+  Text,
+  FormControl,
+  FormLabel,
+  Button,
+  Input,
+} from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { EmailLogin } from "../../@types";
-import { emailLoginSchema } from "../../helpers/validation";
-import { Button } from "@chakra-ui/button";
-import { FormControl, FormLabel } from "@chakra-ui/form-control";
-import { Input } from "@chakra-ui/input";
+import { emailLoginSchema } from "../../helpers";
 import { useLoginWithEmailMutation } from "../../generated/graphql";
 import { useHistory } from "react-router";
-import { useDispatch } from "../../store";
+import { useAppDispatch } from "../../store";
 import { setLogin } from "../../store/thunk/login";
 import { setError } from "../../store/slices/error";
 
 export default function EmailLoginForm() {
   const history = useHistory();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [login, { loading }] = useLoginWithEmailMutation({
     onError: (e) => {
       dispatch(setError(e.message));
@@ -23,8 +27,8 @@ export default function EmailLoginForm() {
       if (!loginWithEmail) {
         return dispatch(
           setError(
-            "Cannot retrive the data after logged you in, please try again"
-          )
+            "Cannot retrive the data after logged you in, please try again",
+          ),
         );
       }
       const { token, user } = loginWithEmail;

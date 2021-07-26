@@ -3,29 +3,27 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import { ColorModeScript, ChakraProvider, theme } from "@chakra-ui/react";
 import { BrowserRouter } from "react-router-dom";
-import { ApolloGqlProvider } from "./libs/apollo";
-import LocaleProvider from "./libs/i18n";
+import { IntlProvider, ApolloGqlProvider } from "./libs";
 import { Provider } from "react-redux";
-import { store } from "./store";
+import store from "./store";
+import { LocaleContextProvider } from "./context/LocaleContext";
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter forceRefresh>
         <ApolloGqlProvider>
-          <LocaleProvider>
-            <ChakraProvider theme={theme}>
-              <ColorModeScript />
-              <App />
-            </ChakraProvider>
-          </LocaleProvider>
+          <LocaleContextProvider>
+            <IntlProvider>
+              <ChakraProvider theme={theme}>
+                <ColorModeScript />
+                <App />
+              </ChakraProvider>
+            </IntlProvider>
+          </LocaleContextProvider>
         </ApolloGqlProvider>
       </BrowserRouter>
     </Provider>
   </React.StrictMode>,
-  document.getElementById("root")
+  document.getElementById("root"),
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals

@@ -17,10 +17,9 @@ import {
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { createInputSchema } from "../../helpers/validation";
-import { useDispatch } from "../../store";
+import { ReportOptions, StuffOptions, createInputSchema } from "../../helpers";
+import { useAppDispatch } from "../../store";
 import { setError } from "../../store/slices/error";
-import { ReportOptions, StuffOptions } from "../../helpers/constants";
 import { useIntl } from "react-intl";
 
 interface Props {
@@ -29,7 +28,7 @@ interface Props {
 
 export default function CreateReportForm({ onComplete }: Props) {
   const { formatMessage } = useIntl();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [create, { loading }] = useCreateReportMutation({
     onCompleted: ({ createReport }) => {
       if (createReport) {

@@ -1,16 +1,25 @@
-import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@chakra-ui/react";
-import { Avatar } from "@chakra-ui/avatar";
-import { Box, Flex, Heading, Text } from "@chakra-ui/layout";
-import { Spinner } from "@chakra-ui/spinner";
-import { useIntl } from "react-intl";
+import {
+  Spinner,
+  Box,
+  Flex,
+  Heading,
+  Text,
+  Avatar,
+  Tabs,
+  TabList,
+  Tab,
+  TabPanels,
+  TabPanel,
+} from "@chakra-ui/react";
 import { useMeQuery } from "../generated/graphql";
-import { useDispatch } from "../store";
+import { useAppDispatch } from "../store";
 import { setError } from "../store/slices/error";
 import MyReportsTable from "../components/tables/MyReportsTable";
+import { useIntl } from "react-intl";
 
 export default function MePage() {
   const { formatMessage } = useIntl();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { data, loading } = useMeQuery({
     onError: (e) => {
       dispatch(setError(e.message));

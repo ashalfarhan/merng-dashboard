@@ -14,8 +14,8 @@ import {
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { editReportSchema } from "../../helpers/validation";
-import { useDispatch } from "../../store";
+import { editReportSchema } from "../../helpers";
+import { useAppDispatch } from "../../store";
 import { setError } from "../../store/slices/error";
 import { ReportOptions } from "../../helpers/constants";
 import { useIntl } from "react-intl";
@@ -30,8 +30,8 @@ interface Props {
 }
 
 export default function EditReportForm({ data, onComplete }: Props) {
+  const dispatch = useAppDispatch();
   const { formatMessage } = useIntl();
-  const dispatch = useDispatch();
   const [editReport, { loading }] = useEditReportMutation({
     onCompleted: ({ editReport }) => {
       if (editReport) {

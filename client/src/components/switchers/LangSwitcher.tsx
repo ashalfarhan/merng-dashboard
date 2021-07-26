@@ -1,17 +1,13 @@
-import { Image } from "@chakra-ui/image";
+import { IconButton, Image } from "@chakra-ui/react";
 import IdLogo from "../../images/id-id.png";
 import EnLogo from "../../images/en-uk.png";
-import { IconButton } from "@chakra-ui/react";
-import { LOCALES } from "../../@types/enums";
-import { getLocale, switchLocale } from "../../store/slices/locale";
-import { useDispatch, useSelector } from "../../store";
+import { useLocale } from "../../context/LocaleContext";
 
 export default function LangSwitcher() {
-  const dispatch = useDispatch();
-  const currentLocale = useSelector(getLocale);
-  const isEng = currentLocale === LOCALES.EN;
+  const { locale, switchLocale } = useLocale();
+  const isEng = locale === "en-uk";
   const handleSwitchLang = () => {
-    dispatch(switchLocale(isEng ? LOCALES.ID : LOCALES.EN));
+    switchLocale(isEng ? "id-id" : "en-uk");
   };
   return (
     <IconButton

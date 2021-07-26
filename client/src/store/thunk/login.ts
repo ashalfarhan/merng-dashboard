@@ -20,7 +20,6 @@ export const setLogin = createAsyncThunk(
     } catch (error) {
       dispatch(setError(error.message));
       console.log(error.message);
-      return error;
     }
-  }
+  },
 );

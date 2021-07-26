@@ -1,5 +1,4 @@
-import { Button } from "@chakra-ui/button";
-import { Box, Heading, Text } from "@chakra-ui/layout";
+import { Button, Box, Heading, Text } from "@chakra-ui/react";
 import { useIntl } from "react-intl";
 import { Link, useLocation } from "react-router-dom";
 

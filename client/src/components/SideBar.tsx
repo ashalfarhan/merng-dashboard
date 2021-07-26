@@ -3,14 +3,14 @@ import { Box, VStack } from "@chakra-ui/layout";
 import { useDisclosure } from "@chakra-ui/react";
 import { useIntl } from "react-intl";
 import { useHistory } from "react-router";
-import { useSelector } from "../store";
+import { useAppSelector } from "../store";
 import { getUser } from "../store/slices/auth";
 import CreateReportModal from "./modals/CreateReportModal";
 
 export default function SideBar() {
   const history = useHistory();
   const { formatMessage } = useIntl();
-  const user = useSelector(getUser);
+  const user = useAppSelector(getUser);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const handleNav = (e: string) => {
     history.push(e);

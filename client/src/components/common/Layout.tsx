@@ -1,9 +1,11 @@
-import { Box, Grid, GridItem } from "@chakra-ui/layout";
+import { Box, Grid, GridItem } from "@chakra-ui/react";
 import SideBar from "../SideBar";
-interface Props {
+
+interface LayoutProps {
   children: JSX.Element;
 }
-export default function Layout({ children }: Props) {
+
+export default function Layout({ children }: LayoutProps) {
   return (
     <Box
       style={{

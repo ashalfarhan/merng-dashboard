@@ -1,30 +1,35 @@
-import { Box, Flex, Heading, Text } from "@chakra-ui/layout";
 import {
+  Box,
+  Flex,
+  Heading,
+  Text,
   Table,
   Thead,
   Tr,
   Th,
   Tbody,
   Td,
+  Spinner,
   TableCaption,
 } from "@chakra-ui/react";
-import { Spinner } from "@chakra-ui/spinner";
 import moment from "moment";
 import { FaCheck } from "react-icons/fa";
 import { useIntl } from "react-intl";
 import { useParams } from "react-router";
 import { useGetReportQuery } from "../generated/graphql";
-import { formatDate } from "../helpers/dateFormatter";
-import { useDispatch, useSelector } from "../store";
+import { formatDate } from "../helpers";
+import { useAppDispatch } from "../store";
 import { setError } from "../store/slices/error";
-import { getLocale } from "../store/slices/locale";
-import DetailStuffHeading from "../components/HeadingSection/DetailStuffHeading";
-import EditReporSection from "../components/HeadingSection/EditReportSection";
+import {
+  EditReportSection,
+  DetailStuffHeading,
+} from "../components/HeadingSection";
+import { useLocale } from "../context/LocaleContext";
 
 export default function ReportPage() {
   const { formatMessage } = useIntl();
-  const locale = useSelector(getLocale);
-  const dispatch = useDispatch();
+  const { locale } = useLocale();
+  const dispatch = useAppDispatch();
   const { id } = useParams<{ id: string }>();
   const { data, loading, error } = useGetReportQuery({
     variables: { id },
@@ -50,9 +55,7 @@ export default function ReportPage() {
           >
             <Box>
               <Heading fontSize="24" display="flex">
-                {formatMessage({ id: "report.reportLabel" }) +
-                  ": " +
-                  data.getReport.name}
+                {formatMessage({ id: "report.reportLabel" }) + ": " + data.getReport.name}
               </Heading>
               <Text>ID: {id}</Text>
               <Text fontSize="16" color="yellow.400">
@@ -71,7 +74,7 @@ export default function ReportPage() {
             </Flex>
           </Flex>
           <Box fontSize="24" mt="8">
-            <EditReporSection
+            <EditReportSection
               reportId={id}
               reportName={data.getReport?.name}
               reportType={data.getReport?.type}
@@ -86,12 +89,8 @@ export default function ReportPage() {
                     <Th w="xl">{formatMessage({ id: "report.nameLabel" })}</Th>
                     <Th>{formatMessage({ id: "stuff.amountLabel" })}</Th>
                     <Th>{formatMessage({ id: "stuff.priceLabel" })}</Th>
-                    <Th w="3xs">
-                      {formatMessage({ id: "report.reportedOnLabel" })}
-                    </Th>
-                    <Th w="3xs">
-                      {formatMessage({ id: "report.updatedAtLabel" })}
-                    </Th>
+                    <Th w="3xs">{formatMessage({ id: "report.reportedOnLabel" })}</Th>
+                    <Th w="3xs">{formatMessage({ id: "report.updatedAtLabel" })}</Th>
                   </Tr>
                 </Thead>
                 <Tbody>
