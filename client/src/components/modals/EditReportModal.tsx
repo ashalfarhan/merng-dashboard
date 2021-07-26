@@ -7,7 +7,7 @@ import {
   ModalOverlay,
 } from "@chakra-ui/react";
 import { ReportType } from "../../generated/graphql";
-import EditReportForm from "../forms/EditReportForm";
+import { EditReportForm } from "../forms";
 
 interface Props {
   isOpen: boolean;

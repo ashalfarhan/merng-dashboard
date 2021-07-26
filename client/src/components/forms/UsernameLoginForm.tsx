@@ -1,20 +1,24 @@
-import { Box, Text } from "@chakra-ui/layout";
+import {
+  Input,
+  FormControl,
+  FormLabel,
+  Button,
+  Box,
+  Text,
+} from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { UsernameLogin } from "../../@types";
-import { usernameLoginSchema } from "../../helpers/validation";
-import { Button } from "@chakra-ui/button";
-import { FormControl, FormLabel } from "@chakra-ui/form-control";
-import { Input } from "@chakra-ui/input";
+import { usernameLoginSchema } from "../../helpers";
 import { useHistory } from "react-router";
-import { useDispatch } from "../../store";
+import { useAppDispatch } from "../../store";
 import { useLoginWithUsernameMutation } from "../../generated/graphql";
 import { setError } from "../../store/slices/error";
 import { setLogin } from "../../store/thunk/login";
 
 export default function UsernameLoginForm() {
   const history = useHistory();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [login, { loading, error }] = useLoginWithUsernameMutation({
     onCompleted: ({ loginWithUsername }) => {
       if (!loginWithUsername || error) {

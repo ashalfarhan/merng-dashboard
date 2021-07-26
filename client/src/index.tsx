@@ -6,7 +6,7 @@ import { BrowserRouter } from "react-router-dom";
 import { ApolloGqlProvider } from "./libs/apollo";
 import LocaleProvider from "./libs/i18n";
 import { Provider } from "react-redux";
-import { store } from "./store";
+import store from "./store";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -23,7 +23,7 @@ ReactDOM.render(
       </BrowserRouter>
     </Provider>
   </React.StrictMode>,
-  document.getElementById("root")
+  document.getElementById("root"),
 );
 
 // If you want to start measuring performance in your app, pass a function

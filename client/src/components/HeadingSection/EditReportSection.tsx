@@ -1,8 +1,8 @@
 import { Flex, Heading, Button, useDisclosure } from "@chakra-ui/react";
 import { AiOutlineEdit } from "react-icons/ai";
-import { useIntl } from "react-intl";
+import { useLocale } from "../../context/LocaleContext";
 import { ReportType } from "../../generated/graphql";
-import EditReportModal from "../modals/EditReportModal";
+import { EditReportModal } from "../modals";
 
 interface Props {
   reporterName: string;
@@ -18,7 +18,7 @@ export default function EditReporSection({
   reporterName,
 }: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { formatMessage } = useIntl();
+  const { t } = useLocale();
   return (
     <Flex
       pb="4"
@@ -28,7 +28,7 @@ export default function EditReporSection({
       align="center"
     >
       <Heading fontSize="32">
-        {formatMessage({ id: "report.reporterLabel" }) + ": " + reporterName}
+        {t({ id: "report.reporterLabel" }) + ": " + reporterName}
       </Heading>
       <Button onClick={onOpen} variant="solid" colorScheme="yellow">
         <EditReportModal
@@ -41,7 +41,7 @@ export default function EditReporSection({
           }}
         />
         <AiOutlineEdit style={{ marginRight: "4px" }} />
-        {formatMessage({ id: "menu.editReportLabel" })}
+        {t({ id: "menu.editReportLabel" })}
       </Button>
     </Flex>
   );

@@ -13,10 +13,9 @@ import {
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { addStuffSchema } from "../../helpers/validation";
-import { useDispatch } from "../../store";
+import { StuffOptions, addStuffSchema } from "../../helpers";
+import { useAppDispatch } from "../../store";
 import { setError } from "../../store/slices/error";
-import { StuffOptions } from "../../helpers/constants";
 import { useIntl } from "react-intl";
 
 interface Props {
@@ -28,7 +27,7 @@ interface Props {
 
 export default function AddStuffForm({ data, onComplete }: Props) {
   const { formatMessage } = useIntl();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [editReport, { loading }] = useAddStuffMutation({
     onCompleted: ({ addStuff }) => {
       if (addStuff) {

@@ -1,16 +1,25 @@
-import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@chakra-ui/react";
-import { Avatar } from "@chakra-ui/avatar";
-import { Box, Flex, Heading, Text } from "@chakra-ui/layout";
-import { Spinner } from "@chakra-ui/spinner";
-import { useIntl } from "react-intl";
+import {
+  Spinner,
+  Box,
+  Flex,
+  Heading,
+  Text,
+  Avatar,
+  Tabs,
+  TabList,
+  Tab,
+  TabPanels,
+  TabPanel,
+} from "@chakra-ui/react";
 import { useMeQuery } from "../generated/graphql";
-import { useDispatch } from "../store";
+import { useAppDispatch } from "../store";
 import { setError } from "../store/slices/error";
 import MyReportsTable from "../components/tables/MyReportsTable";
+import { useLocale } from "../context/LocaleContext";
 
 export default function MePage() {
-  const { formatMessage } = useIntl();
-  const dispatch = useDispatch();
+  const { t } = useLocale();
+  const dispatch = useAppDispatch();
   const { data, loading } = useMeQuery({
     onError: (e) => {
       dispatch(setError(e.message));
@@ -22,17 +31,15 @@ export default function MePage() {
         <Spinner m="auto" />
       ) : (
         <Box width="full">
-          <Heading textAlign="center">
-            {formatMessage({ id: "settings.account" })}
-          </Heading>
+          <Heading textAlign="center">{t({ id: "settings.account" })}</Heading>
           <Flex align="center" flexDirection="column" justify="center" mt="8">
             <Avatar mx="auto" mb="4" size="xl" />
             <Text>{data.me?.name}</Text>
           </Flex>
           <Tabs mt="6" isFitted variant="line">
             <TabList>
-              <Tab>{formatMessage({ id: "account.about.label" })}</Tab>
-              <Tab>{formatMessage({ id: "account.myReports.label" })}</Tab>
+              <Tab>{t({ id: "account.about.label" })}</Tab>
+              <Tab>{t({ id: "account.myReports.label" })}</Tab>
             </TabList>
             <TabPanels>
               <TabPanel>

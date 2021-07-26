@@ -9,24 +9,23 @@ import {
   Button,
   ButtonGroup,
 } from "@chakra-ui/react";
-import { useIntl } from "react-intl";
+import { useLocale } from "../../context/LocaleContext";
 import {
   GetAllReportsDocument,
   MeDocument,
   MeQuery,
   useDeleteReportMutation,
 } from "../../generated/graphql";
-import { formatDate } from "../../helpers/dateFormatter";
-import { useDispatch, useSelector } from "../../store";
+import { formatDate } from "../../helpers";
+import { useAppDispatch } from "../../store";
 import { setError } from "../../store/slices/error";
-import { getLocale } from "../../store/slices/locale";
 
 interface Props {
   data: MeQuery | undefined;
 }
+
 export default function MyReportsTable({ data }: Props) {
-  const { formatMessage } = useIntl();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [deleteReport, { loading }] = useDeleteReportMutation({
     onError: (e) => {
       dispatch(setError(e.message));
@@ -38,7 +37,7 @@ export default function MyReportsTable({ data }: Props) {
       { query: MeDocument },
     ],
   });
-  const locale = useSelector(getLocale);
+  const { locale, t } = useLocale();
   if (!data) {
     return <span>There's no reports, please create one</span>;
   }
@@ -56,9 +55,9 @@ export default function MyReportsTable({ data }: Props) {
       <Thead>
         <Tr>
           <Th>No.</Th>
-          <Th w="xl">{formatMessage({ id: "report.nameLabel" })}</Th>
-          <Th>{formatMessage({ id: "report.createdAtLabel" })}</Th>
-          <Th w="xs">{formatMessage({ id: "report.actionLabel" })}</Th>
+          <Th w="xl">{t({ id: "report.nameLabel" })}</Th>
+          <Th>{t({ id: "report.createdAtLabel" })}</Th>
+          <Th w="xs">{t({ id: "report.actionLabel" })}</Th>
         </Tr>
       </Thead>
       <Tbody>
@@ -82,8 +81,7 @@ export default function MyReportsTable({ data }: Props) {
         ))}
       </Tbody>
       <TableCaption>
-        {formatMessage({ id: "lastUpdateLabel" }) +
-          +new Date().toLocaleString()}
+        {t({ id: "lastUpdateLabel" }) + +new Date().toLocaleString()}
       </TableCaption>
     </Table>
   );

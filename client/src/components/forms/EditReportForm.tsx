@@ -14,11 +14,11 @@ import {
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { editReportSchema } from "../../helpers/validation";
-import { useDispatch } from "../../store";
+import { editReportSchema } from "../../helpers";
+import { useAppDispatch } from "../../store";
 import { setError } from "../../store/slices/error";
 import { ReportOptions } from "../../helpers/constants";
-import { useIntl } from "react-intl";
+import { useLocale } from "../../context/LocaleContext";
 
 interface Props {
   onComplete: () => void;
@@ -30,8 +30,8 @@ interface Props {
 }
 
 export default function EditReportForm({ data, onComplete }: Props) {
-  const { formatMessage } = useIntl();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
+  const { t } = useLocale();
   const [editReport, { loading }] = useEditReportMutation({
     onCompleted: ({ editReport }) => {
       if (editReport) {
@@ -76,9 +76,7 @@ export default function EditReportForm({ data, onComplete }: Props) {
   return (
     <form onSubmit={handleSubmit(handleCreateReport)}>
       <FormControl>
-        <FormLabel>
-          {formatMessage({ id: "createReport.reportNameLabel" })}
-        </FormLabel>
+        <FormLabel>{t({ id: "createReport.reportNameLabel" })}</FormLabel>
         <Input
           {...register("data.name")}
           id="name"
@@ -90,13 +88,11 @@ export default function EditReportForm({ data, onComplete }: Props) {
         </FormErrorMessage>
       </FormControl>
       <FormControl mt={4}>
-        <FormLabel>
-          {formatMessage({ id: "createReport.reportTypeLabel" })}
-        </FormLabel>
+        <FormLabel>{t({ id: "createReport.reportTypeLabel" })}</FormLabel>
         <Select {...register("data.type")} name="type" defaultValue={data.type}>
           {ReportOptions.map((type, idx) => (
             <option key={idx} value={type.value}>
-              {formatMessage({ id: type.label })}
+              {t({ id: type.label })}
             </option>
           ))}
         </Select>

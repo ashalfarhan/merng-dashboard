@@ -1,11 +1,10 @@
-import { Flex } from "@chakra-ui/layout";
-import { Heading, Button, useDisclosure } from "@chakra-ui/react";
+import { Flex, Heading, Button, useDisclosure } from "@chakra-ui/react";
 import { BsPlusSquareFill } from "react-icons/bs";
-import { useIntl } from "react-intl";
-import AddStuffModal from "../modals/AddStuffModal";
+import { useLocale } from "../../context/LocaleContext";
+import { AddStuffModal } from "../modals";
 
 export default function DetailStuffHeading({ reportId }: { reportId: string }) {
-  const { formatMessage } = useIntl();
+  const { t } = useLocale();
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <Flex
@@ -27,7 +26,7 @@ export default function DetailStuffHeading({ reportId }: { reportId: string }) {
           }}
         />
         <BsPlusSquareFill style={{ marginRight: "4px" }} />
-        {formatMessage({ id: "menu.addStuffLabel" })}
+        {t({ id: "menu.addStuffLabel" })}
       </Button>
     </Flex>
   );

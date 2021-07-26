@@ -1,28 +1,39 @@
-import { Box, Flex, Heading } from "@chakra-ui/layout";
 import {
+  Box,
+  Flex,
+  Heading,
   IconButton,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
+  Spinner,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import { useIntl } from "react-intl";
 import { ImStatsDots } from "react-icons/im";
 import { RiBuilding4Line } from "react-icons/ri";
 import { FaDolly } from "react-icons/fa";
-import SalesCharts from "../components/charts/IncomeCharts";
-import SpendingCharts from "../components/charts/SpendingChats";
-import Layout from "../components/common/Layout";
+import { Layout } from "../components/common";
+import { useLocale } from "../context/LocaleContext";
+import Loadable from "react-loadable";
+
+const SalesCharts = Loadable({
+  loader: () => import("../components/charts/IncomeCharts"),
+  loading: Spinner,
+});
+const SpendingCharts = Loadable({
+  loader: () => import("../components/charts/SpendingChats"),
+  loading: Spinner,
+});
 
 export default function Overview() {
-  const { formatMessage } = useIntl();
+  const { t } = useLocale();
   const [display, setDisplay] = useState("SALES");
   return (
     <Layout>
       <Box>
         <Flex justify="space-between" align="center">
-          <Heading>{formatMessage({ id: "overview.heading" })}</Heading>
+          <Heading>{t({ id: "overview.heading" })}</Heading>
           <Menu>
             <MenuButton
               as={IconButton}

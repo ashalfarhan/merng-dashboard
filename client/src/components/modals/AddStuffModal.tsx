@@ -6,7 +6,7 @@ import {
   ModalHeader,
   ModalOverlay,
 } from "@chakra-ui/react";
-import AddStuffForm from "../forms/AddStuffForm";
+import { AddStuffForm } from "../forms";
 
 interface Props {
   isOpen: boolean;
