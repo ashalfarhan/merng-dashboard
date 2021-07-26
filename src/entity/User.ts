@@ -33,7 +33,7 @@ export class User {
   public isAdmin?: boolean;
 
   @Field(() => [Report])
-  @prop({ ref: () => Report, type: () => [Report], default: [] })
+  @prop({ ref: "Report", type: () => [Report], default: [] })
   public reports?: Ref<Report>[];
 
   @prop()

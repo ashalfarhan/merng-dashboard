@@ -7,11 +7,9 @@ import {
   Resolver,
   UseMiddleware,
 } from "type-graphql";
-import { Report, ReportModel } from "../entity/Report";
-import { Stuff, StuffModel } from "../entity/Stuff";
-import { StuffType } from "../utils/@types/enums";
-import { MyContext, EditStuffInput, AddStuffInput } from "../utils/@types";
-import { isAuth } from "../utils/middleware/isAuth";
+import { Stuff, StuffModel, Report, ReportModel } from "../entity";
+import { StuffType, MyContext, EditStuffInput, AddStuffInput } from "../@types";
+import { isAuth } from "../utils";
 
 @Resolver()
 export class StuffResolver {
@@ -19,65 +17,55 @@ export class StuffResolver {
   @UseMiddleware(isAuth)
   async editStuff(
     @Ctx() { payload }: MyContext,
-    @Arg("data") data: EditStuffInput
+    @Arg("data") data: EditStuffInput,
   ) {
-    if (!payload) {
-      return Error("Must be a user to edit a report");
-    }
     try {
       const stuff = await StuffModel.findById(data._id);
       if (!stuff) {
-        return Error("Stuff with this id is not found");
+        throw Error("Stuff with this id is not found");
       }
       const report = await ReportModel.findById(stuff.reportId);
-      if (report?.reporterId !== payload.userId || !payload.isAdmin) {
-        return Error(
-          "Only creator of this report/stuff can add or modify this report/stuff"
-        );
+      if (!report) {
+        throw Error("Cannot find report with id of " + stuff.reportId);
       }
-      const saved = await StuffModel.findOneAndUpdate(
-        { _id: data._id },
-        { ...data }
+      if (report.reporterId == payload.userId || payload.isAdmin) {
+        const { _id, ...rest } = data;
+        const saved = await StuffModel.findByIdAndUpdate(_id, { ...rest });
+        if (!saved) {
+          throw Error("Stuff with this id is not exist, please create one");
+        }
+        return saved;
+      }
+      throw Error(
+        "Only creator of this stuff can modify this stuff or an admin",
       );
-      if (!saved) {
-        return Error("Stuff with this id is not exist, please create one");
-      }
-      return saved;
     } catch (error) {
-      return error.message;
+      return error;
     }
   }
 
   @Mutation(() => Report, { nullable: true })
   @UseMiddleware(isAuth)
   async addStuff(@Ctx() { payload }: MyContext, @Args() data: AddStuffInput) {
-    if (!payload) {
-      return Error("Must be a user to edit a report");
-    }
     try {
       const report = await ReportModel.findById(data.reportId);
       if (!report) {
-        return Error("Report with this id not found");
+        throw Error("Report with this id not found");
       }
-      if (report.reporterId !== payload.userId || !payload.isAdmin) {
-        return Error(
-          "Only creator of this report/stuff can add or modify this report/"
-        );
-      }
-      const newStuff = await StuffModel.create({
-        ...data,
-      });
-      const added = await ReportModel.findOneAndUpdate(
-        { _id: data.reportId },
-        {
+      if (report.reporterId === payload.userId || payload.isAdmin) {
+        const newStuff = await StuffModel.create({
+          ...data,
+        });
+        const added = await ReportModel.findByIdAndUpdate(data.reportId, {
           $push: {
             goods: newStuff,
           },
-        }
-      );
-      return added;
+        });
+        return added;
+      }
+      throw Error("You must be and admin or the creator of this report");
     } catch (error) {
-      return error.message;
+      return error;
     }
   }
 
@@ -87,7 +75,7 @@ export class StuffResolver {
       const items = await StuffModel.find({ type: StuffType.STATIONARY });
       return items;
     } catch (error) {
-      return error.message;
+      return error;
     }
   }
 }

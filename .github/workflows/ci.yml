@@ -14,7 +14,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x]
+        node-version: [14.x, 12.x]
 
     steps:
       - name: Get the working directory
@@ -23,13 +23,16 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Install yarn
-        run: npm i -g yarn
+          cache: "yarn"
+
       - name: Install all dependencies
         run: yarn
+
       - name: Install both modules
         run: yarn modules
+
       - name: Typescript check
         run: yarn ts-check
+
       - name: Build test
         run: yarn build

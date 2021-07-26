@@ -4,7 +4,7 @@ import { UserModel } from "../entity/User";
 import { createToken } from "./helpers/createToken";
 
 export const refreshTokenHandler: RequestHandler = async (req, res) => {
-  const token = req.cookies.fwas;
+  const token: string | null | undefined = req.cookies.fwas;
   if (!token) {
     return res.status(403).json({
       ok: false,
@@ -22,14 +22,11 @@ export const refreshTokenHandler: RequestHandler = async (req, res) => {
       accessToken: "",
     });
   }
-  /**
-   * Now token is should be valid
-   */
-  const user = await UserModel.findOne({ _id: payload.userId });
+  const user = await UserModel.findById(payload.userId);
   if (!user) {
     return res.status(403).json({
       ok: false,
-      message: "You should be a user to request refresh token",
+      message: "No user found with your userId",
       accessToken: "",
     });
   }
