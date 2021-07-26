@@ -5,21 +5,6 @@ import { routes } from "./routes";
 import PrivateRoute from "./components/Private";
 import ErrorModal from "./components/modals/ErrorModal";
 
-// const protectedRoutes = [
-//   "/dashboard/users",
-//   "/dashboard/inventory",
-//   "/dashboard/sales",
-//   "/dashboard/stock",
-//   "/dashboard/reports",
-//   "/dashboard",
-//   "/report/:id",
-//   "/me",
-// ];
-
-// const isProtected = (e: string) => {
-//   return protectedRoutes.includes(e);
-// };
-
 function App() {
   return (
     <Box

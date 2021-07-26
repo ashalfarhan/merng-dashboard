@@ -1,13 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./slices/auth";
-// import localeReducer from "./slices/locale";
 import errorReducer from "./slices/error";
 import { useSelector, useDispatch, TypedUseSelectorHook } from "react-redux";
 
 const store = configureStore({
   reducer: {
     auth: authReducer,
-    // locale: localeReducer,
     error: errorReducer,
   },
   devTools: process.env.NODE_ENV === "development",

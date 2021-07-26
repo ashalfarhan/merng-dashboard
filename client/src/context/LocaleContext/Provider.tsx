@@ -13,6 +13,7 @@ export const LocaleContextProvider = ({
     () => localStorage.getItem("locale") ?? "en-uk",
   );
   const switchLocale = useCallback((target: LOCALE) => {
+    localStorage.setItem("locale", target);
     setLocale(target);
   }, []);
   return (
