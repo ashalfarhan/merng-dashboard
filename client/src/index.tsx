@@ -7,18 +7,21 @@ import { ApolloGqlProvider } from "./libs/apollo";
 import LocaleProvider from "./libs/i18n";
 import { Provider } from "react-redux";
 import store from "./store";
+import { LocaleContextProvider } from "./context/LocaleContext";
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter forceRefresh>
         <ApolloGqlProvider>
-          <LocaleProvider>
-            <ChakraProvider theme={theme}>
-              <ColorModeScript />
-              <App />
-            </ChakraProvider>
-          </LocaleProvider>
+          <LocaleContextProvider>
+            <LocaleProvider>
+              <ChakraProvider theme={theme}>
+                <ColorModeScript />
+                <App />
+              </ChakraProvider>
+            </LocaleProvider>
+          </LocaleContextProvider>
         </ApolloGqlProvider>
       </BrowserRouter>
     </Provider>

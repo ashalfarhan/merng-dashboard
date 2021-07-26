@@ -9,6 +9,7 @@ import {
   Button,
   ButtonGroup,
 } from "@chakra-ui/react";
+import { useIntl } from "react-intl";
 import { useLocale } from "../../context/LocaleContext";
 import {
   GetAllReportsDocument,
@@ -37,7 +38,8 @@ export default function MyReportsTable({ data }: Props) {
       { query: MeDocument },
     ],
   });
-  const { locale, t } = useLocale();
+  const { formatMessage } = useIntl();
+  const { locale } = useLocale();
   if (!data) {
     return <span>There's no reports, please create one</span>;
   }
@@ -55,9 +57,9 @@ export default function MyReportsTable({ data }: Props) {
       <Thead>
         <Tr>
           <Th>No.</Th>
-          <Th w="xl">{t({ id: "report.nameLabel" })}</Th>
-          <Th>{t({ id: "report.createdAtLabel" })}</Th>
-          <Th w="xs">{t({ id: "report.actionLabel" })}</Th>
+          <Th w="xl">{formatMessage({ id: "report.nameLabel" })}</Th>
+          <Th>{formatMessage({ id: "report.createdAtLabel" })}</Th>
+          <Th w="xs">{formatMessage({ id: "report.actionLabel" })}</Th>
         </Tr>
       </Thead>
       <Tbody>
@@ -81,7 +83,8 @@ export default function MyReportsTable({ data }: Props) {
         ))}
       </Tbody>
       <TableCaption>
-        {t({ id: "lastUpdateLabel" }) + +new Date().toLocaleString()}
+        {formatMessage({ id: "lastUpdateLabel" }) +
+          +new Date().toLocaleString()}
       </TableCaption>
     </Table>
   );

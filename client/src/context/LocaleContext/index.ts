@@ -1,5 +1,4 @@
 import { createContext, useContext } from "react";
-import { useIntl } from "react-intl";
 import { LOCALE } from "../../@types";
 
 interface LocaleContextValues {
@@ -14,8 +13,7 @@ export const LocaleContext = createContext<LocaleContextValues>({
 
 export const useLocale = () => {
   const locale = useContext(LocaleContext);
-  const { formatMessage } = useIntl();
-  return { ...locale, t: formatMessage };
+  return { ...locale };
 };
 
-export * from './Provider'
+export * from "./Provider";

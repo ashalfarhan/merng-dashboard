@@ -10,14 +10,14 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import moment from "moment";
+import { useIntl } from "react-intl";
 import { Layout } from "../components/common";
-import { useLocale } from "../context/LocaleContext";
 import { useGetInventoryQuery } from "../generated/graphql";
 import { useAppDispatch } from "../store";
 import { setError } from "../store/slices/error";
 
 export default function Stock() {
-  const { t } = useLocale();
+  const { formatMessage } = useIntl();
   const dispatch = useAppDispatch();
   const { data, loading } = useGetInventoryQuery({
     onError: (e) => {
@@ -28,7 +28,7 @@ export default function Stock() {
   return (
     <Layout>
       <Box>
-        <Heading>{t({ id: "menu.inventory" })}</Heading>
+        <Heading>{formatMessage({ id: "menu.inventory" })}</Heading>
         <Box height="full" display="flex">
           {!data || loading ? (
             <Spinner m="auto" />
@@ -37,10 +37,10 @@ export default function Stock() {
               <Thead>
                 <Tr>
                   <Th>No.</Th>
-                  <Th>{t({ id: "report.nameLabel" })}</Th>
+                  <Th>{formatMessage({ id: "report.nameLabel" })}</Th>
                   <Th>{"Amount"}</Th>
                   <Th>{"Price"}</Th>
-                  <Th>{t({ id: "report.reportedOnLabel" })}</Th>
+                  <Th>{formatMessage({ id: "report.reportedOnLabel" })}</Th>
                 </Tr>
               </Thead>
               <Tbody>
@@ -55,7 +55,7 @@ export default function Stock() {
                 ))}
               </Tbody>
               <TableCaption>
-                {t({ id: "lastUpdateLabel" })}
+                {formatMessage({ id: "lastUpdateLabel" })}
                 {new Date().toLocaleString()}
               </TableCaption>
             </Table>

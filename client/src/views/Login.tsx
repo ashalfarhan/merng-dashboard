@@ -4,8 +4,8 @@ import { LOGIN } from "../@types";
 import { isAuth } from "../store/slices/auth";
 import { useAppSelector } from "../store";
 import { Redirect } from "react-router";
-import { useLocale } from "../context/LocaleContext";
 import Loadable from "react-loadable";
+import { useIntl } from "react-intl";
 
 const EmailLoginForm = Loadable({
   loader: () => import("../components/forms/EmailLoginForm"),
@@ -19,7 +19,7 @@ const UsernameLoginForm = Loadable({
 
 export default function LoginPage() {
   const [loginWith, setLoginWith] = useState(LOGIN.EMAIL);
-  const { t } = useLocale();
+  const { formatMessage } = useIntl();
   const isLoggedIn = useAppSelector(isAuth);
   if (isLoggedIn) {
     return <Redirect to="/dashboard" />;
@@ -28,7 +28,7 @@ export default function LoginPage() {
     <Flex w="full" h="70vh" direction="column" align="center" justify="center">
       <Box w="sm">
         <Box>
-          <Heading>{t({ id: "login.heading" })}</Heading>
+          <Heading>{formatMessage({ id: "login.heading" })}</Heading>
           <Box mt="4">
             {loginWith === LOGIN.EMAIL ? (
               <>
@@ -38,7 +38,7 @@ export default function LoginPage() {
                   w="full"
                   onClick={() => setLoginWith(LOGIN.USERNAME)}
                 >
-                  {t({ id: "login.withUsername" })}
+                  {formatMessage({ id: "login.withUsername" })}
                 </Button>
               </>
             ) : (
@@ -49,7 +49,7 @@ export default function LoginPage() {
                   w="full"
                   onClick={() => setLoginWith(LOGIN.EMAIL)}
                 >
-                  {t({ id: "login.withEmail" })}
+                  {formatMessage({ id: "login.withEmail" })}
                 </Button>
               </>
             )}

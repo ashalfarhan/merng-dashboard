@@ -18,7 +18,7 @@ import { editReportSchema } from "../../helpers";
 import { useAppDispatch } from "../../store";
 import { setError } from "../../store/slices/error";
 import { ReportOptions } from "../../helpers/constants";
-import { useLocale } from "../../context/LocaleContext";
+import { useIntl } from "react-intl";
 
 interface Props {
   onComplete: () => void;
@@ -31,7 +31,7 @@ interface Props {
 
 export default function EditReportForm({ data, onComplete }: Props) {
   const dispatch = useAppDispatch();
-  const { t } = useLocale();
+  const { formatMessage } = useIntl();
   const [editReport, { loading }] = useEditReportMutation({
     onCompleted: ({ editReport }) => {
       if (editReport) {
@@ -76,7 +76,9 @@ export default function EditReportForm({ data, onComplete }: Props) {
   return (
     <form onSubmit={handleSubmit(handleCreateReport)}>
       <FormControl>
-        <FormLabel>{t({ id: "createReport.reportNameLabel" })}</FormLabel>
+        <FormLabel>
+          {formatMessage({ id: "createReport.reportNameLabel" })}
+        </FormLabel>
         <Input
           {...register("data.name")}
           id="name"
@@ -88,11 +90,13 @@ export default function EditReportForm({ data, onComplete }: Props) {
         </FormErrorMessage>
       </FormControl>
       <FormControl mt={4}>
-        <FormLabel>{t({ id: "createReport.reportTypeLabel" })}</FormLabel>
+        <FormLabel>
+          {formatMessage({ id: "createReport.reportTypeLabel" })}
+        </FormLabel>
         <Select {...register("data.type")} name="type" defaultValue={data.type}>
           {ReportOptions.map((type, idx) => (
             <option key={idx} value={type.value}>
-              {t({ id: type.label })}
+              {formatMessage({ id: type.label })}
             </option>
           ))}
         </Select>

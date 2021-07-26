@@ -14,8 +14,8 @@ import { ImStatsDots } from "react-icons/im";
 import { RiBuilding4Line } from "react-icons/ri";
 import { FaDolly } from "react-icons/fa";
 import { Layout } from "../components/common";
-import { useLocale } from "../context/LocaleContext";
 import Loadable from "react-loadable";
+import { useIntl } from "react-intl";
 
 const SalesCharts = Loadable({
   loader: () => import("../components/charts/IncomeCharts"),
@@ -27,13 +27,13 @@ const SpendingCharts = Loadable({
 });
 
 export default function Overview() {
-  const { t } = useLocale();
+  const { formatMessage } = useIntl();
   const [display, setDisplay] = useState("SALES");
   return (
     <Layout>
       <Box>
         <Flex justify="space-between" align="center">
-          <Heading>{t({ id: "overview.heading" })}</Heading>
+          <Heading>{formatMessage({ id: "overview.heading" })}</Heading>
           <Menu>
             <MenuButton
               as={IconButton}

@@ -19,12 +19,14 @@ import { useAppDispatch, useAppSelector } from "../../store";
 import { getUser, isAuth, removeToken } from "../../store/slices/auth";
 import { useLocale } from "../../context/LocaleContext";
 import { memo } from "react";
+import { useIntl } from "react-intl";
 
 const Header = () => {
   const history = useHistory();
   const isLoggedIn = useAppSelector(isAuth);
   const user = useAppSelector(getUser);
-  const { locale, t } = useLocale();
+  const { formatMessage } = useIntl();
+  const { locale } = useLocale();
   const isEng = locale === "en-uk";
   const dispatch = useAppDispatch();
   const handleLogout = () => {
@@ -67,7 +69,7 @@ const Header = () => {
                   onClick={() => handleNav("/me")}
                   icon={<RiAccountPinBoxLine />}
                 >
-                  {t({ id: "settings.account" })}
+                  {formatMessage({ id: "settings.account" })}
                 </MenuItem>
                 <MenuItem
                   onClick={() => handleNav("/dashboard")}
@@ -77,7 +79,7 @@ const Header = () => {
                 </MenuItem>
                 <MenuDivider />
                 <MenuItem icon={<BiLogOut />} onClick={handleLogout}>
-                  {t({ id: "settings.logout" })}
+                  {formatMessage({ id: "settings.logout" })}
                 </MenuItem>
               </MenuList>
             </Menu>
